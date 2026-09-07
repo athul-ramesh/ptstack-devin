@@ -12,11 +12,11 @@ Open a todolist with the steps below copied in verbatim. A step you skip stays l
 
 #### Roles and placement
 
-- **Coordinator (this chat).** Frames, authors briefs, drains the inbox, owns the human report, makes judgment calls. It never authors or edits code. Conflicted merges, restacks, and code changes are always tasks. Mechanically landing a verified unit (fast-forward or clean cherry-pick of a worker's commit, then push) is bookkeeping the coordinator may do itself on repos where local git is cheap.
-- **Sub-coordinator.** Durable, one per track, and only when the program exceeds what one coordinator's drains can manage. Owns its track's units and boards, authors its workers' briefs, spawns its own workers where the runtime lets a subagent spawn one. Where it does not, it owns its track's units directly with the same review separation. Cap in-flight children at what one drain can process, roughly ten.
-- **Worker / verifier.** `run_subagent` with a registered profile. Isolation is a worktree or branch per writer, not a separate machine. Proof uses `exec` on the real CLI or TUI, and the browser only when this session has one. Read `references/verification.md`. A subagent never sees this chat, so its brief inlines what it needs or points at repo and store paths. Prefer fewer, broader workers. One writer per worktree or branch (`skills/principle-separate-before-serializing-shared-state/SKILL.md`). Run a unit's verifier on a different panel profile from its worker. Sequential when pins fail.
+- **Coordinator (this root chat).** Frames tracks and units, authors briefs, dispatches every worker, drains results, owns dependency gates and the human report, and makes retry and judgment decisions. It never authors or edits code. Conflicted merges, restacks, and code changes are tasks. Mechanically landing a verified unit is bookkeeping the coordinator may do itself when authorized.
+- **Track.** A logical record grouping dependent units, status, and evidence. It is not an agent and does not dispatch. The root owns every track's queue and reconciliation.
+- **Worker / verifier.** `run_subagent` with a registered profile, dispatched by the root through [`../references/delegation.md`](../references/delegation.md). Isolation is a worktree or directory per writer, not a branch in one shared checkout. The root resolves `references/verification.md` from the installed poteto-mode source and supplies its absolute path. Proof uses `exec` on the real CLI or TUI, and the browser only when this session has one. Prefer fewer, broader workers. Run a unit's verifier as a separate review pass with edits prohibited.
 
-Depth stays at coordinator, track, worker. Do not nest past the profile `max-nesting`.
+Actual agent depth is root → worker. Workers report unresolved work to the root. Nested coordinators are a future feature requiring a bounded nesting profile, an explicit cost policy, and a dedicated runtime test.
 
 #### Store layout
 
@@ -52,10 +52,10 @@ Size the brief to the unit. Missing fields are a refuse-to-spawn condition. Neve
 
 1. **Frame.** State the done predicate as something countable. Quantify scope. If one agent could finish inside that budget, stop here and run Autonomous run instead.
 2. **Install the runtime.** `exec` `program-state.sh init`. Open the trail via `/pstack:show-me-your-work`. Write standing orders before any spawn.
-3. **Pilot.** Push one unit through the whole path. Brief, worker, verification, unit row, log row. Fix the contract from pilot evidence before any fan-out.
-4. **Scale.** Spawn a rolling window of workers up to the in-flight cap, refilling as children finish. Sequential when pins fail. Recompute ready work after each drain. Relay upstream reports into downstream briefs.
-5. **Drain.** Classify every finished child (landed, needs-verify, failed, noise). `set` the unit row. Run `status`. Spawn the next wave.
-6. **Land.** Landing is continuous. One writer per branch. Advance `lastVerifiedHead` only on merge or a reported new head SHA.
+3. **Pilot.** Push one unit through the whole path. Brief, root dispatch, verification, unit row, log row. Fix the contract from pilot evidence before any fan-out.
+4. **Scale.** The root dispatches a rolling window of ready units up to the in-flight cap, refilling as results arrive. Use separate worktrees or directories for concurrent writers; otherwise serialize them. Recompute ready work after each drain. Relay upstream reports into downstream briefs.
+5. **Drain.** The root classifies every finished worker (landed, needs-verify, failed, noise), updates the unit row, runs `status`, decides retries, and dispatches the next ready wave.
+6. **Land.** Landing is continuous. One writer per worktree or directory. Advance `lastVerifiedHead` only on merge or a reported new head SHA.
 7. **Close.** Reconcile every spawned child to a terminal row. Confirm the predicate on the real artifact. Audit the trail per show-me-your-work. Leave the store intact.
 
 #### Liveness and failure
@@ -64,9 +64,9 @@ Devin cannot schedule a later turn. There is no heartbeat watcher. Bound the wav
 
 Never resume an agent to check on it. Probe read-only. The store, `gh`, and pushed branches.
 
-Retry by mode. Cap-hit, respawn with smaller scope. Network-drop, retry as-is. Tool-error, retry on a different panel profile. Unknown, retry once. Two retries, then abandon the unit and replan around it.
+Retry only after classifying the failure. Cap-hit may justify a fresh smaller scope. A background permission denial may use foreground resume on the same profile. Network drop may justify one same-profile retry. An unavailable model pin remains unavailable; substituting a profile is degraded execution and must be reported. After two deliberate attempts, abandon the unit and replan around it.
 
-Do not claim cloud agents or nested dispatch beyond `max-nesting`.
+Do not claim cloud agents or nested dispatch. Track and unit records do not add agent depth.
 
 #### Escalation
 

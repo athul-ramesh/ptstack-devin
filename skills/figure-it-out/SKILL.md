@@ -37,7 +37,7 @@ Decompose into atomic, independently-landable units. Sequence riskiest-unknown-f
 
 - Build the verification harness before the work, with the baseline captured from the pre-change state, so the check reads as old value vs new value.
 - For one-way-door design decisions, run `/pstack:architect`. Skip it for mechanical work whose shape is already concrete. A second arena over a settled design is over-engineering (`skills/principle-laziness-protocol/SKILL.md`).
-- Decide what fans out. Parallelize only across genuine seams, and give each worker its own worktree or branch (`skills/principle-separate-before-serializing-shared-state/SKILL.md`). Don't over-fan. Use `run_subagent` with a registered profile. Sequential when pins fail.
+- Decide what fans out. Parallelize only across genuine seams, and give each writer its own worktree or directory (`skills/principle-separate-before-serializing-shared-state/SKILL.md`). Don't over-fan. Use `run_subagent` with a registered profile. Sequential scheduling does not repair an unavailable model pin; report the blocked mapping instead of silently substituting.
 - Write the designed phase list down. That list is what the human reviews.
 
 Register each unit before running it.

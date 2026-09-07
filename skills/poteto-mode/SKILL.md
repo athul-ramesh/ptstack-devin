@@ -19,9 +19,24 @@ Do not nest poteto-mode. A scoped subagent follows its brief and does not reread
    - Handle a question, inspection, or trivial edit directly.
    - For a non-trivial task, open only the matching shipped playbook.
 2. Track outcomes, not copied prose.
-3. Make the smallest complete change. Remove obsolete paths instead of preserving compatibility that nobody requested.
+3. Handle small, tightly scoped, sequential implementation directly. For Feature, Refactoring, Bug-fix, Perf-issue, and Hillclimb implementation that merits delegation, complete the implementation dispatch gate below before dispatch. Have the selected worker make the smallest complete change. Remove obsolete paths instead of preserving compatibility that nobody requested.
 4. Verify the real artifact on the matching surface. Read `references/verification.md`. Reproduce bugs before fixing them. Exercise changed behavior after the edit. A build or a test file alone is not proof.
 5. Stop when the requested outcome and its checks are complete. Open, commit, or ship a PR only when the user asks for repository delivery.
+
+## Implementation dispatch gate
+
+For the implementation workflows named above, the root owns inspection, reproduction, design, review, and verification. Small, tightly scoped, sequential fixes stay with the root. When delegation qualifies, the selected worker owns implementation, including its tests and follow-up corrections.
+
+Before delegated implementation starts:
+
+1. Read `references/delegation.md`, resolving it from this skill's installed source path reported by the skill tool.
+2. Read `$HOME/.config/devin/pstack-models.md` when it exists and resolve the exact role key. Feature and Refactoring use `feature, refactoring`; the other keys are `bug-fix`, `perf-issue`, and `hillclimb`. Use the Models default only for a missing sheet or row. Confirm the selected profile is registered.
+3. Read `references/implementation-worker.md` from the installed skill directory and inline its complete contract in the worker's `task`. Include absolute project and plugin pointers, scope, design, and a concrete done condition.
+4. Call `run_subagent` with that exact profile. Collect the completed worker result, review the diff, and independently exercise the changed behavior before claiming completion.
+
+Spawn a worker only when the slice is independently parallelizable and the expected time or quality benefit clearly outweighs the extra context and token usage. If explaining the subtask and reviewing its result would cost about as much as doing it directly, do it directly. A limit such as "at most one worker" caps delegation at one worker. An explicit user instruction to work inline or use no subagents takes precedence.
+
+If dispatch is unavailable or rejected, report the blocked step and inspect any partial filesystem effects. Do not silently implement inline or substitute another profile. Resume the same worker in the foreground only when a resumable agent ID exists and the documented permission-repair path applies.
 
 ## Default engineering rules
 
@@ -83,11 +98,13 @@ If a question is a fact you could observe by running something, do not ask the h
 
 ## Subagents
 
-Use `run_subagent` for independent slices. Give each worker a self-contained brief with file pointers, a disjoint scope, and an observable done condition. Keep writers isolated. The parent reviews artifacts and verifies accepted work.
+Read [`references/delegation.md`](references/delegation.md) before dispatch. The root owns decomposition, dispatch, dependency gates, reconciliation, and verification. Use `run_subagent` only for independently parallelizable slices when the expected time or quality benefit clearly outweighs the extra context and token usage. Keep writers in separate worktrees or directories, or serialize them.
 
-Registered profiles are `pstack:poteto-agent`, `pstack:comment-sicko`, `pstack:panel-swe`, `pstack:panel-opus`, `pstack:panel-sonnet`, and `pstack:panel-codex`. Do not dispatch a subagent for a narrow lookup that direct tools can answer. Do not name a custom profile this plugin has not registered.
+For implementation passes, resolve the exact role profile, inline the complete shared contract from [`references/implementation-worker.md`](references/implementation-worker.md) in the task, and supply absolute project and plugin reference paths. Investigation and review passes receive their own appropriate briefs. Review briefs explicitly prohibit edits.
 
-You own every subagent's work. Review the diff and write your own summary. Do not pass through what it said.
+Registered profiles are `pstack:poteto-agent`, `pstack:comment-sicko`, `pstack:panel-swe`, `pstack:panel-opus`, `pstack:panel-sonnet`, and `pstack:panel-codex`. Do not dispatch a subagent for a narrow lookup or a small, tightly scoped, sequential fix that direct tools can handle. If briefing and reviewing a subtask would cost about as much as doing it directly, do it directly. Do not name a custom profile this plugin has not registered.
+
+You own every subagent's work. Review the artifact and diff, exercise accepted behavior yourself, and write your own summary. Do not pass through what a worker said.
 
 ## Writing the reply
 
@@ -135,13 +152,15 @@ If no shipped playbook fits, invoke `/pstack:figure-it-out`. Do not invent a mis
 
 ## Models
 
-If `$HOME/.config/devin/pstack-models.md` exists, those rows override the defaults below. Values are `pstack:panel-<alias>` profiles. When a later panel skill asks for N perspectives and fewer distinct profiles exist, run N sequential fresh-context `run_subagent` calls on the available profile. Do not treat one pass as a panel.
+If `$HOME/.config/devin/pstack-models.md` exists, its row overrides the matching default below. Values are registered profiles. A missing sheet or missing row uses the documented default. An unregistered configured profile is a configuration error: identify it, stop that dispatch, and do not substitute a built-in profile or claim its intended model ran.
+
+When a later panel skill asks for N perspectives and fewer distinct profiles exist, run N sequential fresh-context `run_subagent` calls on the available registered profile. Do not treat one pass as a panel.
 
 Role defaults.
 
-- feature, refactoring: `opus`
-- bug-fix: `swe`
-- perf-issue: `swe`
-- hillclimb: `swe`
-- judgment and prose: `opus`
-- strongest judgment: `swe`
+- feature, refactoring: `pstack:panel-opus`
+- bug-fix: `pstack:panel-swe`
+- perf-issue: `pstack:panel-swe`
+- hillclimb: `pstack:panel-swe`
+- judgment and prose: `pstack:panel-opus`
+- strongest judgment: `pstack:panel-swe`

@@ -13,7 +13,7 @@
    - **Redundancy.** The wait hangs on one slow instance. Duplicate the work and take the fastest result only when the wait dominates and the system has headroom.
    - **Lazy evaluation.** Cost lands on results that are never used or not needed yet. Defer the work until first use.
    - **Scheduling.** The work must happen, but not during the interactive moment. Move it to where nobody is waiting.
-3. Plan the fix from the trace. If it crosses a module boundary, sketch types first. Delegate implementation with `run_subagent` using the perf-issue model from poteto-mode Models. Review the diff. Capture a post-fix measurement.
+3. Plan the fix from the trace. If it crosses a module boundary, sketch types first. Delegate implementation through [`../references/delegation.md`](../references/delegation.md) with the exact role key `perf-issue`. Review the diff. Capture a post-fix measurement.
    Apply `skills/principle-sequence-verifiable-units/SKILL.md`. Verify each attempt before trying the next.
 4. Parse and compare the artifacts. "Inconclusive" or wrong-surface is not a pass. Flag it.
 5. Cite the measurement in the reply.
