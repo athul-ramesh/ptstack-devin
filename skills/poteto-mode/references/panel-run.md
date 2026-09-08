@@ -5,12 +5,26 @@ Parent-owned record for every multi-perspective pass. Workers never own the verd
 ```
 PanelRun
   role                 string
-  orderedProfiles      pstack:panel-<alias>[]
+  orderedProfiles      pstack:panel-<alias>[] (configured perspective profiles)
+  implementationProfiles pstack:poteto-agent-<alias>[] (resolved writers, including explicit rows)
   requiredPerspectives number
   executionMode        parallel | sequential
   artifacts            path[]
   parentVerdict        string
 ```
+
+Implementation routing is separate from panel perspective routing. When a perspective
+writes code, resolve the configured `pstack:panel-<alias>` entry to the registered
+`pstack:poteto-agent-<alias>` implementation counterpart. This is a deterministic,
+same-pin mapping, not a failure fallback or a model substitution. Before accepting the
+mapping, compare the `model:` frontmatter of both registered profiles and require an
+exact match. If the pins differ, report a configuration error and do not dispatch. An explicit
+`pstack:poteto-agent-<alias>` entry is already an implementation profile and is used
+as configured. Investigation, critique, judging, and review perspectives keep their
+configured `pstack:panel-*` profile. Preserve the panel's required perspective count.
+Every implementation brief follows the single-source procedure in
+[`delegation.md`](delegation.md) and includes the complete contract from the absolute
+`skills/poteto-mode/references/implementation-worker.md` path resolved by the root.
 
 ## Resolve
 
@@ -18,6 +32,10 @@ PanelRun
 2. Keep list length. `requiredPerspectives` is that length.
 3. Count distinct profiles. If the count is less than `requiredPerspectives`, `executionMode` is `sequential`. Otherwise independent read-only passes may use `parallel`; writers use the isolation rules below.
 4. `run_subagent` takes a registered `profile`. Do not pass a free-form model string.
+5. For code-writing perspectives, apply the implementation counterpart mapping above
+   before dispatch. Confirm that the mapped profile is registered, compare both
+   frontmatter pins for equality, and disclose the actual pin. If either profile is
+   unavailable or pins differ, report the blocked configuration.
 
 ## Start and collect
 
@@ -25,6 +43,9 @@ PanelRun
 
 - Set `is_background: false`. A call blocks until its result returns, so start one blocking call at a time.
 - Prefer foreground for a single writer when its tool permissions are not already approved.
+- The foreground call is blocking. Do not promise that the root can interrupt it or add
+  unsupported timeout, cancellation, or model parameters. Let it finish, then inspect
+  the result and artifact.
 - Inspect the returned report and artifact before starting a dependent pass.
 
 ### Background
@@ -42,6 +63,16 @@ PanelRun
 - Do not automatically retry or substitute models. If a required pass does not complete, report the panel as incomplete with its completed count, failure, and any deliberate degraded execution.
 - Give each writer a separate worktree or directory, not merely another branch in the shared checkout. Readers may share inputs.
 - The parent writes `parentVerdict`. Worker reports are evidence, not the answer.
+- Ordinary implementation workers report an early checkpoint, progress after each
+  independently verifiable unit, and a final check with decisive output. The brief
+  supplies a time budget and no-progress rule. Unless the brief sets tighter bounds,
+  use a five-minute early-checkpoint target, one fifteen-minute work quantum, and at most
+  two failed diagnostic attempts. Record each checkpoint in the worker's owned
+  worktree. These are coaching and recovery bounds, not unsupported tool parameters.
+  A time budget bounds reporting and recovery decisions; it does not cancel a blocking
+  command. On no progress, make bounded safe diagnostics, then retry or resume only
+  under the brief's recovery limit. Return at the end of that single quantum, even
+  when incomplete. Never claim success from a timeout or partial report.
 
 ## Roles this phase
 

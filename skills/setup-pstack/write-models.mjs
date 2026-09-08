@@ -31,6 +31,13 @@ export const PANEL_ROLES = Object.freeze([
   ["interrogate reviewers", ["opus", "swe", "sonnet"]],
 ]);
 
+const IMPLEMENTATION_ROLES = new Set([
+  "feature, refactoring",
+  "bug-fix",
+  "perf-issue",
+  "hillclimb",
+]);
+
 export function parseDevinModelsList(text) {
   const ids = new Set();
   for (const line of text.split(/\r?\n/)) {
@@ -46,6 +53,10 @@ export function parseDevinModelsList(text) {
 
 export function panelProfile(alias) {
   return `pstack:panel-${alias}`;
+}
+
+export function implementationProfile(alias) {
+  return `pstack:poteto-agent-${alias}`;
 }
 
 export function firstAvailableAlias(available) {
@@ -70,7 +81,11 @@ export function buildRoleConfigs(available) {
     const alias = resolveAlias(preferred, available);
     roles.push({
       role,
-      profiles: [panelProfile(alias)],
+      profiles: [
+        IMPLEMENTATION_ROLES.has(role)
+          ? implementationProfile(alias)
+          : panelProfile(alias),
+      ],
       requiredPerspectives: 1,
     });
   }
@@ -89,8 +104,8 @@ export function renderSheet(roles) {
   const lines = [
     "# pstack model configuration",
     "",
-    "Per-role overrides for this Devin plugin. Each value is a registered profile `pstack:panel-<alias>`.",
-    "The alias must appear in `devin models list`. Delete a line to fall back to the skill default.",
+    "Per-role overrides for this Devin plugin. Implementation roles use `pstack:poteto-agent-<alias>`; review roles use `pstack:panel-<alias>`.",
+    "The alias must appear in `devin models list`; a profile's frontmatter `model:` pin is authoritative and its suffix is only a role label. Delete a line to fall back to the skill default.",
     "",
     "When a role needs more perspectives than distinct profiles, run that many sequential fresh-context",
     "`run_subagent` calls on the available profile. Do not label one pass as a panel.",

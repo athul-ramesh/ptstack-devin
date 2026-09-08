@@ -9,7 +9,7 @@ Poteto mode sets a quality floor for this Devin CLI plugin. It does not load the
 
 Read this file once. For a non-trivial task, read at most one matching playbook before work starts. Keep every other pstack skill voluntary. Invoke another skill only when this plugin ships it and the task needs that skill. Inspect affected code directly.
 
-This plugin ships `poteto-mode`, `setup-pstack`, `no-comments`, `how`, `why`, `teach`, `architect`, `arena`, `interrogate`, `reflect`, `swarm`, `tdd`, `typescript-best-practices`, `deslop`, `unslop`, `technical-writing`, `blast-radius`, `thermo-nuclear-code-quality-review`, `create-verification-skill`, `maintain-verification-skill`, `fix-ci`, `fix-merge-conflicts`, `recall`, `what-did-i-get-done`, `get-pr-comments`, `bro`, `figure-it-out`, `show-me-your-work`, `automate-me`, `make-pr-easy-to-review`, `babysit`, the 21 `principle-*` leaves, the common playbooks listed below, and the registered profiles `pstack:poteto-agent`, `pstack:comment-sicko`, `pstack:panel-swe`, `pstack:panel-opus`, `pstack:panel-sonnet`, and `pstack:panel-codex`. All 31 public source skills are installed. Shipping and autopilot playbooks are cut. Do not invoke a cut workflow.
+This plugin ships `poteto-mode`, `setup-pstack`, `no-comments`, `how`, `why`, `teach`, `architect`, `arena`, `interrogate`, `reflect`, `swarm`, `tdd`, `typescript-best-practices`, `deslop`, `unslop`, `technical-writing`, `blast-radius`, `thermo-nuclear-code-quality-review`, `create-verification-skill`, `maintain-verification-skill`, `fix-ci`, `fix-merge-conflicts`, `recall`, `what-did-i-get-done`, `get-pr-comments`, `bro`, `figure-it-out`, `show-me-your-work`, `automate-me`, `make-pr-easy-to-review`, `babysit`, the 21 `principle-*` leaves, the common playbooks listed below, and the registered profiles `pstack:poteto-agent`, `pstack:poteto-agent-opus`, `pstack:poteto-agent-sonnet`, `pstack:poteto-agent-swe`, `pstack:poteto-agent-codex`, `pstack:comment-sicko`, `pstack:panel-swe`, `pstack:panel-opus`, `pstack:panel-sonnet`, and `pstack:panel-codex`. All 31 public source skills are installed. Shipping and autopilot playbooks are cut. Do not invoke a cut workflow.
 
 Do not nest poteto-mode. A scoped subagent follows its brief and does not reread this skill.
 
@@ -17,24 +17,25 @@ Do not nest poteto-mode. A scoped subagent follows its brief and does not reread
 
 1. Classify the task.
    - Handle a question, inspection, or trivial edit directly.
+   - For any nontrivial implementation, the root dispatches the implementation slice, including one small sequential worker.
    - For a non-trivial task, open only the matching shipped playbook.
 2. Track outcomes, not copied prose.
-3. Handle small, tightly scoped, sequential implementation directly. For Feature, Refactoring, Bug-fix, Perf-issue, and Hillclimb implementation that merits delegation, complete the implementation dispatch gate below before dispatch. Have the selected worker make the smallest complete change. Remove obsolete paths instead of preserving compatibility that nobody requested.
+3. Handle trivial edits directly. For every nontrivial Feature, Refactoring, Bug-fix, Perf-issue, Hillclimb, Orchestrate, Autonomous run, or prototype implementation, complete the implementation dispatch gate below and have the selected worker make the smallest complete change, even when there is only one sequential unit. Remove obsolete paths instead of preserving compatibility that nobody requested.
 4. Verify the real artifact on the matching surface. Read `references/verification.md`. Reproduce bugs before fixing them. Exercise changed behavior after the edit. A build or a test file alone is not proof.
 5. Stop when the requested outcome and its checks are complete. Open, commit, or ship a PR only when the user asks for repository delivery.
 
 ## Implementation dispatch gate
 
-For the implementation workflows named above, the root owns inspection, reproduction, design, review, and verification. Small, tightly scoped, sequential fixes stay with the root. When delegation qualifies, the selected worker owns implementation, including its tests and follow-up corrections.
+For the implementation workflows named above, the root owns inspection, reproduction, design, review, and verification. The selected worker owns implementation, including its tests and follow-up corrections. Every nontrivial implementation remains delegated, including a single sequential slice.
 
 Before delegated implementation starts:
 
 1. Read `references/delegation.md`, resolving it from this skill's installed source path reported by the skill tool.
-2. Read `$HOME/.config/devin/pstack-models.md` when it exists and resolve the exact role key. Feature and Refactoring use `feature, refactoring`; the other keys are `bug-fix`, `perf-issue`, and `hillclimb`. Use the Models default only for a missing sheet or row. Confirm the selected profile is registered.
+2. Read `$HOME/.config/devin/pstack-models.md` when it exists and resolve the exact role key. Feature and Refactoring use `feature, refactoring`; autonomous and prototype work uses its classified `bug-fix`, `perf-issue`, or `hillclimb` key, and otherwise uses `feature, refactoring`; an Orchestrate unit uses its own classification. Use the Models default only for a missing sheet or row. Confirm the selected profile is registered.
 3. Read `references/implementation-worker.md` from the installed skill directory and inline its complete contract in the worker's `task`. Include absolute project and plugin pointers, scope, design, and a concrete done condition.
-4. Call `run_subagent` with that exact profile. Collect the completed worker result, review the diff, and independently exercise the changed behavior before claiming completion.
+4. Resolve implementation routing through the deterministic same-pin counterpart `pstack:panel-<alias>` → `pstack:poteto-agent-<alias>`. Explicit `pstack:poteto-agent-*` rows are used as configured. For legacy panel mappings, compare source and destination `model:` frontmatter and stop on a mismatch. Call `run_subagent` with the registered implementation profile. Include an early checkpoint path, work budget, no-progress threshold, and bounded recovery count in every ordinary worker brief. Collect the completed worker result, review the diff, and independently exercise the changed behavior before claiming completion.
 
-Spawn a worker only when the slice is independently parallelizable and the expected time or quality benefit clearly outweighs the extra context and token usage. If explaining the subtask and reviewing its result would cost about as much as doing it directly, do it directly. A limit such as "at most one worker" caps delegation at one worker. An explicit user instruction to work inline or use no subagents takes precedence.
+For read-only exploration, spawn only when the expected time or quality benefit outweighs the extra context. A limit such as "at most one worker" caps delegation at one worker. An explicit user instruction to work inline or use no subagents takes precedence. Nontrivial implementation remains delegated even when sequential.
 
 If dispatch is unavailable or rejected, report the blocked step and inspect any partial filesystem effects. Do not silently implement inline or substitute another profile. Resume the same worker in the foreground only when a resumable agent ID exists and the documented permission-repair path applies.
 
@@ -98,11 +99,11 @@ If a question is a fact you could observe by running something, do not ask the h
 
 ## Subagents
 
-Read [`references/delegation.md`](references/delegation.md) before dispatch. The root owns decomposition, dispatch, dependency gates, reconciliation, and verification. Use `run_subagent` only for independently parallelizable slices when the expected time or quality benefit clearly outweighs the extra context and token usage. Keep writers in separate worktrees or directories, or serialize them.
+Read [`references/delegation.md`](references/delegation.md) before dispatch. The root owns decomposition, dispatch, dependency gates, reconciliation, and verification. Route every nontrivial implementation through the dedicated implementation counterpart, including one sequential worker. Keep writers in separate worktrees or directories, or serialize them.
 
 For implementation passes, resolve the exact role profile, inline the complete shared contract from [`references/implementation-worker.md`](references/implementation-worker.md) in the task, and supply absolute project and plugin reference paths. Investigation and review passes receive their own appropriate briefs. Review briefs explicitly prohibit edits.
 
-Registered profiles are `pstack:poteto-agent`, `pstack:comment-sicko`, `pstack:panel-swe`, `pstack:panel-opus`, `pstack:panel-sonnet`, and `pstack:panel-codex`. Do not dispatch a subagent for a narrow lookup or a small, tightly scoped, sequential fix that direct tools can handle. If briefing and reviewing a subtask would cost about as much as doing it directly, do it directly. Do not name a custom profile this plugin has not registered.
+Registered profiles are `pstack:poteto-agent`, `pstack:poteto-agent-opus`, `pstack:poteto-agent-sonnet`, `pstack:poteto-agent-swe`, `pstack:poteto-agent-codex`, `pstack:comment-sicko`, `pstack:panel-swe`, `pstack:panel-opus`, `pstack:panel-sonnet`, and `pstack:panel-codex`. Panel profiles remain the route for investigation and review. Do not dispatch a subagent for a narrow lookup or trivial edit. Every nontrivial implementation uses its dedicated implementation profile, including one sequential worker. Do not name a custom profile this plugin has not registered.
 
 You own every subagent's work. Review the artifact and diff, exercise accepted behavior yourself, and write your own summary. Do not pass through what a worker said.
 
@@ -156,11 +157,11 @@ If `$HOME/.config/devin/pstack-models.md` exists, its row overrides the matching
 
 When a later panel skill asks for N perspectives and fewer distinct profiles exist, run N sequential fresh-context `run_subagent` calls on the available registered profile. Do not treat one pass as a panel.
 
-Role defaults.
+Role defaults. Implementation roles use dedicated profiles. Judgment and prose roles keep panel profiles. Existing user rows that still select `pstack:panel-*` are mapped to their same-pin implementation counterparts for code-writing passes.
 
-- feature, refactoring: `pstack:panel-opus`
-- bug-fix: `pstack:panel-swe`
-- perf-issue: `pstack:panel-swe`
-- hillclimb: `pstack:panel-swe`
+- feature, refactoring: `pstack:poteto-agent-opus`
+- bug-fix: `pstack:poteto-agent-swe`
+- perf-issue: `pstack:poteto-agent-swe`
+- hillclimb: `pstack:poteto-agent-swe`
 - judgment and prose: `pstack:panel-opus`
 - strongest judgment: `pstack:panel-swe`

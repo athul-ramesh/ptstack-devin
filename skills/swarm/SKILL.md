@@ -34,6 +34,8 @@ When a worker must start from a non-default branch, check that branch out in tha
 
 Every brief stands alone. Goal, scope, slice or race arm, how to verify, what to report. Reports use `PASS`, `ISSUES`, or `BLOCKED` with evidence.
 
+Any nontrivial code-writing pass follows [`../poteto-mode/references/delegation.md`](../poteto-mode/references/delegation.md), including its dedicated same-pin implementation profile, worker contract, checkpoint budget, and isolated writer scope. Read-only workers retain the configured panel profile and perspective count.
+
 If a worker drops out, continue with N-1 and note it.
 
 ## Phase C: Aggregate

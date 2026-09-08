@@ -51,7 +51,7 @@ Record the pick, the reason, and the cross-judge verdict beside the base artifac
 
 ## Phase E: Graft
 
-Walk each loser once. Usually one or two grafts, not most of it. Fold by hand so one mental model remains. Read `skills/principle-redesign-from-first-principles/SKILL.md`.
+Walk each loser once. Usually one or two grafts, not most of it. For a nontrivial code graft, dispatch the graft through [`../poteto-mode/references/delegation.md`](../poteto-mode/references/delegation.md) to a dedicated implementation worker with an isolated worktree, then have the root select and verify the result. Keep trivial prose or metadata grafts in the root. Read `skills/principle-redesign-from-first-principles/SKILL.md`.
 
 Record grafts, sources, and rejections. Rejections are the high-signal part.
 
