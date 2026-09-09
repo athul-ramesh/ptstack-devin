@@ -11,7 +11,7 @@
    - **Smallest safe decomposition.** If one worker is best, name why.
 4. Delegate code-writing through [`../references/delegation.md`](../references/delegation.md) with the exact role key `feature, refactoring`. Give a specific scope, absolute file paths, the named data shape, and its organizing structure from the applicable Model the Domain leaf. Review the diff yourself. When the implementation admits multiple valid shapes, invoke `/pstack:arena`.
 5. Verify on the matching surface. "Inconclusive" or wrong-surface is not a pass. Flag it.
-6. Rebase into small, ordered commits. Use `skills/principle-sequence-verifiable-units/SKILL.md`. Build, verify, and commit each small unit before the next.
+6. Use `skills/principle-sequence-verifiable-units/SKILL.md`. Build and verify each small unit before the next. Commit or rebase only within the user's requested delivery scope.
 7. If the design is contested, invoke `/pstack:interrogate` before shipping.
 8. Stop at merge-ready. Do not open a PR unless the user asks. When they ask, `playbooks/opening-a-pr.md`.
 

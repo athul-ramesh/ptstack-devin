@@ -12,7 +12,7 @@ The root session owns decomposition, dispatch, dependency gates, reconciliation,
 6. Choose foreground or background from dependency and permission needs. Dispatch the call, collect its evidence, and inspect the artifact before accepting the work. Keep concurrent writers in separate worktrees or directories. Otherwise serialize them.
 
 Use [`panel-run.md`](panel-run.md) for supported foreground/background mechanics and
-`read_subagent` collection rules.
+completion collection rules.
 
 Do not retry, resume, or dispatch a replacement writer while the prior writer may still
 be running or may still own the target worktree. First establish that it has returned
@@ -22,7 +22,8 @@ worker in the foreground only when a resumable agent ID exists.
 Foreground monitoring is unavailable while the blocking call runs. If it hangs, the
 operator may use the Devin UI's manual cancellation control, then the root records the
 interruption and applies the bounded recovery cap. Background calls use only preapproved
-permissions and are collected with `read_subagent`; do not invent cancellation fields.
+permissions and return results through completion notifications. If notifications are
+unavailable, choose foreground before dispatch. Do not invent cancellation fields.
 
 A `pstack:panel-*` profile is a model-pinned investigation or review profile. For implementation, map it deterministically to the registered `pstack:poteto-agent-*` counterpart with the same `model:` frontmatter pin. This is an implementation routing rule, never a failure fallback. Explicit `pstack:poteto-agent-*` rows are used directly. A dispatch rejection does not authorize a different profile. If no agent ID exists to resume, report the blocked configured pass and inspect any partial filesystem effects; do not issue a substitute call.
 
@@ -39,4 +40,4 @@ This example is used only after resolving `feature, refactoring` to the legacy `
 }
 ```
 
-Do not add `model`, `subagent_type`, or `run_in_background`. New independent perspectives omit `resume`.
+Use only documented `run_subagent` fields. Select the model through the registered profile, not an extra argument. New independent perspectives omit `resume`.

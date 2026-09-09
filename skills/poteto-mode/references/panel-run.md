@@ -52,7 +52,7 @@ Every implementation brief follows the single-source procedure in
 
 - Set `is_background: true` only for independent calls. Issue those calls without waiting between them and retain every returned agent ID.
 - Background workers inherit only permissions already approved in the session. They cannot request new permission. Do not enable blanket dangerous mode to make a run pass.
-- Completion notifications provide finished results. To collect explicitly, call `read_subagent` with `agent_id`; its only optional arguments in Devin CLI 3000.6.14 are `block` and `timeout`. Use `block: true` only when no independent parent work remains. Do not poll.
+- Collect finished results from completion notifications. Use foreground dispatch when the session cannot deliver background results. Do not invent a collection tool or poll.
 - Inspect every completion and artifact before synthesis. A returned ID, notification, or single completion is not a full panel.
 
 ### Repeated profiles and failure
