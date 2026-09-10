@@ -25,6 +25,7 @@ DispatchRecord
   workspace      absolute path assigned to this writer
   branch
   base           branch or SHA the workspace started from
+  inputBaseline  pre-dispatch snapshot of required inputs, including uncommitted changes
   state          dispatched | running | returned | collected | failed | incomplete | cancelled
   artifacts      absolute paths
   parentVerdict
@@ -80,13 +81,14 @@ A `pstack:panel-*` profile is a model-pinned investigation or review profile. Fo
 
 `run_subagent` does not create a worktree and takes no working-directory argument. The root provisions and verifies the workspace before dispatch. Never let two writers edit one checkout concurrently.
 
-1. Create or select a separate workspace outside the project checkout. For a git project use a worktree, `git -C <project> worktree add <absolute-worktree-path> -b <branch> <base>`. For non-git work use a separate directory. Do not create the workspace inside the user's dirty checkout.
-2. Verify the workspace. `git -C <absolute-worktree-path> rev-parse --show-toplevel` must equal the worktree path. Record `git -C <absolute-worktree-path> rev-parse HEAD` as the base SHA.
-3. Record `workspace`, `branch`, `base`, and `owner` in the `DispatchRecord` and pass the absolute path in the brief.
+1. Establish the task's input baseline before provisioning. Inspect staged, unstaged, and untracked changes in the source checkout, including uncommitted prerequisites from earlier workers. Identify the inputs the task requires and capture a stable snapshot of their current contents, deletions, and file modes. Do not commit, stash, reset, or otherwise alter user changes merely to provision a worker.
+2. Create or select a separate workspace outside the project checkout. For a git project use a worktree, `git -C <project> worktree add <absolute-worktree-path> -b <branch> <base>`. A branch or SHA supplies only committed files: transfer the required uncommitted inputs into the worktree, including staged and unstaged changes and required untracked files. Preserve their effective working contents; do not apply overlapping staged and unstaged changes twice. For non-git work copy the required inputs into a separate directory. Do not create the workspace inside the user's dirty checkout. If the required inputs cannot be identified or transferred safely, use the serial fallback in step 7.
+3. Verify the workspace. `git -C <absolute-worktree-path> rev-parse --show-toplevel` must equal the worktree path. Record `git -C <absolute-worktree-path> rev-parse HEAD` as the base SHA, then verify that the required input contents, deletions, and file modes match the captured snapshot. A matching HEAD alone is not sufficient. Record `workspace`, `branch`, `base`, `inputBaseline`, and `owner` in the `DispatchRecord` and pass the absolute path and baseline in the brief. Keep the pre-dispatch snapshot so subsequent review distinguishes inherited changes from the worker's edits.
 4. Instruct the worker that every read, edit, and `exec` command targets the assigned path, using `git -C <absolute-worktree-path> ...` and absolute file paths. Do not assume the worker's current directory.
 5. Inspect the assigned workspace after return. The diff must originate there. If a worker wrote into the shared checkout or another writer's workspace, fail preflight, discard the stray edits, and serialize.
-6. When a safe separate workspace cannot be established, serialize writers in one checkout instead of running concurrently. Readers may share inputs.
-7. Preserve user changes. Leave worktrees and branches in place. Removing them is the explicit Worktree cleanup playbook, not part of delegation.
+6. Compare the returned workspace against `inputBaseline` when attributing worker edits; the diff against HEAD also includes inherited uncommitted inputs.
+7. When a safe separate workspace cannot be established, serialize writers in the checkout containing the required inputs instead of running concurrently. Establish that no prior writer is still running there, record its pre-dispatch input baseline, and assign that checkout's absolute path explicitly. Readers may share inputs.
+8. Preserve user changes. Leave worktrees and branches in place. Removing them is the explicit Worktree cleanup playbook, not part of delegation.
 
 ## Implementation example
 
