@@ -7,6 +7,7 @@ Read this catalog only when a live decision needs more than the default engineer
 - **Laziness Protocol** (`skills/principle-laziness-protocol/SKILL.md`). Refactoring, sizing a diff, or tempted to add abstractions, layers, or signal threading. Bias to deletion and the smallest change that solves the problem.
 - **Foundational Thinking** (`skills/principle-foundational-thinking/SKILL.md`). Before writing logic. Core types and data structures, scaffold-vs-feature sequencing, what concurrent actors share.
 - **Redesign from First Principles** (`skills/principle-redesign-from-first-principles/SKILL.md`). Integrating a new requirement into an existing design. Redesign as if it had been foundational from day one.
+- **Attack the Premise** (`skills/principle-attack-the-premise/SKILL.md`). Two or more fixes that share one premise have failed the same gate. Take a census of which actors hold the imbalance before the next fix, then question the premise instead of writing another fix that assumes it.
 - **Subtract Before You Add** (`skills/principle-subtract-before-you-add/SKILL.md`). Sequencing an addition, refactor, or rewrite. Remove dead weight first, then build on the simpler base.
 - **Minimize Reader Load** (`skills/principle-minimize-reader-load/SKILL.md`). Reviewing or shaping code that's hard to trace. Count layers and hidden state, collapse one-caller wrappers, shrink mutable scope.
 - **Outcome-Oriented Execution** (`skills/principle-outcome-oriented-execution/SKILL.md`). Planned rewrites and migrations with explicit phase boundaries. Converge on the target architecture. Do not preserve throwaway compatibility states.
@@ -28,6 +29,7 @@ Read this catalog only when a live decision needs more than the default engineer
 - **Prove It Works** (`skills/principle-prove-it-works/SKILL.md`). After a task, before declaring done. Verify against the real artifact, not a proxy or "it compiles".
 - **Fix Root Causes** (`skills/principle-fix-root-causes/SKILL.md`). Debugging. Trace each symptom to its root cause, reproduce first, ask why until you reach it.
 - **Sequence Work into Verifiable Units** (`skills/principle-sequence-verifiable-units/SKILL.md`). Multi-step work and how you stack commits and PRs. Break work into small units that each end in a check.
+- **Test Behavior, Not Implementation** (`skills/principle-test-behavior-not-implementation/SKILL.md`). Writing, changing, or keeping a test. Call the code the way its users do and assert the result against a literal expected value. If the test would still pass when every imported function returns `undefined`, rewrite the assertion or delete the test.
 
 **Delegation**
 

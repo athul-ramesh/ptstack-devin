@@ -9,9 +9,13 @@ PanelRun
   implementationProfiles pstack:poteto-agent-<alias>[] (resolved writers, including explicit rows)
   requiredPerspectives number
   executionMode        parallel | sequential
+  workers              DispatchRecord[] (agentId, profile, modelPin, workspace, branch, state)
   artifacts            path[]
   parentVerdict        string
 ```
+
+Each worker follows the root-owned lifecycle in [`delegation.md`](delegation.md).
+Record a `PanelRun` before the first call and one `DispatchRecord` per worker after it.
 
 Implementation routing is separate from panel perspective routing. When a perspective
 writes code, resolve the configured `pstack:panel-<alias>` entry to the registered
@@ -52,16 +56,18 @@ Every implementation brief follows the single-source procedure in
 
 - Set `is_background: true` only for independent calls. Issue those calls without waiting between them and retain every returned agent ID.
 - Background workers inherit only permissions already approved in the session. They cannot request new permission. Do not enable blanket dangerous mode to make a run pass.
-- Collect finished results from completion notifications. Use foreground dispatch when the session cannot deliver background results. Do not invent a collection tool or poll.
-- Inspect every completion and artifact before synthesis. A returned ID, notification, or single completion is not a full panel.
+- Collect each finished worker with `read_subagent` by its retained agent id. It is the supported collection tool and optionally accepts `block` and `timeout`; confirm the installed schema and do not invent fields. A completion notification signals which worker finished, not that its work is correct.
+- Collect independent and out-of-order completions separately by id. Never merge two ids into one result. Use foreground dispatch when the session cannot deliver background results.
+- Inspect every collected result and artifact before synthesis. A returned ID, notification, or single completion is not a full panel.
 
 ### Repeated profiles and failure
 
 - Make one fresh `run_subagent` call per required perspective. Repeated profiles run sequentially as separate calls. Omit `resume` so each is an independent perspective.
 - Resume is only for repairing the same failed worker, such as a background permission denial. Resumed workers always run in the foreground. Resuming on the same profile preserves the mapping; it does not create another perspective.
 - Classify failures before acting. Scheduling failure may justify a foreground retry. An unavailable pinned model is not repaired by sequential scheduling. Changing to another or built-in profile changes the mapping and must be explicitly reported as degraded execution.
+- Classify every non-clean outcome. `failed` has no usable result, so inspect partial filesystem effects. `incomplete` reports its completed and missing portions and is not synthesized over. `cancelled` records what ran and the state it left.
 - Do not automatically retry or substitute models. If a required pass does not complete, report the panel as incomplete with its completed count, failure, and any deliberate degraded execution.
-- Give each writer a separate worktree or directory, not merely another branch in the shared checkout. Readers may share inputs.
+- Give each writer the root-provisioned, verified, recorded workspace that [`delegation.md`](delegation.md) requires, not merely another branch in the shared checkout. A separate branch is not isolation. Readers may share inputs. Serialize writers when no safe separate workspace can be established.
 - The parent writes `parentVerdict`. Worker reports are evidence, not the answer.
 - Ordinary implementation workers report an early checkpoint, progress after each
   independently verifiable unit, and a final check with decisive output. The brief

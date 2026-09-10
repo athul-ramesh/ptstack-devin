@@ -1,0 +1,44 @@
+{
+  "date": "2026-09-10",
+  "cli": "devin 3000.10.21 (611c1cba)",
+  "surface": "local Devin CLI on macOS (darwin)",
+  "plugin": "pstack 0.1.0",
+  "scope": "Task 07 core completion validation",
+  "static_checks": {
+    "command": "node --test tests/pstack-models.test.mjs tests/poteto-delegation.test.mjs",
+    "tests_passed": 19,
+    "tests_failed": 0,
+    "new_tests": 6,
+    "git_diff_check": "clean",
+    "markdown_links_checked": 111,
+    "markdown_links_broken": 0,
+    "principle_leaves_expected": 23,
+    "principle_leaves_catalogued": 23,
+    "profiles_referenced_and_registered": [
+      "pstack:panel-opus",
+      "pstack:panel-sonnet",
+      "pstack:panel-swe",
+      "pstack:poteto-agent-opus",
+      "pstack:poteto-agent-sonnet",
+      "pstack:poteto-agent-swe"
+    ],
+    "cut_workflows_with_routing_verdict": ["shipping", "autopilot-full", "autopilot-stack"],
+    "writer_dispatch_files_with_provisioning": 8,
+    "unsupported_dispatch_fields_found": 0
+  },
+  "native_runtime_validation": {
+    "status": "blocked",
+    "reason": "plugin pstack is not installed in this environment; installing it writes global user configuration, which Task 00 forbids without task authorization",
+    "observed_state": "devin plugins list reports: No plugins installed",
+    "unexercised_cases": ["V01", "V02", "V03", "V04", "V05", "V06", "V07", "V08", "V09", "V10", "V11", "V12", "V13", "V14"],
+    "still_unproven": [
+      "foreground worker completion and parent verification",
+      "two background workers completing out of order and both collected",
+      "read_subagent field names against the installed 3000.10.21 CLI",
+      "same-worker permission resume",
+      "writer worktree isolation enforced at runtime",
+      "runtime worker model identity"
+    ]
+  },
+  "verdict": "static core-completion contract passes; native Devin worker lifecycle remains unproven because no authorized plugin install was available"
+}

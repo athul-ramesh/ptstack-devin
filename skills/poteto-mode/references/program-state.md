@@ -49,7 +49,7 @@ exec skills/show-me-your-work/scripts/log.sh <logfile> <phase> <decision> <why> 
 
 ## Wake
 
-Devin cannot schedule a later turn. Bound the iteration count in this session. Then write `resume.md` and stop. The operator starts a new session and resumes from `storePath`.
+This plugin has no agent-callable scheduled wakeup. Bound the iteration count in this session. Then write `resume.md` and stop. The operator starts a new session and resumes from `storePath`.
 
 ## Resume
 

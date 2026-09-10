@@ -2,7 +2,7 @@
 
 **You own the exit condition. Define done, then drive to it without stopping.** For "going to bed", "run until done", or "keep going until X".
 
-Devin cannot schedule a later turn. There is no wake watcher. Bound the iteration count in this session. Then write `resume.md` and stop. The operator starts a new session to continue.
+This plugin has no agent-callable scheduled wakeup and no wake watcher. Bound the iteration count in this session. Then write `resume.md` and stop. The operator starts a new session to continue.
 
 1. State the exit condition as a checkable predicate before the first iteration (tests green, repro fixed, all N PRs merged, pixel-diff zero). A vague goal stalls. A predicate lets you stop.
 2. Persist `ProgramState` at `<cwd>/.pstack/<slug>/` per `references/program-state.md`. Init the store. Each iteration is a unit. Do not invent a timer or a sleep loop.

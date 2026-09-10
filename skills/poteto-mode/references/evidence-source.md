@@ -4,8 +4,8 @@ Tagged source for recall, what-did-i-get-done, get-pr-comments, and any brief th
 
 ```
 EvidenceSource
-  kind        this-conversation | devin-export | session-index | git-history | pr | issue | unavailable
-  locator     export path, session id, sha range, PR number, or ticket id. Empty when kind is this-conversation.
+  kind        this-conversation | devin-export | session-index | durable-state | git-history | pr | issue | unavailable
+  locator     export path, session id, store path, sha range, PR number, or ticket id. Empty when kind is this-conversation.
   category    git | session | pr | issue | docs | chat | errors | other. Required when kind is unavailable.
   reason      why this category is missing. Required when kind is unavailable.
 ```
@@ -23,6 +23,10 @@ Session message bodies come from, in order:
 1. This conversation. Kind `this-conversation`.
 2. An export path the user named. `devin --export` writes jsonl. `read` that file. Kind `devin-export`.
 3. `exec` `devin list --format json` for session ids in this directory. Kind `session-index`. An id is not a transcript. Do not treat it as message bodies.
+
+## Durable state
+
+A `ProgramState` store is a first-class resume source. Read `<cwd>/.pstack/<slug>/` or the `storePath` the user named: `resume.md`, `units.tsv`, `decisions.tsv`. Kind `durable-state`, locator the store path. A worker status the store records as unknown stays unknown. Do not infer a completed or abandoned worker from silence. Only a fresh live check resolves it.
 
 ## Live checks
 
