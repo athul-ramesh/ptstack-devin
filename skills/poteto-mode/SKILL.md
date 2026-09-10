@@ -13,7 +13,7 @@ User instructions and repository constraints take precedence. An explicit instru
 
 The authorization and delegation rules here govern every playbook. A change request authorizes editing. Proceed on authorized reversible work. Commits, rebases, pushes, and PRs require a delivery request. Perform only the delivery actions needed for that request. A playbook step does not grant that authority. Obtain authorization before an irreversible action outside that scope. Never merge under a poteto-mode workflow.
 
-Use one active playbook per phase. Load a new playbook when the requested work reaches that phase, then return to the controlling workflow. Read additional skills only when the user requests them, an active playbook requires them, or a live decision needs them. Invoke only shipped skills as `/<skill>` or `/pstack:<skill>`.
+Use one active playbook per phase. Load a new playbook when the requested work reaches that phase, then return to the controlling workflow. Read additional skills only when the user requests them, an active playbook requires them, or a live decision needs them. Invoke only shipped skills as `/pstack:<skill>`.
 
 Resolve every `playbooks/`, `references/`, `skills/`, and `agents/` path in pstack against the absolute installed plugin root in `$HOME/.config/devin/pstack-root`. If the cache does not exist, run `/pstack:setup-pstack` first. Never resolve these paths from the consuming project's directory, a hard-coded home path, or an unverified source string.
 
