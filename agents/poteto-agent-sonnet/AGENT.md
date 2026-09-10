@@ -1,7 +1,7 @@
 ---
 name: poteto-agent-sonnet
 description: Explicitly selected model-pinned implementation worker using the sonnet panel model; scoped implementation only.
-model: glm-5-3-flash-high
+model: sonnet
 ---
 
 # Poteto implementation worker (sonnet)

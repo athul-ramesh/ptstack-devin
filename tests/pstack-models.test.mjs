@@ -90,4 +90,16 @@ describe("pstack models sheet", () => {
     assert.match(first.content, /frontmatter `model:` pin is authoritative/);
     assert.doesNotMatch(first.content, /claude-/);
   });
+
+  it("writes pstack-root and restricts profiles to shipped agents when plugin root is given", () => {
+    const dir = mkdtempSync(join(tmpdir(), "pstack-root-"));
+    const out = join(dir, "pstack-models.md");
+    const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+    const result = writeFromModelsList(LIST_FOUR, { out, home: dir, pluginRoot: root });
+    assert.equal(result.rootPath, join(dir, ".config", "devin", "pstack-root"));
+    assert.equal(readFileSync(result.rootPath, "utf8"), root);
+    const row = result.roles.find((r) => r.role === "feature, refactoring");
+    assert.deepEqual(row.profiles, ["pstack:poteto-agent-opus"]);
+    assert.deepEqual([...result.available].sort(), ["codex", "opus", "sonnet", "swe"]);
+  });
 });

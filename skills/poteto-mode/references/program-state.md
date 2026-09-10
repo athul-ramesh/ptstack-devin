@@ -40,11 +40,13 @@ One writer per file. Readers aggregate at read time.
 
 ## Scripts
 
+Resolve the installed pstack root from `$HOME/.config/devin/pstack-root` before every `exec` below and substitute `<PSTACK_ROOT>`.
+
 ```
-exec skills/poteto-mode/scripts/program-state.sh init <dir> <objective>
-exec skills/poteto-mode/scripts/program-state.sh set <dir> <id> <owner> <state> <deps> <evidence> <head>
-exec skills/poteto-mode/scripts/program-state.sh status <dir>
-exec skills/show-me-your-work/scripts/log.sh <logfile> <phase> <decision> <why> <evidence> <result>
+exec <PSTACK_ROOT>/skills/poteto-mode/scripts/program-state.sh init <dir> <objective>
+exec <PSTACK_ROOT>/skills/poteto-mode/scripts/program-state.sh set <dir> <id> <owner> <state> <deps> <evidence> <head>
+exec <PSTACK_ROOT>/skills/poteto-mode/scripts/program-state.sh status <dir>
+exec <PSTACK_ROOT>/skills/show-me-your-work/scripts/log.sh <logfile> <phase> <decision> <why> <evidence> <result>
 ```
 
 ## Wake

@@ -15,7 +15,7 @@ The authorization and delegation rules here govern every playbook. A change requ
 
 Use one active playbook per phase. Load a new playbook when the requested work reaches that phase, then return to the controlling workflow. Read additional skills only when the user requests them, an active playbook requires them, or a live decision needs them. Invoke only shipped skills as `/<skill>` or `/pstack:<skill>`.
 
-Resolve `playbooks/` and `references/` from this skill's installed directory. Resolve `skills/` and `agents/` from the installed plugin root reported by the skill tool, never from the consuming project's directory.
+Resolve every `playbooks/`, `references/`, `skills/`, and `agents/` path in pstack against the absolute installed plugin root in `$HOME/.config/devin/pstack-root`. If the cache does not exist, run `/pstack:setup-pstack` first. Never resolve these paths from the consuming project's directory, a hard-coded home path, or an unverified source string.
 
 ## Choose the route
 

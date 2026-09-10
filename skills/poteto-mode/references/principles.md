@@ -1,6 +1,6 @@
 # Principle selection
 
-Read this catalog only when a live decision needs more than the default engineering rules. Select the relevant leaf and read it in full. Resolve `skills/` paths from the installed plugin root, not the consuming project. Workers read only the leaves named in their brief.
+Read this catalog only when a live decision needs more than the default engineering rules. Select the relevant leaf and read it in full. Resolve `skills/` paths from the installed plugin root in `$HOME/.config/devin/pstack-root`, not the consuming project. If the cache is missing, run `/pstack:setup-pstack` first. Workers read only the leaves named in their brief.
 
 **Core**
 

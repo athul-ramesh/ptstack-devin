@@ -1,6 +1,6 @@
 # Release notes
 
-Plugin `pstack` 0.1.0 for local Devin CLI 3000.6.14.
+Plugin `pstack` 0.1.0 for local Devin CLI.
 
 ## Shipped
 
@@ -12,7 +12,7 @@ SessionStart injects `PSTACK_ROUTE=/pstack:poteto-mode`.
 
 Poteto implementation delegation is root-owned. Code-writing passes use the explicit same-pin counterpart mapping `pstack:panel-<alias>` → `pstack:poteto-agent-<alias>`, while explicit `pstack:poteto-agent-*` rows are honored as configured. This mapping is deterministic and is not failure fallback. Investigation and review retain their configured `panel-*` profiles and panel perspective counts. The root derives absolute references from the installed skill source and inlines a shared worker contract. Logical program tracks do not add agent depth. Concurrent writers use separate worktrees or directories.
 
-Panel profiles remain model-pinned for investigation and review briefs. Their pins are unchanged: `panel-swe` uses `swe`, `panel-sonnet` uses `glm-5-3-flash-high`, and `panel-opus` and `panel-codex` use `gpt-5-6-sol-medium`. The dedicated implementation profiles preserve those actual pins: `poteto-agent-swe`, `poteto-agent-sonnet`, `poteto-agent-opus`, and `poteto-agent-codex` use the corresponding pins. The scoped `poteto-agent` pin also remains `gpt-5-6-sol-medium`.
+Panel profiles remain model-pinned for investigation and review briefs. Their `model:` frontmatter pins match their suffix: `panel-swe` uses `swe`, `panel-sonnet` uses `sonnet`, `panel-opus` uses `opus`, and `panel-codex` uses `codex`. The dedicated implementation profiles preserve the same pins: `poteto-agent-swe`, `poteto-agent-sonnet`, `poteto-agent-opus`, and `poteto-agent-codex` use the corresponding short names. The scoped `poteto-agent` profile also pins `opus`.
 
 Implementation briefs must specify an early checkpoint artifact, time budget, work quantum, no-progress threshold, and bounded recovery attempts. Workers report progress for independently verifiable units and return after the stated quantum with the concrete done check. These fields guide reporting and recovery; they do not claim that a blocking foreground call can be cancelled. Background work uses only preapproved permissions and is collected with `read_subagent`. Permission repair resumes the same worker in the foreground when a resumable ID exists. No model or profile substitution is automatic.
 
