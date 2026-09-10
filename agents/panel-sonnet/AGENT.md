@@ -1,7 +1,7 @@
 ---
 name: panel-sonnet
 description: Internal model-pinned profile for an assigned implementation, investigation, or review pass.
-model: sonnet
+model: glm-5-3-flash-high
 ---
 
 # Panel sonnet

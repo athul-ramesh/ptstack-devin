@@ -1,7 +1,7 @@
 ---
 name: poteto-agent
 description: Explicitly selected model-pinned profile for one scoped worker pass; not a root coordinator or automatic role-sheet target.
-model: opus
+model: gpt-5-6-sol-medium
 ---
 
 # Poteto scoped worker

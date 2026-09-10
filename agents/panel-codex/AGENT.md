@@ -1,7 +1,7 @@
 ---
 name: panel-codex
 description: Internal model-pinned profile for an assigned implementation, investigation, or review pass.
-model: codex
+model: gpt-5-6-sol-medium
 ---
 
 # Panel codex
