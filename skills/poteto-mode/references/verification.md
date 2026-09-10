@@ -14,6 +14,10 @@ VerificationReceipt
 
 There is no Devin `run` or `verify` skill. Do not invent one.
 
+## Detect the surface
+
+Before promising evidence, name the tool this session actually exposes for the surface the change touches. A `cli` or `tui` change needs an `exec` path to the real binary. A `web` change needs a browser mechanism the session exposes. Inspect the available tools rather than assuming one. If none is visible, set `surface` to `unsupported` and record the missing tool as the unresolved gap. Then fill the receipt below. Compile success, a green type check, and a passing unit test are not evidence of the changed user surface.
+
 ## Surfaces
 
 **CLI.** `exec` the real binary or documented command. Capture stdout, stderr, and exit code. `passPredicate` names the exact output or exit that means the user-visible behavior happened.

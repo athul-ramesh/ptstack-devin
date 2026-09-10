@@ -7,7 +7,7 @@ description: Watch an open PR. Fix failing CI, handle straightforward review com
 
 Standalone `/pstack:babysit` for one PR outside a poteto-mode run. Inside poteto-mode, [`../poteto-mode/playbooks/babysit.md`](../poteto-mode/playbooks/babysit.md) owns mode, frontier, and stop conditions.
 
-This session only. Devin cannot schedule a later turn. Do not claim a watch that outlives this session.
+This session only. This plugin has no agent-callable scheduled wakeup. Do not claim a watch that outlives this session.
 
 Read [`../poteto-mode/references/delivery-capability.md`](../poteto-mode/references/delivery-capability.md).
 

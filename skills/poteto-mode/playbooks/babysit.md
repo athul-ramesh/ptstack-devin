@@ -4,7 +4,7 @@
 
 This playbook supersedes `/pstack:babysit` inside poteto-mode. `/pstack:babysit` stays the standalone entry outside poteto-mode.
 
-This session only. Devin cannot schedule a later turn. Do not claim a watch after this session ends.
+This session only. This plugin has no agent-callable scheduled wakeup. Do not claim a watch after this session ends.
 
 Read [`../references/delivery-capability.md`](../references/delivery-capability.md).
 

@@ -24,11 +24,11 @@ Open a todolist with one entry per phase.
 2. Choose the shape. Partition, race, or mix. For a race or mix, declare `first pass`, `rank all`, or `best-of` before spawning.
 3. Set N from the user or the shape. N is total workers, not concurrency.
 4. Pick the worker profile from `swarm workers` in `$HOME/.config/devin/pstack-models.md`, else the Models default. For a model race, name each arm's profile up front.
-5. Give each writer its own output. A worktree, a branch, or `/tmp/swarm-<slug>/worker-<n>/`.
+5. Give each writer its own root-provisioned output. A verified git worktree, or a separate directory such as `/tmp/swarm-<slug>/worker-<n>/`. A branch in the shared checkout is not isolation.
 
 ## Phase B: Fan out
 
-One `run_subagent` per worker on the swarm-workers profile. Isolation comes from the worktree or output directory, not from a remote box.
+One `run_subagent` per worker on the swarm-workers profile. The root creates and records each workspace per [`../poteto-mode/references/delegation.md`](../poteto-mode/references/delegation.md) before dispatch. Isolation comes from the verified worktree or separate directory, not from a branch in the shared checkout and not from a remote box.
 
 When a worker must start from a non-default branch, check that branch out in that worker's worktree and name the path in its brief.
 

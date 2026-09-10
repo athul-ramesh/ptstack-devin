@@ -14,7 +14,7 @@ Open a todolist with the steps below copied in verbatim. A step you skip stays l
 
 - **Coordinator (this root chat).** Frames tracks and units, authors briefs, dispatches every worker, drains results, owns dependency gates and the human report, and makes retry and judgment decisions. It never authors or edits code. Conflicted merges, restacks, and code changes are tasks. Mechanically landing a verified unit is bookkeeping the coordinator may do itself when authorized.
 - **Track.** A logical record grouping dependent units, status, and evidence. It is not an agent and does not dispatch. The root owns every track's queue and reconciliation.
-- **Worker / verifier.** `run_subagent` with a registered profile, dispatched by the root through [`../references/delegation.md`](../references/delegation.md). Code-writing workers use the deterministic same-pin `pstack:poteto-agent-<alias>` counterpart of the configured `pstack:panel-<alias>` profile, or an explicitly configured `pstack:poteto-agent-*` row. Panel profiles remain for investigation and review. Isolation is a worktree or directory per writer, not a branch in one shared checkout. The root resolves `references/verification.md` from the installed poteto-mode source and supplies its absolute path. Proof uses `exec` on the real CLI or TUI, and the browser only when this session has one. Prefer fewer, broader workers. Run a unit's verifier as a separate review pass with edits prohibited.
+- **Worker / verifier.** `run_subagent` with a registered profile, dispatched by the root through [`../references/delegation.md`](../references/delegation.md). Code-writing workers use the deterministic same-pin `pstack:poteto-agent-<alias>` counterpart of the configured `pstack:panel-<alias>` profile, or an explicitly configured `pstack:poteto-agent-*` row. Panel profiles remain for investigation and review. Isolation is a root-provisioned, verified, recorded worktree or directory per writer, not a branch in one shared checkout. The root resolves `references/verification.md` from the installed poteto-mode source and supplies its absolute path. Proof uses `exec` on the real CLI or TUI, and the browser only when this session has one. Prefer fewer, broader workers. Run a unit's verifier as a separate review pass with edits prohibited.
 
 Actual agent depth is root → worker. Workers report unresolved work to the root. Nested coordinators are a future feature requiring a bounded nesting profile, an explicit cost policy, and a dedicated runtime test.
 
@@ -60,7 +60,7 @@ Size the brief to the unit. Missing fields are a refuse-to-spawn condition. Neve
 
 #### Liveness and failure
 
-Devin cannot schedule a later turn. There is no heartbeat watcher. Bound the wave count in this session. Then write `resume.md` and stop. The operator starts a new session. In-flight subagents from the dead session are gone. Pushed branches, open PRs, and the store are not. Re-read standing orders and `units.tsv`, reattach in-flight work by PR and branch rather than agent id, drain, resume.
+This plugin has no agent-callable scheduled wakeup and no heartbeat watcher. Bound the wave count in this session. Then write `resume.md` and stop. The operator starts a new session. In-flight subagents from the dead session are gone. Pushed branches, open PRs, and the store are not. Re-read standing orders and `units.tsv`, reattach in-flight work by PR and branch rather than agent id, drain, resume.
 
 Never resume an agent to check on it. Probe read-only. The store, `gh`, and pushed branches.
 

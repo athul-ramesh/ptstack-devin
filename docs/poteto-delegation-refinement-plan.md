@@ -243,3 +243,12 @@ Completed 2026-09-07.
 - Added compact sanitized evidence under `docs/evidence/`; full session exports remain outside the repository.
 - Updated README and release notes with root-owned delegation, unchanged profile pins, no automatic fallback, permission requirements, and the remaining live-validation limits.
 - No commit, publish, setup rewrite, plugin-source change, or user-configuration write was performed.
+
+### Core completion validation record (2026-09-10)
+
+Task 07 of [`poteto-mode-parity-findings-and-plan.md`](poteto-mode-parity-findings-and-plan.md) extended the structural checks and recorded a dated baseline.
+
+- Added six structural checks to `tests/poteto-delegation.test.mjs`: shipped link resolution, principle-catalog completeness, registered profile mapping and same-pin comparison, explicit cut-workflow routing, writer workspace provisioning, and documented `run_subagent` fields with a forbidden-field guard.
+- `node --test tests/pstack-models.test.mjs tests/poteto-delegation.test.mjs` passed 19 of 19. `git diff --check` is clean. 111 relative links resolved with 0 broken.
+- Native runtime validation remains blocked: the plugin is not installed, and installing it writes global user configuration that Task 00 withholds. Worker completion, background collection, same-worker permission resume, worktree isolation, and runtime model identity stay unproven.
+- Compact evidence: [`evidence/poteto-delegation-2026-09-10.json`](evidence/poteto-delegation-2026-09-10.json).

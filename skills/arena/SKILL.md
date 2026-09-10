@@ -27,7 +27,7 @@ The prompt is the contract.
 1. State the artifact.
 2. Derive the rubric. 3-6 concrete, gradeable criteria. Candidates do not see the rubric.
 3. Pick runners from `arena runners` in `$HOME/.config/devin/pstack-models.md`, else the Models defaults. Same profile N times when the work is generation-bound.
-4. Assign output paths. Each candidate writes to its own location. A git worktree when possible, otherwise `/tmp/arena-<slug>/candidate-<n>/`. Shared write paths fail `skills/principle-separate-before-serializing-shared-state/SKILL.md`.
+4. Assign output paths. Each candidate writes to its own root-provisioned location. A verified git worktree when possible, otherwise a separate `/tmp/arena-<slug>/candidate-<n>/` directory. A branch in the shared checkout is not isolation. Shared write paths fail `skills/principle-separate-before-serializing-shared-state/SKILL.md`. Record each workspace per [`../poteto-mode/references/delegation.md`](../poteto-mode/references/delegation.md) before dispatch.
 
 ## Phase B: Fan out
 

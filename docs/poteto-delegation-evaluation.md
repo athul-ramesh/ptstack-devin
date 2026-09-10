@@ -75,7 +75,53 @@ Partial scoped edits appeared in the disposable repository despite the rejected 
 
 Compact sanitized evidence is in [`evidence/poteto-delegation-2026-09-07.json`](evidence/poteto-delegation-2026-09-07.json). The full session export is not retained in the repository.
 
+## Capability baseline on 2026-09-10
+
+Recorded against Devin CLI 3000.10.21 (611c1cba), local Devin CLI on macOS, plugin `pstack` 0.1.0. No plugin runtime behavior was exercised for this entry. It separates documented claims from the 2026-09-07 live observations and from what remains untested.
+
+Environment:
+
+- CLI version and build: `devin 3000.10.21 (611c1cba)` from `devin --version`.
+- Surface: local Devin CLI on darwin. Devin Desktop shares the local plugin surface; cloud sessions do not.
+- Plugin version and revision: `pstack` 0.1.0, manifest `.devin-plugin/plugin.json`. Not installed in this environment. `devin plugins list` reported none and `devin doctor` reported no custom subagent profiles configured.
+- Default permission mode: `normal` (alias `auto`), per the `devin --permission-mode` help text. Background subagents inherit only pre-approved permissions and cannot prompt for new ones.
+- Subagent tools: `run_subagent` and `read_subagent`, documented as removed when `subagents_enabled` is false.
+- Profile registration: unverified locally because the plugin is not installed. The pinned model slugs `swe`, `glm-5-3-flash-high`, and `gpt-5-6-sol-medium` exist in `devin models list` (46 families).
+
+Confirmed schemas (official docs, Devin CLI 3000.10.21):
+
+- Dispatch: `run_subagent` takes `profile`, `task`, `title`, `is_background`, and optional `resume`. There is no per-call model argument; the profile `model:` pin or the default subagent model decides.
+- Collection: `read_subagent`. A completion notification is a signal to inspect, not proof of correctness.
+- Resume: resumed subagents always run in the foreground, so a background worker denied a tool can be resumed to approve it.
+- Cancellation: from the subagent panel, or Ctrl+C or Esc for a foreground subagent. No tool argument cancels a run.
+
+Capability classification:
+
+- Documented and locally observed on 2026-09-07: SessionStart injected `PSTACK_ROUTE`; the skill tool loaded poteto-mode; three foreground `run_subagent` calls returned role markers; `node --test tests/pstack-models.test.mjs` passed 4 of 4.
+- Documented, not observed: always-on plugin `AGENTS.md` rules; `read_subagent` collection; background worker completion; same-worker permission resume.
+- Unavailable: `/loop <prompt>` is an interactive run-then-review command, not an agent-callable scheduler or a durable wakeup. Cloud sessions exclude plugin SessionStart and plugin agents.
+- Untested: writer worktree isolation enforcement, background result collection, parent verification of a worker diff, and runtime worker model identity.
+
 Official references:
 
 - https://docs.devin.ai/cli/subagents
 - https://docs.devin.ai/cli/extensibility/plugins/overview
+- https://docs.devin.ai/cli/extensibility/rules
+- https://docs.devin.ai/cli/reference/commands
+
+## Core completion validation on 2026-09-10
+
+Task 07 extended the structural checks and re-ran them. These are static contract checks, not native Devin execution.
+
+Static:
+
+- `node --test tests/pstack-models.test.mjs tests/poteto-delegation.test.mjs` passed 19 of 19, including six new checks for link resolution, the principle catalog, profile registration and same-pin mapping, explicit delivery routing, writer isolation, and documented dispatch fields.
+- `git diff --check` reported no whitespace errors.
+- Every relative Markdown link in the shipped skill tree plus `AGENTS.md` and `README.md` resolved: 111 checked, 0 broken.
+- The principle catalog lists 23 leaves and matches the 23 shipped `skills/principle-*/SKILL.md` directories one-to-one.
+- Every `pstack:panel-*` and `pstack:poteto-agent-*` profile named in poteto-mode resolves to a registered `agents/<name>/AGENT.md`, and each `poteto-agent-*` shares its panel counterpart's `model:` pin.
+- `shipping`, `autopilot-full`, and `autopilot-stack` each have a `cut` row and reach that verdict before the generic fallback.
+- Each concurrent-writer dispatch path requires a root-provisioned workspace, and the delegation reference documents worktree creation and verification.
+- No `subagent_type`, `run_in_background`, or `disable-model-invocation` field appears in the shipped skill tree.
+
+Native runtime: blocked. `devin plugins list` reports no plugins installed, and installing one writes global user configuration, which Task 00 forbids without task authorization. No V06-V14 scenario was exercised, so worker completion, background collection, same-worker permission resume, worktree isolation, and runtime model identity remain unproven. Compact facts are in [`evidence/poteto-delegation-2026-09-10.json`](evidence/poteto-delegation-2026-09-10.json).

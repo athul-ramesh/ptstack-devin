@@ -37,7 +37,7 @@ Decompose into atomic, independently-landable units. Sequence riskiest-unknown-f
 
 - Build the verification harness before the work, with the baseline captured from the pre-change state, so the check reads as old value vs new value.
 - For one-way-door design decisions, run `/pstack:architect`. Skip it for mechanical work whose shape is already concrete. A second arena over a settled design is over-engineering (`skills/principle-laziness-protocol/SKILL.md`).
-- Decide what fans out. Parallelize only across genuine seams, and give each writer its own worktree or directory (`skills/principle-separate-before-serializing-shared-state/SKILL.md`). Don't over-fan. Use `run_subagent` with a registered profile. Sequential scheduling does not repair an unavailable model pin; report the blocked mapping instead of silently substituting.
+- Decide what fans out. Parallelize only across genuine seams, and give each writer its own root-provisioned, recorded worktree or directory per [`../poteto-mode/references/delegation.md`](../poteto-mode/references/delegation.md) (`skills/principle-separate-before-serializing-shared-state/SKILL.md`). Don't over-fan. Use `run_subagent` with a registered profile. Sequential scheduling does not repair an unavailable model pin; report the blocked mapping instead of silently substituting.
 - Every nontrivial code-writing unit follows the root-owned procedure in `../poteto-mode/references/delegation.md`, including dedicated same-pin implementation routing, the complete worker contract, bounded checkpoint and recovery fields, and isolated writer scope. Read-only exploration keeps its configured panel profile.
 - Write the designed phase list down. That list is what the human reviews.
 
@@ -61,7 +61,7 @@ Apply `skills/principle-sequence-verifiable-units/SKILL.md`. Verify each unit be
 
 On resume, run `status`, skip `verified` and `abandoned`, and continue the first `in-progress` or `pending` unit. Do not redo a verified unit.
 
-Devin cannot schedule a later turn. Bound the unit count in this session. If units remain, write `resume.md` and stop.
+This plugin has no agent-callable scheduled wakeup. Bound the unit count in this session. If units remain, write `resume.md` and stop.
 
 ## Phase D: Keep the audit trail
 

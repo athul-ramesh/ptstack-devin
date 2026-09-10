@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import {
   existsSync,
   mkdtempSync,
+  readdirSync,
   readFileSync,
   rmSync,
 } from "node:fs";
@@ -13,9 +14,25 @@ import { buildRoleConfigs } from "../skills/setup-pstack/write-models.mjs";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const skillSource = join(repoRoot, "skills", "poteto-mode", "SKILL.md");
+const skillsRoot = join(repoRoot, "skills");
+const potetoRoot = join(skillsRoot, "poteto-mode");
 
 function frontmatterModel(path) {
   return readFileSync(path, "utf8").match(/^model: (.+)$/m)?.[1];
+}
+
+function walkMarkdown(dir) {
+  const out = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...walkMarkdown(path));
+    else if (entry.name.endsWith(".md")) out.push(path);
+  }
+  return out;
+}
+
+function relativeLinks(text) {
+  return [...text.matchAll(/\]\(([^)\s]+)\)/g)].map(([, target]) => target);
 }
 
 describe("poteto delegation contract", () => {
@@ -137,5 +154,165 @@ describe("poteto delegation contract", () => {
       assert.deepEqual(roles.get(role).profiles, [`pstack:poteto-agent-${alias}`]);
       assert.equal(frontmatterModel(implementationPath), frontmatterModel(panelPath));
     }
+  });
+});
+
+describe("poteto core completion contract", () => {
+  it("resolves every relative Markdown link in the shipped skill tree", () => {
+    const files = [
+      ...walkMarkdown(skillsRoot),
+      join(repoRoot, "AGENTS.md"),
+      join(repoRoot, "README.md"),
+    ];
+    let checked = 0;
+    for (const file of files) {
+      for (const raw of relativeLinks(readFileSync(file, "utf8"))) {
+        if (/^(?:https?:|mailto:|#)/.test(raw) || raw.includes("$")) continue;
+        const target = raw.split("#")[0].split("?")[0];
+        if (!target) continue;
+        checked += 1;
+        assert.equal(
+          existsSync(resolve(dirname(file), target)),
+          true,
+          `${file} links to missing ${raw}`,
+        );
+      }
+    }
+    assert.ok(checked > 100, `expected the shipped tree to expose links, saw ${checked}`);
+  });
+
+  it("lists every shipped principle leaf in the catalog", () => {
+    const catalog = readFileSync(
+      join(potetoRoot, "references", "principles.md"),
+      "utf8",
+    );
+    const catalogued = new Set(
+      [...catalog.matchAll(/`skills\/(principle-[a-z0-9-]+)\/SKILL\.md`/g)].map(
+        ([, name]) => name,
+      ),
+    );
+    const shipped = readdirSync(skillsRoot, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && entry.name.startsWith("principle-"))
+      .map((entry) => entry.name)
+      .sort();
+
+    assert.equal(shipped.length, 23);
+    assert.deepEqual([...catalogued].sort(), shipped);
+    for (const name of shipped) {
+      const leaf = join(skillsRoot, name, "SKILL.md");
+      assert.equal(existsSync(leaf), true, `${name} has no SKILL.md`);
+      const text = readFileSync(leaf, "utf8");
+      assert.match(text, new RegExp(`^name: ${name}$`, "m"));
+      assert.match(text, /triggers:\n\s*-\s*model/);
+    }
+  });
+
+  it("maps every referenced pstack profile to a registered agent", () => {
+    const profiles = new Set();
+    for (const file of [join(potetoRoot, "SKILL.md"), ...walkMarkdown(potetoRoot)]) {
+      const text = readFileSync(file, "utf8");
+      for (const [profile] of text.matchAll(/pstack:(?:panel|poteto-agent)-[a-z0-9-]+/g)) {
+        profiles.add(profile);
+      }
+    }
+
+    assert.ok(profiles.size > 0);
+    for (const profile of profiles) {
+      const name = profile.replace("pstack:", "");
+      const path = join(repoRoot, "agents", name, "AGENT.md");
+      assert.equal(existsSync(path), true, `${profile} is not registered`);
+      assert.match(readFileSync(path, "utf8"), /^model: .+$/m);
+
+      if (!profile.startsWith("pstack:poteto-agent-")) continue;
+      const alias = profile.replace("pstack:poteto-agent-", "");
+      const panel = join(repoRoot, "agents", `panel-${alias}`, "AGENT.md");
+      if (!existsSync(panel)) continue;
+      assert.equal(
+        frontmatterModel(path),
+        frontmatterModel(panel),
+        `${profile} must share its panel pin`,
+      );
+    }
+  });
+
+  it("routes explicit shipping and autopilot requests to a cut verdict first", () => {
+    const skill = readFileSync(join(potetoRoot, "SKILL.md"), "utf8");
+    const delivery = readFileSync(
+      join(potetoRoot, "references", "delivery-capability.md"),
+      "utf8",
+    );
+    for (const name of ["shipping", "autopilot-full", "autopilot-stack"]) {
+      assert.match(
+        delivery,
+        new RegExp(`^\\| ${name} \\|[^\\n]*\\| cut \\|`, "m"),
+        `${name} must have a cut verdict row`,
+      );
+      assert.ok(skill.includes(name), `SKILL.md must name the cut workflow ${name}`);
+    }
+    assert.ok(
+      skill.indexOf("references/delivery-capability.md") <
+        skill.indexOf("Otherwise use the specific task route below"),
+      "the explicit delivery route must precede the generic fallback",
+    );
+  });
+
+  it("requires a root-provisioned workspace wherever writers dispatch", () => {
+    const writerFiles = [
+      join(potetoRoot, "playbooks", "feature.md"),
+      join(potetoRoot, "playbooks", "hillclimb.md"),
+      join(potetoRoot, "playbooks", "prototype.md"),
+      join(potetoRoot, "playbooks", "visual-parity.md"),
+      join(potetoRoot, "playbooks", "orchestrate.md"),
+      join(skillsRoot, "figure-it-out", "SKILL.md"),
+      join(skillsRoot, "swarm", "SKILL.md"),
+      join(skillsRoot, "arena", "SKILL.md"),
+    ];
+    for (const file of writerFiles) {
+      const text = readFileSync(file, "utf8");
+      assert.match(text, /(?:root-)?provision(?:ed)?/i, `${file} must provision the workspace`);
+      assert.match(text, /worktree|directory|workspace/i, `${file} must name a separate workspace`);
+    }
+
+    const delegation = readFileSync(
+      join(potetoRoot, "references", "delegation.md"),
+      "utf8",
+    );
+    assert.match(delegation, /worktree add/);
+    assert.match(delegation, /rev-parse --show-toplevel/);
+    assert.match(delegation, /git -C/);
+    assert.match(
+      readFileSync(join(potetoRoot, "references", "panel-run.md"), "utf8"),
+      /separate branch is not isolation/i,
+    );
+  });
+
+  it("keeps the dispatch contract on documented run_subagent fields", () => {
+    const allowed = new Set(["profile", "task", "title", "is_background", "resume"]);
+    let blocks = 0;
+    for (const file of walkMarkdown(skillsRoot)) {
+      const text = readFileSync(file, "utf8");
+      for (const [, body] of text.matchAll(/```json\n([\s\S]*?)```/g)) {
+        if (!body.includes('"profile"')) continue;
+        blocks += 1;
+        for (const key of Object.keys(JSON.parse(body))) {
+          assert.ok(allowed.has(key), `${file} uses unsupported dispatch field ${key}`);
+        }
+      }
+      assert.doesNotMatch(
+        text,
+        /subagent_type|run_in_background|disable-model-invocation/,
+        `${file} reintroduces a Cursor or Claude dispatch field`,
+      );
+    }
+    assert.ok(blocks > 0, "expected at least one documented dispatch example");
+
+    for (const reference of ["delegation.md", "panel-run.md"]) {
+      const text = readFileSync(join(potetoRoot, "references", reference), "utf8");
+      assert.match(text, /read_subagent/, `${reference} must document collection`);
+    }
+    assert.match(
+      readFileSync(join(potetoRoot, "references", "delegation.md"), "utf8"),
+      /agentId[\s\S]*parentVerdict/,
+    );
   });
 });
