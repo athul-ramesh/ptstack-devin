@@ -72,4 +72,4 @@ One synthesized artifact. One short synthesis note naming the base, grafts, reje
 `$HOME/.config/devin/pstack-models.md` overrides these defaults.
 
 - arena runners: `pstack:panel-opus`, `pstack:panel-swe`, `pstack:panel-sonnet`
-- arena cross-judge pool: `pstack:panel-opus`, `pstack:panel-swe`, `pstack:panel-sonnet`
+- arena cross-judge pool: `pstack:panel-opus`, `pstack:panel-swe`

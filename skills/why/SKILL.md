@@ -99,5 +99,5 @@ If this `why` precedes a change, add Preserve / Change / Avoid / Risk from the l
 
 `$HOME/.config/devin/pstack-models.md` overrides these defaults.
 
-- why investigators: `pstack:panel-opus`
+- why investigators: `pstack:panel-sonnet`
 - why synthesizer: `pstack:panel-opus`

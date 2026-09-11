@@ -58,9 +58,9 @@ describe("pstack models sheet", () => {
   it("routes implementation roles to dedicated workers and keeps panels for review roles", () => {
     const roles = new Map(buildRoleConfigs(parseDevinModelsList(LIST_FOUR)).map((row) => [row.role, row]));
     assert.deepEqual(roles.get("feature, refactoring").profiles, [implementationProfile("opus")]);
-    assert.deepEqual(roles.get("bug-fix").profiles, [implementationProfile("swe")]);
-    assert.deepEqual(roles.get("perf-issue").profiles, [implementationProfile("swe")]);
-    assert.deepEqual(roles.get("hillclimb").profiles, [implementationProfile("swe")]);
+    assert.deepEqual(roles.get("bug-fix").profiles, [implementationProfile("sonnet")]);
+    assert.deepEqual(roles.get("perf-issue").profiles, [implementationProfile("opus")]);
+    assert.deepEqual(roles.get("hillclimb").profiles, [implementationProfile("sonnet")]);
     assert.deepEqual(roles.get("judgment and prose").profiles, ["pstack:panel-opus"]);
     assert.deepEqual(roles.get("how critics").profiles, ["pstack:panel-opus", "pstack:panel-swe", "pstack:panel-sonnet"]);
   });

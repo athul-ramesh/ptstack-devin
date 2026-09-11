@@ -52,4 +52,4 @@ One in-chat report. Table, issue one-liners, gaps, and the race rule when used.
 
 `$HOME/.config/devin/pstack-models.md` overrides this default.
 
-- swarm workers: `pstack:panel-opus`
+- swarm workers: `pstack:panel-sonnet`

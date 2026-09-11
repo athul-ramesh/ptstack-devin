@@ -77,5 +77,5 @@ For each approved row, follow Routing:
 
 `$HOME/.config/devin/pstack-models.md` overrides these defaults.
 
-- reflect tooling: `pstack:panel-opus`
+- reflect tooling: `pstack:panel-sonnet`
 - reflect judgment, divergent, synthesizer: `pstack:panel-opus`

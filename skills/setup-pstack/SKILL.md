@@ -9,6 +9,14 @@ Write `$HOME/.config/devin/pstack-models.md`. Skills read that sheet for per-rol
 
 Do not write `~/.claude/` or any host path this plugin does not own.
 
+## Default routing policy
+
+`opus` is the strongest configured model, `sonnet` is the medium-capability model for bounded work, and `swe` supplies an alternate model perspective. These labels do not select model families or reasoning levels; configure profile pins separately.
+
+Keep broad features/refactoring, performance diagnosis, synthesis, prose, and final judgment on `opus`. Use `sonnet` for scoped bug fixes, measurable hillclimbing, exploration, evidence gathering, tooling review, and swarm slices. Scope those briefs tightly; select `opus` explicitly when the work requires broad design or difficult diagnosis. Panels retain all three perspectives; the arena cross-judge pool uses `opus` and `swe` so the judge can differ from the parent.
+
+Keep paired `panel-*` and `poteto-agent-*` model pins equal. Setup writes role routing only; it does not change those pins or the main session model.
+
 ## Steps
 
 1. Run `devin models list` with `exec`. Keep every alias from lines that start with `aliases:`. Never write a family slug or an identifier that command did not print.

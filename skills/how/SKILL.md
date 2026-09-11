@@ -75,6 +75,6 @@ Present the explanation, then the critique. The explanation stands alone.
 
 `$HOME/.config/devin/pstack-models.md` overrides these defaults. Values are profiles.
 
-- how explorer: `pstack:panel-opus`
+- how explorer: `pstack:panel-sonnet`
 - how explainer: `pstack:panel-opus`
 - how critics: `pstack:panel-opus`, `pstack:panel-swe`, `pstack:panel-sonnet`

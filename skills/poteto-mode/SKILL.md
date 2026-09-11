@@ -123,10 +123,10 @@ Read `$HOME/.config/devin/pstack-models.md` when it exists. Its exact role row o
 Implementation uses dedicated profiles. Resolve legacy `pstack:panel-<alias>` rows to `pstack:poteto-agent-<alias>` only after verifying registration and equal `model:` frontmatter pins, as specified in Root-owned delegation. This mapping is not a failure fallback. Preserve explicit implementation-profile rows.
 
 - feature, refactoring: `pstack:poteto-agent-opus`
-- bug-fix: `pstack:poteto-agent-swe`
-- perf-issue: `pstack:poteto-agent-swe`
-- hillclimb: `pstack:poteto-agent-swe`
+- bug-fix: `pstack:poteto-agent-sonnet`
+- perf-issue: `pstack:poteto-agent-opus`
+- hillclimb: `pstack:poteto-agent-sonnet`
 - judgment and prose: `pstack:panel-opus`
-- strongest judgment: `pstack:panel-swe`
+- strongest judgment: `pstack:panel-opus`
 
 When an active panel skill requires N perspectives but fewer distinct profiles are available, use N sequential fresh-context `run_subagent` calls on the available registered profiles. One pass is not a panel. Do not claim a model ran without dispatch evidence.

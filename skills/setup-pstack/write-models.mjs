@@ -9,24 +9,24 @@ export const CORE_ALIASES = Object.freeze(["opus", "swe", "sonnet", "codex"]);
 
 export const SINGLE_ROLES = Object.freeze([
   ["feature, refactoring", "opus"],
-  ["bug-fix", "swe"],
-  ["perf-issue", "swe"],
-  ["hillclimb", "swe"],
+  ["bug-fix", "sonnet"],
+  ["perf-issue", "opus"],
+  ["hillclimb", "sonnet"],
   ["judgment and prose", "opus"],
-  ["strongest judgment", "swe"],
-  ["how explorer", "opus"],
+  ["strongest judgment", "opus"],
+  ["how explorer", "sonnet"],
   ["how explainer", "opus"],
-  ["why investigators", "opus"],
+  ["why investigators", "sonnet"],
   ["why synthesizer", "opus"],
-  ["reflect tooling", "opus"],
+  ["reflect tooling", "sonnet"],
   ["reflect judgment, divergent, synthesizer", "opus"],
-  ["swarm workers", "opus"],
+  ["swarm workers", "sonnet"],
 ]);
 
 export const PANEL_ROLES = Object.freeze([
   ["how critics", ["opus", "swe", "sonnet"]],
   ["arena runners", ["opus", "swe", "sonnet"]],
-  ["arena cross-judge pool", ["opus", "swe", "sonnet"]],
+  ["arena cross-judge pool", ["opus", "swe"]],
   ["architect runners", ["opus", "swe", "sonnet"]],
   ["interrogate reviewers", ["opus", "swe", "sonnet"]],
 ]);

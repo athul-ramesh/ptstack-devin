@@ -67,17 +67,17 @@ describe("poteto delegation contract", () => {
   it("uses registered profiles for every poteto default", () => {
     const skill = readFileSync(skillSource, "utf8");
     const defaults = new Map(
-      [...skill.matchAll(/^- (.+): `(pstack:(?:panel|poteto-agent)-(?:opus|swe))`$/gm)].map(
+      [...skill.matchAll(/^- (.+): `(pstack:(?:panel|poteto-agent)-(?:opus|swe|sonnet))`$/gm)].map(
         ([, role, profile]) => [role, profile],
       ),
     );
     const expected = new Map([
       ["feature, refactoring", "pstack:poteto-agent-opus"],
-      ["bug-fix", "pstack:poteto-agent-swe"],
-      ["perf-issue", "pstack:poteto-agent-swe"],
-      ["hillclimb", "pstack:poteto-agent-swe"],
+      ["bug-fix", "pstack:poteto-agent-sonnet"],
+      ["perf-issue", "pstack:poteto-agent-opus"],
+      ["hillclimb", "pstack:poteto-agent-sonnet"],
       ["judgment and prose", "pstack:panel-opus"],
-      ["strongest judgment", "pstack:panel-swe"],
+      ["strongest judgment", "pstack:panel-opus"],
     ]);
 
     assert.deepEqual(defaults, expected);
@@ -147,8 +147,8 @@ describe("poteto delegation contract", () => {
   });
 
   it("keeps implementation defaults on legacy-equivalent model pins", () => {
-    const roles = new Map(buildRoleConfigs(new Set(["opus", "swe"])).map((row) => [row.role, row]));
-    for (const [role, alias] of [["feature, refactoring", "opus"], ["bug-fix", "swe"], ["perf-issue", "swe"], ["hillclimb", "swe"]]) {
+    const roles = new Map(buildRoleConfigs(new Set(["opus", "swe", "sonnet"])).map((row) => [row.role, row]));
+    for (const [role, alias] of [["feature, refactoring", "opus"], ["bug-fix", "sonnet"], ["perf-issue", "opus"], ["hillclimb", "sonnet"]]) {
       const implementationPath = join(repoRoot, "agents", `poteto-agent-${alias}`, "AGENT.md");
       const panelPath = join(repoRoot, "agents", `panel-${alias}`, "AGENT.md");
       assert.deepEqual(roles.get(role).profiles, [`pstack:poteto-agent-${alias}`]);
