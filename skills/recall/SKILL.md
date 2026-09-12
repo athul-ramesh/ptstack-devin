@@ -19,7 +19,7 @@ Read [`../poteto-mode/references/evidence-source.md`](../poteto-mode/references/
 
 3. Collect session evidence. Use the session-bodies order in `evidence-source.md`. For one named export, `read` it here. For several named exports, one `run_subagent` per file on `pstack:panel-opus`. Sequential when `executionMode` is sequential. Say so. Each worker returns topic, the user's goal, decisions, open threads, struggles, and artifacts, citing the export path. Raw files stay with the workers.
 
-4. Sweep the shared record whenever the topic names a feature, file, subsystem, area, or bug. This is the default. "My work on X" does not skip it. Invoke `/pstack:why`. Steer the question to current state, what was tried and did not hold, and what users still report. why records a `PanelRun` and skips unavailable MCP. Copy those skips as `unavailable` sources. Run this with the session mining, not after it.
+4. Sweep the shared record whenever the topic names a feature, file, subsystem, area, or bug. This is the default. "My work on X" does not skip it. Invoke `/pstack:why`. Steer the question to current state, what was tried and did not hold, and what users still report. why records a `PanelRun` and reports source coverage failures and unchased leads. Copy those gaps as `unavailable` sources with their reasons. Run this with the session mining, not after it.
 
 5. Verify against live state. An export or a stale ticket is history. Take PRs, branches, and tickets the mining surfaced and check them with `exec` git and `gh`. When the answer hinges on what an agent did, read the full named export, not a digest.
 

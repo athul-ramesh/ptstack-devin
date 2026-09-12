@@ -4,7 +4,7 @@ Build the synthesizer's prompt from this template; fill in the placeholders.
 
 ---
 
-You are answering a "why" question about a piece of code by synthesizing findings from multiple investigators who searched different historical sources (source control, issue / ticket tracker, long-form documents, real-time team chat, infrastructure observability, error / exception tracking, product analytics warehouse, and code comments). Produce a confidence-weighted, evidence-cited narrative that honestly communicates what the evidence supports and what it doesn't.
+You are answering a "why" question about a piece of code by synthesizing findings from investigators assigned to registered evidence sources. Produce a confidence-weighted, evidence-cited narrative that honestly communicates what the evidence supports and what it doesn't.
 
 ## The Question
 
@@ -20,16 +20,20 @@ You are answering a "why" question about a piece of code by synthesizing finding
 
 {ALL_INVESTIGATOR_FINDINGS}
 
-## Sources That Weren't Searched
+## Source Coverage
 
-{SKIPPED_SOURCES_WITH_REASONS}
+{SOURCE_COVERAGE_WITH_REASONS}
+
+## Unchased Leads
+
+{UNCHASED_LEADS_WITH_REASONS}
 
 ## Epistemics Framework
 
 You MUST follow the framework in `references/epistemics.md`. Read it in full before writing the output. The key rules:
 
 1. Every claim sits in one of these tiers: **Direct**, **Supported**, **Inferred**, **Speculative**, **Unknown**. The tier determines what section the claim goes in and how it's phrased.
-2. Every Direct/Supported claim must have a citation (PR #, ticket ID, doc URL, chat permalink, commit hash, or file:line).
+2. Every Direct/Supported claim must have a citation (PR #, issue number, commit hash, file:line, or URL).
 3. Inferred and Speculative claims must use hedged language ("appears to", "likely", "suggests", "one possibility is").
 4. Never cite code as evidence for its own intent.
 5. Gaps in the evidence must be documented. Don't fill them with plausible-sounding guesses.
@@ -37,11 +41,11 @@ You MUST follow the framework in `references/epistemics.md`. Read it in full bef
 
 ## Instructions
 
-1. **Read all investigator findings.** They gathered raw evidence, not conclusions. You weigh it.
-2. **Reconcile overlapping findings.** Multiple investigators may have cited the same PR, ticket, or doc. Merge into a single, authoritative reference.
+1. **Read the investigator findings.** They gathered raw evidence, not conclusions. You weigh it.
+2. **Reconcile overlapping findings.** Deduplicate items cited more than once into a single, authoritative reference.
 3. **Identify contradictions.** If two items of evidence disagree, don't pick one. Surface both.
 4. **Calibrate confidence.** For each claim, identify the evidence and the tier. State Direct claims plainly with a citation. Hedge Inferred claims and explain the inference. Mark Speculative claims explicitly. Put claims with no evidence in the gaps section.
-5. **Verify citations by spot-checking.** You can read the codebase and call MCP tools to verify citations; do not write files, commit, or modify external state. If you're uncertain a cited item exists or says what's claimed, check it. Don't propagate errors.
+5. **Verify citations by spot-checking.** You can read the codebase and use available read tools for the registered sources to verify citations; do not write files, commit, or modify external state. If you're uncertain a cited item exists or says what's claimed, check it. Don't propagate errors.
 6. **Don't overreach.** The user will act on your output. Better to leave an open question open than to fill it with a confident-sounding guess.
 
 ## Output Format
@@ -87,32 +91,27 @@ Skip this section if there's a single clear answer.
 
 ### What We Don't Know
 
-**Explicit gaps.** Things the user asked that the evidence didn't answer. Sources searched that came up empty. Sources that weren't searchable at all, such as a missing real-time team chat MCP.
+**Explicit gaps.** Things the user asked that the evidence didn't answer. Searches that came up empty. Sources or items that could not be searched, with the reasons.
 
-Be specific. "We searched the issue tracker for [query1], [query2], [query3] and found no issue discussing the rate-limit threshold" is useful. "We don't know why" is not. Include:
+Be specific. "We ran `git log -S` and read the 6 PRs touching this file looking for the rate-limit threshold rationale and found nothing" is useful. "We don't know why" is not. Include:
 
 - Specific questions that went unanswered
 - Searches that returned nothing
-- Sources that were unavailable (and why)
+- External leads that could not be chased (tracker tickets, docs, chat threads the record references)
 - People who would likely know but who you can't ask
 
 ### Sources Consulted
 
 Bulleted list of what was actually searched, so the user can judge coverage and redirect. Format:
 
-- **Source control history**: {file paths}, {number of commits reviewed}, PRs #{numbers}, and code comments searched. Or "Not searched. This should not happen because git and `gh` are always expected."
-- **Issue / ticket tracker**: {ticket IDs and keyword searches}. Or "Not searched. No matching MCP available in this environment."
-- **Long-form documents**: {page titles and search queries}. Or "Not searched. No matching MCP available in this environment."
-- **Real-time team chat**: {channels searched, date ranges, queries}. Or "Not searched. No matching MCP available in this environment."
-- **Infrastructure observability**: {dashboards, monitors, metrics, logs, traces, or incidents searched}. Or "Not searched. No matching MCP available in this environment."
-- **Error / exception tracking**: {issues, events, or releases searched}. Or "Not searched. No matching MCP available in this environment."
-- **Product analytics warehouse**: {fully-qualified tables queried, the time windows, and the numeric summaries (counts, percentiles, first/last-seen timestamps) that bore on the question}. Or "Not searched. No matching MCP available in this environment."
+- **{Registered category}**: queries and items actually searched, including empty results. State any unavailable portions and reasons separately. For source control, include files, commits, PRs, issues, and comments reviewed.
+- **Unchased leads**: referenced items and why they were not followed (unregistered source, unavailable tools, or scope). Or "None surfaced."
 
 ### Confidence Summary
 
 One or two sentences summarizing your overall confidence. E.g.:
 
-> "The core rationale (A) is well-supported by direct PR and ticket evidence. The specific threshold value (100) is inferred from the surrounding context but not explicitly documented. The question of whether this was driven by a customer request could not be answered. No relevant issue tracker or long-form doc content surfaced, and real-time team chat search was unavailable."
+> "The core rationale (A) is well-supported by direct PR evidence. The specific threshold value (100) is inferred from the surrounding context but not explicitly documented. Whether it was driven by a customer request could not be answered; the searched records do not establish it."
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: why
-description: "Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, postmortems, or data-backed thresholds. Discovers available MCP servers and queries each evidence category (source control, issue tracker, long-form docs, real-time chat, infrastructure observability, error tracking, product analytics warehouse) in parallel, then returns a cited read on decisions and tradeoffs. Use how for runtime behavior."
+description: "Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, or postmortems. Searches source control history (git log and blame, PRs and linked issues via `gh`, code comments, in-repo docs) and returns a cited, confidence-weighted read on decisions and tradeoffs. Use how for runtime behavior."
 ---
 
 # Why
@@ -9,7 +9,7 @@ Investigate motivation. Why this shape? Which constraints? Which alternatives di
 
 Companion to `/pstack:how`. How is mechanics. Why is force.
 
-Historical context lives in seven categories. You cannot tell from the question which one holds the answer. Enumerate what this session can search, query every available category, then synthesize with explicit confidence. Null results are evidence. Coverage is the default.
+The source registry currently covers source control: commits, PRs, linked issues, review threads, code comments, and in-repo docs. Name gaps in coverage when they matter. Query thoroughly, then synthesize with explicit confidence. Null results are evidence. Coverage is the default.
 
 Resolve profiles from [`../poteto-mode/references/panel-run.md`](../poteto-mode/references/panel-run.md). Record a `PanelRun` before the first `run_subagent` call.
 
@@ -32,44 +32,25 @@ Inline, cheap:
 - Recent commits on the target (`exec` git blame, git log --follow, git log --oneline)
 - PR numbers from merge subjects, then `gh pr view` when `gh` works
 
-Pass this seed to every investigator.
+Pass this seed to each investigator.
 
 ## Step 3. Investigators
 
-Default is the full sweep.
+Default is the full sweep of source control history.
 
-### Discovery
+Read the registry in [`references/source-playbook.md`](references/source-playbook.md). Search each registered category whose tools are available. Source control is the sole registered category today. Check git access and `gh` availability/authentication separately; search local history even if PR access fails and record the partial coverage and reason.
 
-Run `devin mcp list` with `exec`. Also use MCP tools already present in this session. Map each server to one category:
+For each available category, resolve the exact `why investigators` role through the panel contract and dispatch its configured perspectives. With the default profile list and registry, this is one worker. Follow `executionMode` for independent workers. Workers must not write files, commit, or change external state.
 
-1. Source control history
-2. Issue / ticket tracker
-3. Long-form documents
-4. Real-time team chat
-5. Infrastructure observability
-6. Error / exception tracking
-7. Product analytics warehouse
+Each investigator gets [`references/investigator-prompt.md`](references/investigator-prompt.md) with its source name and registered playbook filled in, the code anchor, and the question. Append [`references/sources/incident-postmortem.md`](references/sources/incident-postmortem.md) for defensive code investigated through source control.
 
-Source control is always available through git and `gh` via `exec`. Always spawn that investigator.
-
-One investigator per available category. Do not collapse categories into one worker.
-
-Each `run_subagent` uses the why-investigators profile. Workers must not write files, commit, or change external state. Keep MCP tools available so they can search. Do not strip tools to fake a sandbox.
-
-Each investigator gets [`references/investigator-prompt.md`](references/investigator-prompt.md), the matching playbook from [`references/source-playbook.md`](references/source-playbook.md), the code anchor, and the question. Append [`references/sources/incident-postmortem.md`](references/sources/incident-postmortem.md) when the target looks defensive.
-
-Skip only with a written reason in Sources Consulted:
-
-- No MCP for that category. Gap, not a choice.
-- Provably irrelevant. High bar. A build-time script with no runtime path can skip error tracking. "Probably not" cannot.
-
-Sequential when `executionMode` is sequential. Say so.
+Collect findings, empty searches, availability failures, and additional leads. Route a cross-source lead to the worker for its registered, available category; record unchased leads with the reason (unregistered, unavailable, or outside the requested scope).
 
 ## Step 4. Synthesize
 
-One `run_subagent` on the why-synthesizer profile. Same no-write rule. It needs MCP tools to spot-check citations.
+Resolve the `why synthesizer` role through the panel contract. Same no-write rule. Give it the available read tools for the registered sources to spot-check citations.
 
-Give it investigator findings including nulls and skips, the code anchor, the question, [`references/epistemics.md`](references/epistemics.md), and [`references/synthesizer-prompt.md`](references/synthesizer-prompt.md).
+Give it all investigator findings, source availability and reasons, and unchased leads, the code anchor, the question, [`references/epistemics.md`](references/epistemics.md), and [`references/synthesizer-prompt.md`](references/synthesizer-prompt.md).
 
 ## Step 5. Present
 
@@ -91,7 +72,7 @@ Keep the confidence split.
 
 **What We Don't Know.** Specific searches that returned nothing.
 
-**Sources Consulted.** One line per category, including empty and skipped.
+**Sources Consulted.** One line per registered category with what was searched and any unavailable portions and reasons, plus unchased leads.
 
 If this `why` precedes a change, add Preserve / Change / Avoid / Risk from the lineage.
 

@@ -11,7 +11,7 @@ Teach sits on `/pstack:how` and `/pstack:why`. Orient yourself with `read`, then
 
 1. Decide the few things they should walk away knowing. Read that from why they asked and what they already know in this conversation. Do not quiz them. Skip what they already know.
 
-2. Invoke `/pstack:how` for mechanics and `/pstack:why` for motivation. Issue both before waiting when the host runs them together. Sequential is fine. Say so. Match size to the question. Both for a subsystem. One may be enough for a small change. Keep why narrow by default. Put the narrowing in the ask so why records skipped categories. Widen only when the reasons are the point.
+2. Invoke `/pstack:how` for mechanics and `/pstack:why` for motivation. Issue both before waiting when the host runs them together. Sequential is fine. Say so. Match size to the question. Both for a subsystem. One may be enough for a small change. Keep why narrow by default. Put the narrowing in the ask. Widen only when the reasons are the point.
 
 3. Start with a plain definition. Name the thing. Say what it is. Then tie it to this repo. Then how it works, then why, then edges. Explain the mechanism. Do not list functions like a changelog. Do not print framing labels such as "the key insight", "at its core", or "TL;DR".
 
