@@ -10,7 +10,7 @@ devin plugins install --local -y .
 
 Public skills are `/pstack:<name>`. Principle leaves are model-triggered only. SessionStart injects a route to `/pstack:poteto-mode` on local Devin CLI.
 
-`/pstack:setup-pstack` writes `$HOME/.config/devin/pstack-models.md` from `aliases:` lines in `devin models list`. Poteto keeps dispatch at root and resolves code-writing passes through the deterministic same-pin counterpart `pstack:panel-<alias>` → `pstack:poteto-agent-<alias>`. Background workers require already-approved permissions and return results through completion notifications; every dispatch records the returned identity, configured profile pin, and assigned workspace, is collected with `read_subagent` by agent id, and is inspected by the root before the parent verdict. Concurrent writers get a root-provisioned, verified worktree or directory, never two writers in one checkout.
+`/pstack:setup-pstack` preserves configured roles and notes in `$HOME/.config/devin/pstack-models.md`, populating missing roles from `aliases:` lines in `devin models list`. Poteto keeps dispatch at root and resolves code-writing passes through the deterministic same-pin counterpart `pstack:panel-<alias>` → `pstack:poteto-agent-<alias>`. Background workers require already-approved permissions and return results through completion notifications; every dispatch records the returned identity, configured profile pin, and assigned workspace, is collected with `read_subagent` by agent id, and is inspected by the root before the parent verdict. Concurrent writers get a root-provisioned, verified worktree or directory, never two writers in one checkout.
 
 `shipping`, `autopilot-full`, and `autopilot-stack` are cut from this port. An explicit request for one gets that capability verdict and the bounded in-session alternative, not a silent fallback to figure-it-out. Merge stays with the operator. This plugin has no agent-callable scheduled wakeup. `/loop <prompt>` is an interactive command that runs a prompt then auto-reviews the diff in a loop, not a time-based scheduler.
 
@@ -18,14 +18,27 @@ Pause and resume do not create delivery authority. An ordinary pause records eac
 
 Shipped behavior is in [`docs/release-notes.md`](docs/release-notes.md).
 
-Verified against Devin CLI 3000.10.21 (611c1cba), local CLI on macOS.
+Verified against Devin CLI 3000.11.3 (9c803229faa4), local CLI on macOS. Native observations and evidence gaps are in [port verification](docs/port-verification.md).
+
+Avoid installing two copies with the same plugin name. Devin may source-qualify inventory names while loading skills from an older copy; verify the path returned by the skill tool.
+
+## Using 0.2.0
+
+- Invoke `/pstack:correct` when the same repository mistake keeps recurring. It looks for at least two occurrences and favors structural enforcement, with proof that the check rejects a historical bad form.
+- Invoke `/pstack:benchmark-checklist` before trusting a measured speedup or regression. Comparisons require at least five interleaved runs per side, median and range, correct outputs, and proof that the timed work happened. A requested ballpark permits one labeled run with errors and actual work still checked.
+- Run `/pstack:setup-pstack` without losing your configured role lists or notes. Explicit role changes use repeatable `--role "role=profile[,profile...]"` arguments to its installed `write-models.mjs` helper. Repeated profiles remain separate fresh-context perspectives.
+- Existing performance workflows now use the measurement checklist and try avoiding work before optimizing its cost. Follow-ups after a completed worker use a fresh context; permission repair retains the same worker.
+- Multi-phase plans must pass the installed `check-plan.mjs` helper. Verification records the exact code-ready SHA and two independent audit focuses. CLI evidence can be a transcript; screenshots require a UI adapter.
+- Decision logs retain their history and identify separate runs. PR descriptions now include both What changed and Scope, with deliberate exclusions stated explicitly.
+
+Profile pins and merge authority are unchanged. Native verification confirmed routing, both new slash commands, foreground workers, separate sequential passes, and background collection. Narrowly approved background permissions and same-worker permission repair remain untested.
 
 ## Checks
 
 Structural contract checks:
 
 ```
-node --test tests/pstack-models.test.mjs tests/poteto-delegation.test.mjs
+node --test tests/*.test.mjs
 ```
 
 They cover relative reference resolution, the principle catalog, registered profile mapping and same-pin comparison, explicit cut-workflow routing, writer workspace provisioning, and the documented `run_subagent` fields. They are static checks, not native Devin execution.

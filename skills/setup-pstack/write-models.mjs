@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import { mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { spawnSync } from "node:child_process";
 
 export const CORE_ALIASES = Object.freeze(["opus", "swe", "sonnet", "codex"]);
@@ -118,6 +118,52 @@ export function renderSheet(roles) {
   return lines.join("\n");
 }
 
+const KNOWN_ROLES = new Set([...SINGLE_ROLES, ...PANEL_ROLES].map(([role]) => role));
+const AGENTS_ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../agents");
+
+function profilePin(profile) {
+  if (!/^pstack:(?:panel|poteto-agent)-(?:opus|swe|sonnet|codex)$/.test(profile)) {
+    throw new Error(`unregistered profile ${profile}`);
+  }
+  const path = join(AGENTS_ROOT, profile.slice("pstack:".length), "AGENT.md");
+  const pin = readFileSync(path, "utf8").match(/^model:\s*(\S+)/m)?.[1];
+  if (!pin) throw new Error(`registered profile ${profile} has no model pin`);
+  return pin;
+}
+
+function validateRow(role, profiles, available) {
+  if (!KNOWN_ROLES.has(role)) throw new Error(`unknown role ${role}; correct the row explicitly`);
+  if (!profiles.length) throw new Error(`role ${role} has no profiles`);
+  for (const profile of profiles) {
+    const pin = profilePin(profile);
+    const alias = profile.match(/-(opus|swe|sonnet|codex)$/)[1];
+    if (!available.has(alias)) throw new Error(`role ${role}: alias ${alias} is unavailable`);
+    if (IMPLEMENTATION_ROLES.has(role) && profile.startsWith("pstack:panel-")) {
+      const counterpart = implementationProfile(alias);
+      if (profilePin(counterpart) !== pin) throw new Error(`role ${role}: counterpart model pins differ`);
+    } else if (!IMPLEMENTATION_ROLES.has(role) && !profile.startsWith("pstack:panel-")) {
+      throw new Error(`role ${role} requires review profiles`);
+    }
+  }
+}
+
+export function parseExistingSheet(content, available) {
+  const rows = new Map();
+  const lines = content.split("\n");
+  for (let index = 0; index < lines.length; index += 1) {
+    const match = lines[index].match(/^([^#`]+?):\s*(.*)$/);
+    if (!match) continue;
+    const role = match[1].trim();
+    if (!KNOWN_ROLES.has(role) && !match[2].includes("pstack:")) continue;
+    if (rows.has(role)) throw new Error(`line ${index + 1}: duplicate role ${role}`);
+    const profiles = match[2].split(",").map((profile) => profile.trim());
+    try { validateRow(role, profiles, available); }
+    catch (error) { throw new Error(`line ${index + 1}: ${error.message}`); }
+    rows.set(role, { role, profiles, requiredPerspectives: profiles.length, line: index });
+  }
+  return { rows, lines };
+}
+
 export function defaultOutPath(home = process.env.HOME) {
   if (!home) throw new Error("HOME is not set");
   return join(home, ".config", "devin", "pstack-models.md");
@@ -151,11 +197,17 @@ function detectModelsList() {
 }
 
 function parseArgs(argv) {
-  const out = { home: process.env.HOME, out: undefined };
+  const out = { home: process.env.HOME, out: undefined, roles: [] };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
-    if (arg === "--home") out.home = argv[++i];
-    else if (arg === "--out") out.out = argv[++i];
+    if (arg === "--home" || arg === "--out") {
+      if (!argv[i + 1] || argv[i + 1].startsWith("--")) throw new Error(`${arg} requires a path`);
+      out[arg.slice(2)] = argv[++i];
+    }
+    else if (arg === "--role") {
+      if (!argv[i + 1]) throw new Error("--role requires role=profile[,profile...]");
+      out.roles.push(argv[++i]);
+    }
     else throw new Error(`unknown argument ${arg}`);
   }
   return out;
@@ -163,9 +215,35 @@ function parseArgs(argv) {
 
 export function writeFromModelsList(text, options = {}) {
   const available = parseDevinModelsList(text);
-  const roles = buildRoleConfigs(available);
-  const content = renderSheet(roles);
+  const defaults = buildRoleConfigs(available);
   const path = options.out ?? defaultOutPath(options.home);
+  const existing = existsSync(path) ? readFileSync(path, "utf8") : undefined;
+  const parsed = parseExistingSheet(existing ?? renderSheet(defaults), available);
+  const overrides = new Map();
+  for (const override of options.roles ?? []) {
+    const equals = override.indexOf("=");
+    if (equals < 1) throw new Error(`invalid role override ${override}`);
+    const role = override.slice(0, equals).trim();
+    const profiles = override.slice(equals + 1).split(",").map((profile) => profile.trim());
+    if (overrides.has(role)) throw new Error(`duplicate override for role ${role}`);
+    validateRow(role, profiles, available);
+    overrides.set(role, { role, profiles, requiredPerspectives: profiles.length });
+  }
+  const roles = [];
+  for (const [role, row] of parsed.rows) {
+    const selected = overrides.get(role) ?? row;
+    roles.push({ role, profiles: selected.profiles, requiredPerspectives: selected.profiles.length });
+    if (overrides.has(role)) parsed.lines[row.line] = `${role}: ${selected.profiles.join(", ")}`;
+  }
+  const additions = [];
+  for (const row of defaults) {
+    if (parsed.rows.has(row.role)) continue;
+    const selected = overrides.get(row.role) ?? row;
+    roles.push(selected);
+    additions.push(`${selected.role}: ${selected.profiles.join(", ")}`);
+  }
+  let content = parsed.lines.join("\n");
+  if (additions.length) content = `${content}${content.endsWith("\n") ? "" : "\n"}${additions.join("\n")}\n`;
   writeAtomic(path, content);
   return { path, content, roles, available: [...available].sort() };
 }
