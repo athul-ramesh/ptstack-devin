@@ -12,13 +12,16 @@ Read [`../references/delivery-capability.md`](../references/delivery-capability.
 
 **Titles.** Conventional Commits `type(scope): subject`. Types `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `perf`. Short imperative subject. No trailing period.
 
-**Descriptions.** These sections in order. Drop an empty section.
+**Descriptions.** These sections in order. Keep required sections. Omit Tradeoffs only when empty.
 
 - `## Why`. Intent and why this approach fits.
-- `## Scope`. Facts from the diff. Real symbols and paths.
+- `## What changed`. Concrete changes from the diff, with real symbols and paths.
+- `## Scope`. Always state coverage and deliberate exclusions.
 - `## Tradeoffs`. Real choices only. Skip when there are none.
 - `## Blast Radius`. Who and what the change touches.
 - `## Verification`. How you ran each check. Name `exec` commands. State the outcome.
+
+Keep verification outcomes concise and include at most one primary performance number. Link detailed measurement evidence separately.
 
 Do not use `## Summary` or `## Test plan`.
 
