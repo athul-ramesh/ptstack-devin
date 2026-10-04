@@ -89,3 +89,31 @@ test('rejects every shipped angle placeholder, including placeholders in fences'
   }
   assert.ok(validatePlan(`${valid}\n\`\`\`text\n<command>\n\`\`\`\n`).some(error => /placeholder/.test(error.message)));
 });
+
+test('ignores headings and checkboxes inside nested or mismatched code fences', () => {
+  for (const [open, inner, close] of [
+    ['````markdown', '```js', '````'],
+    ['~~~markdown', '```js', '~~~'],
+    ['```markdown', '~~~', '````'],
+    ['````markdown', '```` not a closing fence', '````'],
+  ]) {
+    const example = `${open}\n${inner}\n## Example heading\n- [ ] Example without a receipt\n${close}\n`;
+    assert.deepEqual(validatePlan(valid.replace('## Appendix A. Prototype evidence', `${example}\n## Appendix A. Prototype evidence`)), [], open);
+  }
+});
+
+test('rejects dependency cycles while accepting forward references and shared dependencies', () => {
+  const pr = valid.slice(valid.indexOf('## Add search'), valid.indexOf('## Close the program'));
+  const plan = dependencies => valid.slice(0, valid.indexOf('## Add search'))
+    + dependencies.map((deps, index) => pr.replace('Add search (PR1)', `Add feature (PR${index + 1})`)
+      .replace('**Depends on.** None.', `**Depends on.** ${deps}.`)).join('')
+    + valid.slice(valid.indexOf('## Close the program'));
+  for (const dependencies of [['PR2', 'PR1'], ['PR2', 'PR3', 'PR1']]) {
+    const source = plan(dependencies);
+    const errors = validatePlan(source);
+    const cycle = errors.find(error => /cycle/i.test(error.message));
+    assert.ok(cycle, JSON.stringify(errors));
+    assert.match(source.split('\n')[cycle.line - 1], /^\*\*Depends on/);
+  }
+  assert.deepEqual(validatePlan(plan(['PR2, PR3', 'PR4', 'PR4', 'None'])), []);
+});

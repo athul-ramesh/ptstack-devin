@@ -12,10 +12,18 @@ export function validatePlan(source) {
   const lines = source.split(/\r?\n/);
   const errors = [];
   const fail = (line, message) => errors.push({ line: line + 1, message });
-  let fenced = false;
+  let fence;
   const prose = lines.map(line => {
-    if (/^\s*(`{3,}|~{3,})/.test(line)) { fenced = !fenced; return ''; }
-    return fenced ? '' : line;
+    const marker = line.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
+    if (fence) {
+      if (marker && marker[1][0] === fence[0] && marker[1].length >= fence.length && !marker[2].trim()) fence = undefined;
+      return '';
+    }
+    if (marker && (marker[1][0] !== '`' || !marker[2].includes('`'))) {
+      fence = marker[1];
+      return '';
+    }
+    return line;
   });
   const headings = prose.flatMap((line, index) => /^## /.test(line) ? [{ title: line.slice(3).trim(), index }] : []);
   const titles = prose.flatMap((line, index) => /^# /.test(line) ? [{ line, index }] : []);
@@ -51,6 +59,7 @@ export function validatePlan(source) {
     if (!prose.slice(stage.index + 1, end).some(line => /^\s*- \[[ xX]\]/.test(line))) fail(stage.index, 'Program checklist stage needs evidence-bearing checkboxes.');
   }
   const blocks = ['Depends on', 'Files', 'Build', 'You see', 'Verify, unit', 'Verify, live', 'Verify, perf', 'Review gate'];
+  const dependencies = new Map();
   for (const pr of prs) {
     const { start, end } = sectionLines(pr);
     const found = prose.slice(start, end).flatMap((line, offset) => {
@@ -63,6 +72,10 @@ export function validatePlan(source) {
       if (block.name === 'Depends on') {
         const dependency = prose[block.index].replace(/^\*\*Depends on\.\*\*\s*/, '').replace(/\.$/, '').trim();
         if (!dependency || (dependency !== 'None' && dependency.split(/\s*,\s*/).some(id => !ids.has(id) || pr.title.endsWith(`(${id})`)))) fail(block.index, 'Dependencies must be None or other declared PR ids.');
+        else dependencies.set(pr.title.match(/\(([^()]+)\)$/)?.[1], {
+          ids: dependency === 'None' ? [] : dependency.split(/\s*,\s*/),
+          line: block.index,
+        });
       } else {
         if (!prose.slice(block.index + 1, next).some(line => /^\s*- \[[ xX]\]/.test(line))) fail(block.index, `${block.name} needs an evidence-bearing checkbox.`);
         if (block.name.startsWith('Verify, ') && !prose[block.index].includes('Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.')) fail(block.index, 'Verification block must open with the verification rule.');
@@ -70,6 +83,20 @@ export function validatePlan(source) {
       }
     }
   }
+  const visiting = new Set();
+  const visited = new Set();
+  const visit = id => {
+    if (visited.has(id) || !dependencies.has(id)) return;
+    visiting.add(id);
+    const dependency = dependencies.get(id);
+    for (const next of dependency.ids) {
+      if (visiting.has(next)) fail(dependency.line, `Dependency cycle: ${id} depends on ${next}, which is already in its dependency chain.`);
+      else visit(next);
+    }
+    visiting.delete(id);
+    visited.add(id);
+  };
+  for (const id of dependencies.keys()) visit(id);
   for (const heading of headings.filter(h => h.title.startsWith('Appendix '))) {
     if (!sectionLines(heading).text.trim()) fail(heading.index, 'Appendix must state findings or explicitly state None.');
   }
