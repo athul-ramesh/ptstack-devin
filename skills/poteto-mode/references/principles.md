@@ -26,6 +26,8 @@ Read this catalog only when a live decision needs more than the default engineer
 
 **Verification**
 
+- **Explain the Number** (`skills/principle-explain-the-number/SKILL.md`). Before trusting, reporting, or acting on measured latency, throughput, regressions, speedups, or eval results. Validate actual work, spread, and the limiter.
+
 - **Prove It Works** (`skills/principle-prove-it-works/SKILL.md`). After a task, before declaring done. Verify against the real artifact, not a proxy or "it compiles".
 - **Fix Root Causes** (`skills/principle-fix-root-causes/SKILL.md`). Debugging. Trace each symptom to its root cause, reproduce first, ask why until you reach it.
 - **Sequence Work into Verifiable Units** (`skills/principle-sequence-verifiable-units/SKILL.md`). Multi-step work and how you stack commits and PRs. Break work into small units that each end in a check.

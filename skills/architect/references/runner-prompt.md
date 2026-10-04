@@ -18,3 +18,12 @@ Apply the following discipline. The orchestrator compares candidates on these ax
 - Short call chains. If tracing the flow needs more than three files, flatten the hierarchy, per the **laziness-protocol** and **minimize-reader-load** principle skills.
 
 You are one of several runners, each on a different model. Produce the best design your model can make; don't hedge against the others. Differences between candidates are the signal used to pick a base and graft. Converging on a safe-looking middle defeats the exploration.
+
+## Design for partial-context agents
+
+Assume contributors see only opened files, copy the nearest example, and choose the shortest path that compiles. Screen each candidate and the final synthesis against all four checks:
+
+- Each piece of state has one owner.
+- Each task has one supported path. Migrate callers and delete competing paths.
+- Internal implementation details are inaccessible through unsupported imports; enforce the public boundary.
+- Repeated lists derive from one authoritative source. When derivation is impossible, enforce consistency with a check.

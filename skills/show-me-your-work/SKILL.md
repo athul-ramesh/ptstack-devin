@@ -66,10 +66,10 @@ At the end of the run, before handing back, check the log told the truth. Read [
 
 Walk the log against what actually happened:
 
-- Every row maps to a real action. Cut invented or aspirational entries.
+- Every row maps to a real action. Append superseding entries for invented or aspirational rows; never delete them.
 - Each row's evidence resolves and shows what the row claims.
 - A fork, pivot, or abandoned approach that shaped the work but isn't logged is a gap. Add it.
-- Drop padding. If nobody would audit a row, it doesn't earn its place.
+- Mark padding as superseded in a new row; never edit or delete it.
 
 Fix the log, not the story. If the work diverged from what a row claims, the row is wrong. Add a superseding row. Do not rewrite earlier rows.
 
@@ -93,3 +93,7 @@ Read top to bottom, follow the evidence pointers, spot-check. GitHub renders a c
 ## Composing this skill
 
 Other skills route their audit trail here instead of inventing one. Reference it by name and let it own the format. Don't restate the columns.
+
+## Run identity and interleaving
+
+A run is one conversation, including later turns and compaction. A pickup, replacement agent, or new chat starts a new run. Assign a run id. When joining an existing log, append a `start` row naming the run and the prior row range it did not write. When returning after another run's segment, append another `start` row with that boundary. Audit only this run's stretches against current conversation evidence or a named Devin export. Identify other runs' rows without claiming their evidence. Log actual in-session checkpoints and new changes. Keep bounded-run summaries and durable resume notes; do not promise scheduled ticks.

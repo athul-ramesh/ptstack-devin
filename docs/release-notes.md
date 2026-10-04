@@ -1,14 +1,14 @@
 # Release notes
 
-Plugin `pstack` 0.1.0 for local Devin CLI 3000.10.21 (611c1cba). The earlier 3000.6.14 observations below remain as recorded; the 2026-09-10 baseline updates the tool surface only.
+Plugin `pstack` 0.2.0 verified on local Devin CLI 3000.11.3 (9c803229faa4). Earlier 3000.10.21 and 3000.6.14 observations are historical baselines.
 
 ## Shipped
 
-31 public skills under `/pstack:<name>`. 23 `principle-*` leaves, model-triggered. 20 poteto-mode playbooks. Profiles `pstack:poteto-agent`, `pstack:poteto-agent-{swe,opus,sonnet,codex}`, `pstack:comment-sicko`, and `pstack:panel-{swe,opus,sonnet,codex}`.
+33 public skills under `/pstack:<name>`. 24 `principle-*` leaves, model-triggered. 20 poteto-mode playbooks. Profiles `pstack:poteto-agent`, `pstack:poteto-agent-{swe,opus,sonnet,codex}`, `pstack:comment-sicko`, and `pstack:panel-{swe,opus,sonnet,codex}`.
 
 SessionStart injects `PSTACK_ROUTE=/pstack:poteto-mode`.
 
-`/pstack:setup-pstack` writes `$HOME/.config/devin/pstack-models.md` twice with the same bytes when the model list is unchanged.
+`/pstack:setup-pstack` preserves configured roles and notes in `$HOME/.config/devin/pstack-models.md`. Unchanged inputs and overrides produce byte-identical reruns.
 
 Poteto implementation delegation is root-owned. Code-writing passes use the explicit same-pin counterpart mapping `pstack:panel-<alias>` → `pstack:poteto-agent-<alias>`, while explicit `pstack:poteto-agent-*` rows are honored as configured. This mapping is deterministic and is not failure fallback. Investigation and review retain their configured `panel-*` profiles and panel perspective counts. The root derives absolute references from the installed skill source and inlines a shared worker contract. Logical program tracks do not add agent depth. Concurrent writers use separate worktrees or directories.
 
@@ -34,10 +34,18 @@ Bare skill names resolve `~/.agents/skills`, not this plugin. Use `pstack:<name>
 
 `devin -p` refuses an untrusted `/tmp` cwd.
 
-Pinned-profile dispatch can be denied by non-interactive permissions. The workflow reports failure without automatic model or profile substitution. A bounded consuming-project run proved automatic routing and complete brief construction, but not worker completion, parent verification, worker runtime identity, or background result collection.
+Pinned-profile dispatch can be denied by non-interactive permissions. The workflow reports failure without automatic model or profile substitution. The earlier 0.1.0 consuming-project run proved routing and brief construction. The 0.2.0 native checks below extend that evidence.
 
-`read_subagent` is the documented collection tool. Background completion and result collection remain untested in a live session.
+`read_subagent` is the documented collection tool. The 0.2.0 smoke run observed foreground completion, two fresh sequential repeated-profile passes, and background completion/collection. Narrowly approved-permission behavior and foreground permission repair remain untested; see [port verification](port-verification.md).
 
 Cloud Devin sessions exclude plugin SessionStart and plugin agents. The root `AGENTS.md` is always-on in local CLI and Desktop sessions.
 
-The full documented / locally observed / unavailable / untested matrix is in [`../README.md`](../README.md).
+Installation guidance is in [README](../README.md). Observed behavior and untested checks are in [port verification](port-verification.md).
+
+## 0.2.0 upstream port
+
+Source pstack 0.15.9 at `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`. Adds explicit-user correct and benchmark-checklist skills and model-triggered Explain the Number. Restores agent-resistant design checks, schema-owned parsing, uncapped supported reflection learnings, fresh-worker policy, SHA/method evidence, ordered performance strategies, append-only interleaved-run logging, PR sections, and a Node-only plan validator. Preserves profile pins, local packaging, ProgramState/worktree helpers, authorization, and operator-controlled delivery.
+
+Benny's two-stage Slack triage/reproduce setup and existing-fix checks were inspected in the source audit. Unattended triggers and Cursor setup are excluded, including manual Benny replacements. Bot UI routine creation, secret cards, panels, webhook authentication, and wake payloads have no documented local equivalent; building a replacement service is outside scope. Cloud automations remain outside this local port. UI evidence requires an available adapter. Cursor reasoning-budget normalization and Bun orchestration/watch bootstrap are not imported.
+
+Structural checks validate instructions and scripts; they do not establish native worker execution. Runtime identity must be recorded separately from configured pins and reported only if exposed. Native smoke results for this release are recorded in [port verification](port-verification.md).

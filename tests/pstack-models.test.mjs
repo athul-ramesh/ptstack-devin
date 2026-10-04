@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -90,4 +91,59 @@ describe("pstack models sheet", () => {
     assert.match(first.content, /frontmatter `model:` pin is authoritative/);
     assert.doesNotMatch(first.content, /claude-/);
   });
+  it("preserves role order, notes, repeated perspectives and explicit overrides on rerun", () => {
+    const out = join(mkdtempSync(join(tmpdir(), "pstack-models-")), "sheet.md");
+    writeFileSync(out, "# My models\n\nNotes: Keep my preferred review order.\nhow critics: pstack:panel-codex, pstack:panel-codex\nbug-fix: pstack:panel-opus\n");
+    const first = writeFromModelsList(LIST_FOUR, { out, roles: ["swarm workers=pstack:panel-sonnet", "feature, refactoring=pstack:poteto-agent-codex"] });
+    assert.match(first.content, /Notes: Keep my preferred review order/);
+    assert.equal(first.roles[0].role, "how critics");
+    assert.equal(first.roles[0].requiredPerspectives, 2);
+    assert.deepEqual(first.roles[1].profiles, ["pstack:panel-opus"]);
+    assert.match(first.content, /swarm workers: pstack:panel-sonnet/);
+    assert.equal(writeFromModelsList(LIST_FOUR, { out }).content, first.content);
+  });
+
+  it("rejects invalid existing rows without changing any bytes", () => {
+    const out = join(mkdtempSync(join(tmpdir(), "pstack-models-")), "sheet.md");
+    for (const content of [
+      "bug-fix: pstack:poteto-agent-swe\nbug-fix: pstack:poteto-agent-opus\n",
+      "unknown role: pstack:panel-opus\n",
+      "bug-fix: pstack:panel-missing\n",
+      "how critics: pstack:poteto-agent-opus\n",
+      "bug-fix: \n",
+    ]) {
+      writeFileSync(out, content);
+      assert.throws(() => writeFromModelsList(LIST_FOUR, { out }), /line \d+:/);
+      assert.equal(readFileSync(out, "utf8"), content);
+    }
+  });
+
+  it("rejects invalid overrides and unavailable existing choices without writes", () => {
+    const out = join(mkdtempSync(join(tmpdir(), "pstack-models-")), "sheet.md");
+    const content = writeFromModelsList(LIST_FOUR, { out }).content;
+    for (const roles of [
+      ["no such role=pstack:panel-opus"],
+      ["how critics=pstack:poteto-agent-opus"],
+      ["bug-fix=pstack:poteto-agent-claude"],
+      ["bug-fix=pstack:poteto-agent-opus", "bug-fix=pstack:poteto-agent-swe"],
+    ]) {
+      assert.throws(() => writeFromModelsList(LIST_FOUR, { out, roles }));
+      assert.equal(readFileSync(out, "utf8"), content);
+    }
+    assert.throws(() => writeFromModelsList(LIST_SWE, { out }), /unavailable/);
+    assert.equal(readFileSync(out, "utf8"), content);
+  });
+
+  it("accepts repeatable CLI role overrides", () => {
+    const out = join(mkdtempSync(join(tmpdir(), "pstack-models-")), "sheet.md");
+    const script = join(dirname(fileURLToPath(import.meta.url)), "../skills/setup-pstack/write-models.mjs");
+    const result = spawnSync(process.execPath, [script, "--out", out,
+      "--role", "bug-fix=pstack:poteto-agent-codex",
+      "--role", "how critics=pstack:panel-swe,pstack:panel-swe"], { input: LIST_FOUR, encoding: "utf8" });
+    assert.equal(result.status, 0, result.stderr);
+    const sheet = readFileSync(out, "utf8");
+    assert.match(sheet, /bug-fix: pstack:poteto-agent-codex/);
+    assert.match(sheet, /how critics: pstack:panel-swe, pstack:panel-swe/);
+  });
+
 });

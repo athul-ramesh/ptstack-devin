@@ -25,3 +25,5 @@ Evals test how a change affects agent behavior before promoting it. A new skill 
 7. **Read every candidate output yourself** end to end. Compare to the judge's verdict. Disagreement means a model is biased or the rubric is ambiguous. Synthesize.
 
 **Reply:** variant under test, rubric, per-candidate notes, judge's verdict, your synthesis, and a recommendation for whether to promote the variant.
+
+Before reporting eval numbers, read `skills/principle-explain-the-number/SKILL.md`. Verify task completion, trial count, spread, model coverage, and scenario relevance. An eval is not automatically a performance benchmark.

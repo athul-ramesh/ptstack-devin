@@ -53,3 +53,7 @@ One in-chat report. Table, issue one-liners, gaps, and the race rule when used.
 `$HOME/.config/devin/pstack-models.md` overrides this default.
 
 - swarm workers: `pstack:panel-sonnet`
+
+## Required evidence
+
+Commit-verification briefs name exact SHAs. Measurement briefs also name sample count, sample definition, and execution order. Results repeat those identifiers and methodology. A proven defect produces `ISSUES` and lists every demonstrated issue. Reject a result missing required evidence. Permit at most one fresh-worker retry within the existing recovery bounds; a second miss stays an evidence gap and never becomes `PASS`. Never replace an in-flight writer.

@@ -63,7 +63,7 @@ A `pstack:panel-*` profile is a model-pinned investigation or review profile. Fo
 - A collected report can still be wrong or partial. Inspect the artifact at the recorded workspace path, read the diff, and re-run the decisive check on the real surface. Set the record to `collected` only after inspection.
 - Classify every non-clean outcome before acting. `failed` has no usable result, so inspect any partial filesystem effects in the assigned workspace. `incomplete` reports its completed and missing portions and is not synthesized over. `cancelled` records what ran and the state it left.
 - Independent and out-of-order completions keep their own ids and records. Never merge two workers into one result.
-- Resume is only for repairing the same failed or cancelled worker through the retained `resume` field. It is not a new perspective and not a substitute.
+- Resume is only for same-worker foreground permission repair or justified costly-state recovery through the retained `resume` field. It is not a new perspective and not a substitute.
 
 ## Permission recovery
 
@@ -104,3 +104,7 @@ This example is used only after resolving `feature, refactoring` to the legacy `
 ```
 
 Use only documented `run_subagent` fields. Select the model through the registered profile, not an extra argument. New independent perspectives omit `resume`.
+
+## Fresh-context policy
+
+After a worker returns, subsequent queue units, substantive follow-ups, and retries use a fresh worker identity. Supply a consolidated brief containing original intent, later directives, prior findings, current workspace state, and verification requirements. Same-worker foreground resume is reserved for permission repair or justified costly-state recovery; document the reason. Never replace a writer while it may still own the workspace. Preserve root-owned dispatch, same-pin counterpart mapping, bounded recovery, collection by id, and artifact inspection.

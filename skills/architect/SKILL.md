@@ -88,3 +88,12 @@ Caller's usage first. Type sketch derived from it. One file for small changes. M
 `$HOME/.config/devin/pstack-models.md` overrides this default.
 
 - architect runners: `pstack:panel-opus`, `pstack:panel-swe`, `pstack:panel-sonnet`
+
+## Design for partial-context agents
+
+Assume contributors see only opened files, copy the nearest example, and choose the shortest path that compiles. Screen each candidate and the final synthesis against all four checks:
+
+- Each piece of state has one owner.
+- Each task has one supported path. Migrate callers and delete competing paths.
+- Internal implementation details are inaccessible through unsupported imports; enforce the public boundary.
+- Repeated lists derive from one authoritative source. When derivation is impossible, enforce consistency with a check.

@@ -146,6 +146,18 @@ function parseUser(input: unknown): User {
 }
 ```
 
+When the domain type is declared first, annotate the schema so an omitted required field fails compilation:
+
+```ts
+type Account = { id: string; role: "admin" | "member" };
+const AccountSchema: z.ZodType<Account> = z.object({
+  id: z.string().uuid(),
+  role: z.enum(["admin", "member"]),
+});
+// Removing role above fails compilation: the schema output lacks Account.role.
+const parseAccount = (input: unknown): Account => AccountSchema.parse(input);
+```
+
 Use `safeParse` when failure is an expected branch. Use the equivalent inference helper when the repository uses another schema library. Do not add a new schema dependency for one guard; this rule prefers the schema system the codebase already trusts.
 
 ## No `as` casts
@@ -156,16 +168,9 @@ Every `as` is a potential runtime crash. Cast only after the type system has ver
 // Don't
 const user = data as User;
 
-// Do. Earn the cast at the boundary.
+// Do. The schema owns parsing and the inferred type.
 function parseUser(data: unknown): User {
-  if (typeof data !== "object" || data === null) {
-    throw new Error("expected object");
-  }
-  if (!("id" in data) || typeof (data as Record<string, unknown>).id !== "string") {
-    throw new Error("expected id");
-  }
-  // ... validate all fields
-  return data as User; // OK, earned cast after full validation
+  return UserSchema.parse(data);
 }
 ```
 

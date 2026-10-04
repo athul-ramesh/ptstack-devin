@@ -63,7 +63,7 @@ Every implementation brief follows the single-source procedure in
 ### Repeated profiles and failure
 
 - Make one fresh `run_subagent` call per required perspective. Repeated profiles run sequentially as separate calls. Omit `resume` so each is an independent perspective.
-- Resume is only for repairing the same failed worker, such as a background permission denial. Resumed workers always run in the foreground. Resuming on the same profile preserves the mapping; it does not create another perspective.
+- Resume is only for same-worker foreground permission repair or justified costly-state recovery. Other follow-ups and retries after return use a fresh worker under delegation.md. Resumed workers always run in the foreground. Resuming on the same profile preserves the mapping; it does not create another perspective.
 - Classify failures before acting. Scheduling failure may justify a foreground retry. An unavailable pinned model is not repaired by sequential scheduling. Changing to another or built-in profile changes the mapping and must be explicitly reported as degraded execution.
 - Classify every non-clean outcome. `failed` has no usable result, so inspect partial filesystem effects. `incomplete` reports its completed and missing portions and is not synthesized over. `cancelled` records what ran and the state it left.
 - Do not automatically retry or substitute models. If a required pass does not complete, report the panel as incomplete with its completed count, failure, and any deliberate degraded execution.
