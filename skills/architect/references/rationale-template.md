@@ -33,3 +33,12 @@ The prose that ships alongside the type sketch. One page. Sentence-case headings
 ## Next implementation step
 
 *The first thing to build against the sketch. One sentence. What you'd start writing immediately after synthesis (or after Phase D sign-off, if a checkpoint was opted into).*
+
+## Design for partial-context agents
+
+Assume contributors see only opened files, copy the nearest example, and choose the shortest path that compiles. Screen each candidate and the final synthesis against all four checks:
+
+- Each piece of state has one owner.
+- Each task has one supported path. Migrate callers and delete competing paths.
+- Internal implementation details are inaccessible through unsupported imports; enforce the public boundary.
+- Repeated lists derive from one authoritative source. When derivation is impossible, enforce consistency with a check.

@@ -196,7 +196,7 @@ describe("poteto core completion contract", () => {
       .map((entry) => entry.name)
       .sort();
 
-    assert.equal(shipped.length, 23);
+    assert.equal(shipped.length, 24);
     assert.deepEqual([...catalogued].sort(), shipped);
     for (const name of shipped) {
       const leaf = join(skillsRoot, name, "SKILL.md");

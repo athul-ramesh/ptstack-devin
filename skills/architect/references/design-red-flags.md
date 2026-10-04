@@ -31,3 +31,12 @@ Group code around domain knowledge and ownership. Methods that run at different 
 A pass-through method forwards the same arguments to another method with the same shape. It adds a layer without hiding complexity.
 
 Remove it or move responsibility to the module that can complete the operation. Keep a forwarding boundary only when it adds policy, adaptation, or a distinct abstraction.
+
+## Design for partial-context agents
+
+Assume contributors see only opened files, copy the nearest example, and choose the shortest path that compiles. Screen each candidate and the final synthesis against all four checks:
+
+- Each piece of state has one owner.
+- Each task has one supported path. Migrate callers and delete competing paths.
+- Internal implementation details are inaccessible through unsupported imports; enforce the public boundary.
+- Repeated lists derive from one authoritative source. When derivation is impossible, enforce consistency with a check.
