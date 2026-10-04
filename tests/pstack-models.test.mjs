@@ -146,4 +146,36 @@ describe("pstack models sheet", () => {
     assert.match(sheet, /how critics: pstack:panel-swe, pstack:panel-swe/);
   });
 
+  it("repairs an unavailable role through the CLI without changing notes or other roles", () => {
+    const out = join(mkdtempSync(join(tmpdir(), "pstack-models-")), "sheet.md");
+    const original = "# My models\nNotes: Keep this order.\nbug-fix: pstack:poteto-agent-opus\nhow critics: pstack:panel-swe, pstack:panel-swe\n";
+    writeFileSync(out, original);
+    const script = join(dirname(fileURLToPath(import.meta.url)), "../skills/setup-pstack/write-models.mjs");
+    const result = spawnSync(process.execPath, [script, "--out", out,
+      "--role", "bug-fix=pstack:poteto-agent-swe"], { input: LIST_SWE, encoding: "utf8" });
+    assert.equal(result.status, 0, result.stderr);
+    const repaired = readFileSync(out, "utf8");
+    assert.ok(repaired.startsWith(original.replace("poteto-agent-opus", "poteto-agent-swe")));
+    assert.equal(writeFromModelsList(LIST_SWE, { out }).content, repaired);
+  });
+
+  it("validates the effective sheet before writing an explicit repair", () => {
+    const out = join(mkdtempSync(join(tmpdir(), "pstack-models-")), "sheet.md");
+    const roles = ["bug-fix=pstack:poteto-agent-swe"];
+    for (const content of [
+      "bug-fix: pstack:poteto-agent-opus\nhow critics: pstack:panel-opus\n",
+      "bug-fix: pstack:poteto-agent-opus\nbug-fix: pstack:poteto-agent-swe\n",
+      "bug-fix: pstack:poteto-agent-opus\nunknown role: pstack:panel-swe\n",
+    ]) {
+      writeFileSync(out, content);
+      assert.throws(() => writeFromModelsList(LIST_SWE, { out, roles }));
+      assert.equal(readFileSync(out, "utf8"), content);
+    }
+    for (const value of ["pstack:panel-missing", "", "pstack:poteto-agent-opus"]) {
+      writeFileSync(out, `bug-fix: ${value}\n`);
+      const repaired = writeFromModelsList(LIST_SWE, { out, roles });
+      assert.ok(repaired.content.startsWith("bug-fix: pstack:poteto-agent-swe\n"));
+    }
+  });
+
 });

@@ -147,7 +147,7 @@ function validateRow(role, profiles, available) {
   }
 }
 
-export function parseExistingSheet(content, available) {
+export function parseExistingSheet(content, available, overrides = new Map()) {
   const rows = new Map();
   const lines = content.split("\n");
   for (let index = 0; index < lines.length; index += 1) {
@@ -156,7 +156,7 @@ export function parseExistingSheet(content, available) {
     const role = match[1].trim();
     if (!KNOWN_ROLES.has(role) && !match[2].includes("pstack:")) continue;
     if (rows.has(role)) throw new Error(`line ${index + 1}: duplicate role ${role}`);
-    const profiles = match[2].split(",").map((profile) => profile.trim());
+    const profiles = overrides.get(role)?.profiles ?? match[2].split(",").map((profile) => profile.trim());
     try { validateRow(role, profiles, available); }
     catch (error) { throw new Error(`line ${index + 1}: ${error.message}`); }
     rows.set(role, { role, profiles, requiredPerspectives: profiles.length, line: index });
@@ -218,7 +218,6 @@ export function writeFromModelsList(text, options = {}) {
   const defaults = buildRoleConfigs(available);
   const path = options.out ?? defaultOutPath(options.home);
   const existing = existsSync(path) ? readFileSync(path, "utf8") : undefined;
-  const parsed = parseExistingSheet(existing ?? renderSheet(defaults), available);
   const overrides = new Map();
   for (const override of options.roles ?? []) {
     const equals = override.indexOf("=");
@@ -229,6 +228,7 @@ export function writeFromModelsList(text, options = {}) {
     validateRow(role, profiles, available);
     overrides.set(role, { role, profiles, requiredPerspectives: profiles.length });
   }
+  const parsed = parseExistingSheet(existing ?? renderSheet(defaults), available, overrides);
   const roles = [];
   for (const [role, row] of parsed.rows) {
     const selected = overrides.get(role) ?? row;
