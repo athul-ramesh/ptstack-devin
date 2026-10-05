@@ -1,10 +1,12 @@
 # Release notes
 
-Plugin `pstack` 0.2.0 verified on local Devin CLI 3000.11.3 (9c803229faa4). Earlier 3000.10.21 and 3000.6.14 observations are historical baselines.
+Plugin `pstack` 0.3.0 adds explicit-user `/pstack:poteto-help`, prompting references, recipes, and a Devin usage guide. It ports upstream pstack 0.15.13. Native activation of this release is untested. See the [port audit](pstack-0.15.13-port-audit.md).
+
+Plugin 0.2.0 was verified on local Devin CLI 3000.11.3 (9c803229faa4). Earlier 3000.10.21 and 3000.6.14 observations are historical baselines.
 
 ## Shipped
 
-33 public skills under `/pstack:<name>`. 24 `principle-*` leaves, model-triggered. 20 poteto-mode playbooks. Profiles `pstack:poteto-agent`, `pstack:poteto-agent-{swe,opus,sonnet,codex}`, `pstack:comment-sicko`, and `pstack:panel-{swe,opus,sonnet,codex}`.
+34 public skills under `/pstack:<name>`. 24 `principle-*` leaves, model-triggered. 20 poteto-mode playbooks. Profiles `pstack:poteto-agent`, `pstack:poteto-agent-{swe,opus,sonnet,codex}`, `pstack:comment-sicko`, and `pstack:panel-{swe,opus,sonnet,codex}`.
 
 SessionStart injects `PSTACK_ROUTE=/pstack:poteto-mode`.
 
