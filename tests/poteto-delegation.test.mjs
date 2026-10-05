@@ -111,11 +111,11 @@ describe("poteto delegation contract", () => {
 
   it("preserves every model-pinned profile frontmatter value", () => {
     const pins = {
-      "panel-codex": "gpt-5-6-sol-medium",
-      "panel-opus": "gpt-5-6-sol-medium",
+      "panel-codex": "gpt-6-1-sol-medium",
+      "panel-opus": "gpt-6-1-sol-medium",
       "panel-sonnet": "glm-5-3-flash-high",
       "panel-swe": "swe",
-      "poteto-agent": "gpt-5-6-sol-medium",
+      "poteto-agent": "gpt-6-1-sol-medium",
     };
 
     for (const [profile, pin] of Object.entries(pins)) {
@@ -132,11 +132,11 @@ describe("poteto delegation contract", () => {
       "utf8",
     );
     const profiles = {
-      "poteto-agent": "gpt-5-6-sol-medium",
-      "poteto-agent-opus": "gpt-5-6-sol-medium",
+      "poteto-agent": "gpt-6-1-sol-medium",
+      "poteto-agent-opus": "gpt-6-1-sol-medium",
       "poteto-agent-sonnet": "glm-5-3-flash-high",
       "poteto-agent-swe": "swe",
-      "poteto-agent-codex": "gpt-5-6-sol-medium",
+      "poteto-agent-codex": "gpt-6-1-sol-medium",
     };
     for (const [profile, pin] of Object.entries(profiles)) {
       const path = join(repoRoot, "agents", profile, "AGENT.md");

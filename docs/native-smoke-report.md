@@ -22,16 +22,16 @@ New-skill activation could not be exercised through the runtime: the skills exis
 
 ## Worker dispatch
 
-All workers dispatched on the explicitly requested registered profile `AISkills/ptstack-devin:panel-opus`. Configured pin from `agents/panel-opus/AGENT.md` frontmatter (verified in both the source repo and the 0.2.0 cache): **`model: gpt-5-6-sol-medium`**.
+All workers dispatched on the explicitly requested registered profile `AISkills/ptstack-devin:panel-opus`. Configured pin from `agents/panel-opus/AGENT.md` frontmatter (verified in both the source repo and the 0.2.0 cache): **`model: gpt-6-1-sol-medium`**.
 
 | Pass | Mode | agent_id | Profile (returned) | Configured pin | Result |
 |---|---|---|---|---|---|
-| Foreground | `is_background: false` | `caea952f` | `AISkills/ptstack-devin:panel-opus` | `gpt-5-6-sol-medium` | Completed; returned `SMOKE_FOREGROUND_OK`; quoted fixture line 1 correctly. Collected by id via `read_subagent`. |
-| Sequential 1 | `is_background: false`, fresh call, no `resume` | `8b0a5471` | `AISkills/ptstack-devin:panel-opus` | `gpt-5-6-sol-medium` | Completed; returned `SMOKE_PASS_1`; quoted fixture line 2 correctly. |
-| Sequential 2 | `is_background: false`, fresh call, no `resume` | `fdae5283` | `AISkills/ptstack-devin:panel-opus` | `gpt-5-6-sol-medium` | Completed; returned `SMOKE_PASS_2`; reported correct line count (2). |
-| Background | `is_background: true`, read-only tools | `2e7e055e` | `AISkills/ptstack-devin:panel-opus` | `gpt-5-6-sol-medium` | Completed; returned `SMOKE_BACKGROUND_OK`; collected by id via `read_subagent` after completion notification. |
+| Foreground | `is_background: false` | `caea952f` | `AISkills/ptstack-devin:panel-opus` | `gpt-6-1-sol-medium` | Completed; returned `SMOKE_FOREGROUND_OK`; quoted fixture line 1 correctly. Collected by id via `read_subagent`. |
+| Sequential 1 | `is_background: false`, fresh call, no `resume` | `8b0a5471` | `AISkills/ptstack-devin:panel-opus` | `gpt-6-1-sol-medium` | Completed; returned `SMOKE_PASS_1`; quoted fixture line 2 correctly. |
+| Sequential 2 | `is_background: false`, fresh call, no `resume` | `fdae5283` | `AISkills/ptstack-devin:panel-opus` | `gpt-6-1-sol-medium` | Completed; returned `SMOKE_PASS_2`; reported correct line count (2). |
+| Background | `is_background: true`, read-only tools | `2e7e055e` | `AISkills/ptstack-devin:panel-opus` | `gpt-6-1-sol-medium` | Completed; returned `SMOKE_BACKGROUND_OK`; collected by id via `read_subagent` after completion notification. |
 
-All four passes returned their required tokens with correct read evidence. Runtime model identity is **not exposed** by the CLI (`run_subagent`/`read_subagent` surface no per-worker model label); `gpt-5-6-sol-medium` is a configuration fact from frontmatter, not an observed runtime identity.
+All four passes returned their required tokens with correct read evidence. Runtime model identity is **not exposed** by the CLI (`run_subagent`/`read_subagent` surface no per-worker model label); `gpt-6-1-sol-medium` is a configuration fact from frontmatter, not an observed runtime identity.
 
 ## Limitations
 

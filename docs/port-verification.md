@@ -25,7 +25,7 @@ Herdr opened an adjacent interactive Devin pane. The operator approved repositor
 | Fresh sequential perspective 2 | fdae5283 | SMOKE_PASS_2 |
 | Background | 2e7e055e | SMOKE_BACKGROUND_OK, completion notification and collection by id |
 
-Configured pin is `gpt-5-6-sol-medium`; no per-worker runtime model identity was exposed. The pane displayed bypass-permissions mode during these passes. Thus this run demonstrates background execution and collection, but does not prove its behavior under narrowly preapproved permissions. Detailed observed report: [native smoke report](native-smoke-report.md). Transient session artifacts are under `/private/tmp/pstack-port-smoke`; they are evidence from this run, not a promised portable path.
+Configured pin is `gpt-6-1-sol-medium`; no per-worker runtime model identity was exposed. The pane displayed bypass-permissions mode during these passes. Thus this run demonstrates background execution and collection, but does not prove its behavior under narrowly preapproved permissions. Detailed observed report: [native smoke report](native-smoke-report.md). Transient session artifacts are under `/private/tmp/pstack-port-smoke`; they are evidence from this run, not a promised portable path.
 
 ## Evidence gaps
 

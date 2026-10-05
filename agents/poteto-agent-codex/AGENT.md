@@ -1,7 +1,7 @@
 ---
 name: poteto-agent-codex
 description: Explicitly selected model-pinned implementation worker using the codex panel model; scoped implementation only.
-model: gpt-5-6-sol-medium
+model: gpt-6-1-sol-medium
 ---
 
 # Poteto implementation worker (codex)

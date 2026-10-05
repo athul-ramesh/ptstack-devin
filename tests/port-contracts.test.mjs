@@ -111,8 +111,8 @@ test('fresh-worker and swarm evidence contracts preserve bounded recovery and ow
 });
 
 test('all implementation and panel pins remain matched and unchanged', () => {
-  for (const [alias, pin] of Object.entries({ codex: 'gpt-5-6-sol-medium', opus: 'gpt-5-6-sol-medium', sonnet: 'glm-5-3-flash-high', swe: 'swe' })) {
+  for (const [alias, pin] of Object.entries({ codex: 'gpt-6-1-sol-medium', opus: 'gpt-6-1-sol-medium', sonnet: 'glm-5-3-flash-high', swe: 'swe' })) {
     for (const prefix of ['panel', 'poteto-agent']) assert.match(read(`agents/${prefix}-${alias}/AGENT.md`), new RegExp(`^model: ${pin}$`, 'm'));
   }
-  assert.match(read('agents/poteto-agent/AGENT.md'), /^model: gpt-5-6-sol-medium$/m);
+  assert.match(read('agents/poteto-agent/AGENT.md'), /^model: gpt-6-1-sol-medium$/m);
 });
