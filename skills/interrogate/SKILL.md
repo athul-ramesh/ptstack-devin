@@ -5,9 +5,7 @@ description: "Use for \"interrogate\", \"adversarial review\", \"multi-model rev
 
 # Interrogate
 
-Spawn one reviewer per configured profile. Same prompt and rubric. Diversity of profile is the signal, not assigned personas. Agreement is high confidence. Lone findings are worth reading at lower weight.
-
-The deliverable is a synthesized verdict. Do not auto-apply changes.
+Spawn one reviewer per configured profile with the same prompt and rubric. Diversity of profile is the signal, not assigned personas. Deliver a synthesized verdict. Do not auto-apply changes.
 
 Resolve profiles from [`../poteto-mode/references/panel-run.md`](../poteto-mode/references/panel-run.md). Record a `PanelRun` before the first `run_subagent` call. Sequential when distinct profiles are fewer than the required count. Say so.
 
@@ -43,16 +41,12 @@ Parse findings. Consensus is 2+ independent raises. Keep lone-model findings at 
 
 ## Step 5. Lead judgment
 
-You are a pragmatic lead, not a neutral aggregator. Read [`references/lead-judgment.md`](references/lead-judgment.md). You have the full conversation. Reviewers saw a slice.
-
-Buckets:
+You are a pragmatic lead, not a neutral aggregator. Read [`references/lead-judgment.md`](references/lead-judgment.md). You have the full conversation. Reviewers saw a slice. Put each finding in a bucket with its reviewer profile and a one-line rationale:
 
 - **Act on.** Would block a real PR.
 - **Consider.** Real, cost unclear.
 - **Noted.** Valid, not actionable now.
 - **Dismissed.** Wrong, nit, or missing context. Say why.
-
-Each finding names the reviewer profile, the bucket, and a one-line rationale.
 
 ## Output
 

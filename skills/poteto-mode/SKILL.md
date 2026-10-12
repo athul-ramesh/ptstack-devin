@@ -68,7 +68,7 @@ For other work, select the first applicable route:
 
 When routes overlap, choose the required evidence. For diagnosis without a fix, use Trace forensics for a captured trace and Runtime forensics for live instrumentation. Exact visual equivalence uses Visual parity. A sustained metric target uses Hillclimb. A specific performance regression uses Perf issue. Other defects use Bug fix. Other behavior-preserving changes use Refactoring, and other product changes use Feature. An explicit shipping or autopilot request gets the delivery-capability verdict, never an unnamed fallback.
 
-Use Prototype to settle a question an experiment can answer. Ask the user for a product or preference decision that evidence cannot settle. Return the prototype's decision to the controlling workflow. Implement the chosen direction only within the authorized scope.
+Use Prototype for questions an experiment can answer. Reserve questions for product or preference decisions evidence cannot settle. Return the result to the controlling workflow and implement only within the authorized scope.
 
 Inside poteto-mode, use the Babysit playbook rather than the standalone `/pstack:babysit` skill. Opening a PR does not authorize babysitting. Devin runs these workflows in the current session. Do not promise a later wakeup or background watch after the session ends.
 
@@ -110,7 +110,7 @@ Push back when the evidence contradicts the request's premise or the proposed wo
 
 ## Write the reply
 
-State the outcome for the consumer and maintainer before implementation details. Include the active playbook's required reply content, relevant checks, and unresolved limits. Write your own assessment of worker evidence.
+State the consumer and maintainer outcome before implementation details. Include the active playbook's reply content, checks, unresolved limits, and your assessment of worker evidence.
 
 Name each principle that shaped a decision and the specific choice it changed. Cite only leaves whose SKILL.md you read this session. Never claim to have read or applied a principle you did not.
 

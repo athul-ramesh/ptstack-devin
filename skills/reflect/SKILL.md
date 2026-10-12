@@ -9,7 +9,7 @@ Mine this session for durable learnings. Route them into skill edits.
 
 Resolve profiles from [`../poteto-mode/references/panel-run.md`](../poteto-mode/references/panel-run.md). Record a `PanelRun` before the first `run_subagent` call.
 
-## When to invoke
+## When to use
 
 - The user said "reflect" or "/reflect".
 - A complex task (5+ tool calls) landed cleanly and the recipe is worth keeping.
@@ -19,9 +19,7 @@ Resolve profiles from [`../poteto-mode/references/panel-run.md`](../poteto-mode/
 
 Skip trivia, off-topic chat, and work an existing skill already covered.
 
-## Process
-
-### 1. Evidence for this session
+## 1. Evidence for this session
 
 Devin does not expose a private per-project transcript directory this plugin can search. Do not invent a path. Do not glob home config for other sessions.
 
@@ -33,7 +31,7 @@ Use, in order:
 
 `devin list --format json` names sessions in this directory. It does not return message bodies. Do not treat a session id as a transcript.
 
-### 2. Three reviewers
+## 2. Three reviewers
 
 Three `run_subagent` calls. Sequential when `executionMode` is sequential. Say so. Reviewers may use MCP tools for context the evidence names. They must not write files.
 
@@ -45,17 +43,17 @@ Three `run_subagent` calls. Sequential when `executionMode` is sequential. Say s
 
 Fill the template with the export path or the digest.
 
-### 3. Synthesize
+## 3. Synthesize
 
 One `run_subagent` on the reflect-judgment profile. [`references/synthesizer.md`](references/synthesizer.md) with each reviewer's full output inlined. It returns Accepted / Rejected / Backlog. It must not write files.
 
-### 4. Structural check
+## 4. Structural check
 
 If a lint, script, metadata flag, or runtime check would enforce an Accepted item more reliably, move it to Backlog. Read `skills/principle-encode-lessons-in-structure/SKILL.md`.
 
-### 5. Apply
+## 5. Apply
 
-Show the full Accepted / Rejected / Backlog list. Wait for explicit approval. Skill changes affect every future agent. Do not auto-apply.
+Present the full Accepted / Rejected / Backlog list and wait for explicit approval before applying edits. The user picks the subset and may redirect routing. Do not auto-apply.
 
 Backlog items go to whatever tracker this team already uses. Only Accepted waits.
 
@@ -66,7 +64,7 @@ For each approved row, follow Routing:
 - `tune description: <skill path>`. Same playbook, description loop.
 - `new skill via authoring-a-skill: <kebab-name>`. Same playbook. Do not invent the shape ad hoc.
 
-### 6. Summarize
+## 6. Summarize
 
 - Edits applied. Path and one line.
 - New skills created. Path and one line.

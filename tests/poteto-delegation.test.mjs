@@ -158,6 +158,17 @@ describe("poteto delegation contract", () => {
 });
 
 describe("poteto core completion contract", () => {
+  it("maps every public skill exactly once in poteto-help", () => {
+    const help = readFileSync(join(skillsRoot, "poteto-help", "SKILL.md"), "utf8");
+    const table = help.split("## Pick a skill")[1].split("Close calls:")[0];
+    const mapped = [...table.matchAll(/^\|.*`\/pstack:([a-z0-9-]+)`/gm)]
+      .map(([, name]) => name).sort();
+    const shipped = readdirSync(skillsRoot, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && !entry.name.startsWith("principle-"))
+      .map((entry) => entry.name).sort();
+    assert.deepEqual(mapped, shipped);
+  });
+
   it("resolves every relative Markdown link in the shipped skill tree", () => {
     const files = [
       ...walkMarkdown(skillsRoot),

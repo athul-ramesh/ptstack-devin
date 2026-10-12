@@ -18,30 +18,18 @@ Resolve profiles from [`../poteto-mode/references/panel-run.md`](../poteto-mode/
 
 ### Step 1. Question and complexity
 
-Parse the ask. State your interpretation if the scope is ambiguous. Do not quiz the user.
+If the scope is ambiguous, state your interpretation and explore. When in doubt, lean simple.
 
-- **Simple.** One module, a small utility, "how does function X work". Skip explorers. Go to Step 2b.
-- **Complex.** Multiple files or services, a cross-cutting feature, a full overview. Explorers first. Go to Step 2a.
+- **Simple.** One module, utility, or narrow question. One read-only `run_subagent` on the how-explainer profile explores and explains with [`references/explainer-prompt.md`](references/explainer-prompt.md) and no explorer findings. Then Step 4.
+- **Complex.** Multiple files or services, a cross-cutting feature, or a full overview. Continue with Step 2.
 
-When in doubt, lean simple.
+### Step 2. Explore (complex only)
 
-### Step 2a. Explore (complex only)
-
-Split the question into 2-4 disjoint angles. Spawn one explorer per angle with `run_subagent` and the how-explorer profile.
-
-Each explorer gets [`references/explorer-prompt.md`](references/explorer-prompt.md) plus its angle. It uses `glob`, `grep`, and `read`. It returns components, flow, files read, boundaries, non-obvious facts, and open questions.
-
-Then Step 3.
-
-### Step 2b. Direct explain (simple)
-
-One `run_subagent` on the how-explainer profile. It explores and writes the explanation. Use [`references/explainer-prompt.md`](references/explainer-prompt.md) with empty explorer findings.
-
-Then Step 4.
+Split the question into 2-4 disjoint angles. Spawn one read-only explorer per angle on the how-explorer profile, using [`references/explorer-prompt.md`](references/explorer-prompt.md). Each returns components, flow, files read, boundaries, non-obvious facts, and open questions.
 
 ### Step 3. Synthesize (complex only)
 
-One `run_subagent` on the how-explainer profile. Hand it every explorer report and [`references/explainer-prompt.md`](references/explainer-prompt.md). It reconciles overlap and contradictions by reading the code.
+After every explorer returns, give one read-only how-explainer all reports and [`references/explainer-prompt.md`](references/explainer-prompt.md). It reconciles overlap and contradictions by reading the code.
 
 ### Step 4. Present
 
@@ -49,17 +37,7 @@ Show the explainer output. Light edits for conversation context are fine. Do not
 
 ### Output format
 
-Adapt. Drop empty sections.
-
-**Overview.** 1-2 paragraphs. What it is, what it does, why it exists.
-
-**Key Concepts.** Types, services, or abstractions needed for the rest.
-
-**How It Works.** Trigger, steps, data, decision points. Prose. Cite files and functions. No dump unless a snippet is required.
-
-**Where Things Live.** Files a newcomer opens first.
-
-**Gotchas.** Surprises, history, sharp edges.
+Use the sections in [`references/explainer-prompt.md`](references/explainer-prompt.md): Overview, Key Concepts, How It Works, Where Things Live, Gotchas. Drop empty sections.
 
 ## Critique mode
 
