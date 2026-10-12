@@ -5,20 +5,9 @@ description: "Spawn N parallel candidates at the same task, pick a base, graft t
 
 # Arena
 
-Fan out N independent attempts at the same task. Read every candidate end to end. Pick the strongest as the base. Graft the best ideas from the others into it. Verify the result.
-
 Resolve profiles from [`../poteto-mode/references/panel-run.md`](../poteto-mode/references/panel-run.md). Record a `PanelRun` before the first `run_subagent` call. Sequential when distinct profiles are fewer than N. Say so. Do not claim parallel execution in that mode.
 
-## Start
-
-Open a todolist with one entry per phase.
-
-1. Frame
-2. Fan out
-3. Cross-judge
-4. Pick
-5. Graft
-6. Verify
+Open a todolist with one entry per phase: Frame, Fan out, Cross-judge, Pick, Graft, Verify.
 
 ## Phase A: Frame
 
@@ -47,13 +36,9 @@ Read every candidate end to end. Score criterion by criterion. Compare with the 
 
 Pick the base a future maintainer can extend without breaking invariants. Prefer the cleaner boundary when tied.
 
-Record the pick, the reason, and the cross-judge verdict beside the base artifact.
-
 ## Phase E: Graft
 
 Walk each loser once. Usually one or two grafts, not most of it. For a nontrivial code graft, dispatch the graft through [`../poteto-mode/references/delegation.md`](../poteto-mode/references/delegation.md) to a dedicated implementation worker with an isolated worktree, then have the root select and verify the result. Keep trivial prose or metadata grafts in the root. Read `skills/principle-redesign-from-first-principles/SKILL.md`.
-
-Record grafts, sources, and rejections. Rejections are the high-signal part.
 
 When N candidates converge, note that and ship the consensus. No graft. When they wildly diverge, Phase A was under-specified. Reframe and re-run.
 
@@ -65,7 +50,7 @@ A verification miss means re-frame or return to graft. Do not paper over.
 
 ## Outputs
 
-One synthesized artifact. One short synthesis note naming the base, grafts, rejections, dropouts, and verification result.
+One synthesized artifact, with a short synthesis note naming the base and why, the cross-judge verdict, each graft and its source, rejections and why, convergence or dropouts, and the verification result.
 
 ## Models
 

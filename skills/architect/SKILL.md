@@ -5,7 +5,7 @@ description: "Sketch types, signatures, and module structure before code, then s
 
 # Architect
 
-Design before implementing. Sketch types, signatures, class shapes, and module boundaries with `not implemented` bodies. Synthesize across independent candidates. Fill in against the chosen sketch. If implementation proves the sketch wrong, throw it out.
+Sketch types, signatures, class shapes, and module boundaries with `not implemented` bodies. Synthesize across independent candidates, then implement against the chosen sketch.
 
 Resolve profiles from [`../poteto-mode/references/panel-run.md`](../poteto-mode/references/panel-run.md).
 
@@ -21,15 +21,13 @@ Open a todolist with one entry per phase.
 
 ## Phase A: Ground
 
-Build a real model of every system the new code touches. Invoke `/pstack:how` over those subsystems. Critique mode when existing structure is the constraint.
-
-Naming a file is not grounding. Produce the traced model how prescribes. If the design redefines ownership or layering, also invoke `/pstack:why` so the rationale is a constraint.
+Build a real model of every system the new code touches. Invoke `/pstack:how` over those subsystems. Critique mode when existing structure is the constraint. Naming a file is not grounding. Produce the architectural explanation how prescribes. If the design redefines ownership or layering, also invoke `/pstack:why` so the rationale is a constraint.
 
 Skip Phase A only for genuine greenfield work.
 
 ## Phase B: Sketch
 
-Invoke `/pstack:arena` with the design-sketch task and Phase A artifacts. Pass [`references/runner-prompt.md`](references/runner-prompt.md) as each runner's prompt. Each candidate produces a package shaped per [`references/rationale-template.md`](references/rationale-template.md). Usage first, then types, signatures, module map, rationale.
+Invoke `/pstack:arena` with the design-sketch task and Phase A artifacts. Pass [`references/runner-prompt.md`](references/runner-prompt.md) as each runner's prompt.
 
 Use architect-runners profiles.
 
@@ -53,9 +51,7 @@ If the human pushes back on the shape, that is Phase A evidence. Re-ground. Re-r
 
 ## Phase D: Implement
 
-Replace `not implemented` with code. The sketch is the contract.
-
-A new parameter the sketch missed is a signal. Ask whether the sketch was wrong, the requirement was missed, or the implementation is overreaching. Surface it. Do not bolt it on.
+Replace `not implemented` with code. The sketch is the contract. A new parameter the sketch missed is a signal. Ask whether the sketch was wrong, the requirement was missed, or the implementation is overreaching. Surface it. Do not bolt it on.
 
 ## Phase E: Scrap
 

@@ -18,17 +18,19 @@ Pause and resume do not create delivery authority. An ordinary pause records eac
 
 Shipped behavior is in [`docs/release-notes.md`](docs/release-notes.md).
 
-The 0.2.0 release was verified against Devin CLI 3000.11.3 (9c803229faa4), local CLI on macOS. Historical native observations are in [port verification](docs/port-verification.md). Native activation of 0.3.0 remains untested.
+The 0.2.0 release was verified against Devin CLI 3000.11.3 (9c803229faa4), local CLI on macOS. Historical native observations are in [port verification](docs/port-verification.md). Native activation of 0.4.0 remains untested.
 
 Avoid installing two copies with the same plugin name. Devin may source-qualify inventory names while loading skills from an older copy; verify the path returned by the skill tool.
 
-## Using 0.3.0
+## Using 0.4.0
 
 Ask `/pstack:poteto-help` with a setup or workflow question. This explicit-user skill answers with one suggested prompt and a source link. It does not start a task for a help question. A request to do work follows poteto-mode instead.
 
+Invoke [`/pstack:ketchup`](skills/ketchup/SKILL.md) to catch up on this chat since your last message. It is explicit-user and read-only. It summarizes what changed and the decisions only you can make, with options, costs, a recommendation, and what happens without an answer.
+
 The [usage guide](docs/usage-guide.md) covers prompting, investigation, prototypes before plans, real behavior verification, benchmark evidence, repeated-mistake enforcement, and bounded in-session delivery. The help skill includes [prompting guidance](skills/poteto-help/references/prompting.md) and [copyable recipes](skills/poteto-help/references/recipes.md).
 
-This release ports the help and documentation changes through upstream pstack 0.15.13. Existing workflow skills are unchanged upstream since the 0.15.9 port. See the [port audit](docs/pstack-0.15.13-port-audit.md) for adaptations and verification limits.
+This release ports upstream pstack 0.15.17 changes #538 and #539: shorter prompts and ketchup. Devin dispatch, profile pins, and delivery authority are preserved. See the [port audit](docs/pstack-0.15.17-port-audit.md) for coverage, exclusions, and verification limits. The [0.15.13 audit](docs/pstack-0.15.13-port-audit.md) records the earlier help and documentation port.
 
 ## Features retained from 0.2.0
 

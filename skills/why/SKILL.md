@@ -5,19 +5,13 @@ description: "Use for 'why does X work this way', 'why we picked Y', design rati
 
 # Why
 
-Investigate motivation. Why this shape? Which constraints? Which alternatives died?
-
-Companion to `/pstack:how`. How is mechanics. Why is force.
+Investigate motivation, constraints, and rejected alternatives. Use `/pstack:how` for mechanics.
 
 The source registry currently covers source control: commits, PRs, linked issues, review threads, code comments, and in-repo docs. Name gaps in coverage when they matter. Query thoroughly, then synthesize with explicit confidence. Null results are evidence. Coverage is the default.
 
 Resolve profiles from [`../poteto-mode/references/panel-run.md`](../poteto-mode/references/panel-run.md). Record a `PanelRun` before the first `run_subagent` call.
 
-## Posture
-
-Evidence before narrative. Quote and cite. Name gaps. Hedge on purpose. Do not infer intent from code shape.
-
-Read [`references/epistemics.md`](references/epistemics.md). The synthesizer must follow it.
+Read [`references/epistemics.md`](references/epistemics.md). Investigators gather evidence; the synthesizer follows its confidence tiers.
 
 ## Step 1. Target and question
 
@@ -58,21 +52,7 @@ Light edits only. Do not rewrite confidence language.
 
 ## Output format
 
-Keep the confidence split.
-
-**The Question.** Restate.
-
-**The Code in Question.** Paths, ranges, symbols.
-
-**What We Found (direct evidence).** Cited claims.
-
-**What We Can Reasonably Infer.** Hedged. Show the chain.
-
-**Competing Hypotheses.** Skip when the record is clear.
-
-**What We Don't Know.** Specific searches that returned nothing.
-
-**Sources Consulted.** One line per registered category with what was searched and any unavailable portions and reasons, plus unchased leads.
+Use [`references/synthesizer-prompt.md`](references/synthesizer-prompt.md): The Question, The Code in Question, What We Found, What We Can Reasonably Infer, Competing Hypotheses, What We Don't Know, Sources Consulted, Confidence Summary. Keep the confidence split. Sources Consulted names each registered category, searches, unavailable portions and reasons, and unchased leads.
 
 If this `why` precedes a change, add Preserve / Change / Avoid / Risk from the lineage.
 
