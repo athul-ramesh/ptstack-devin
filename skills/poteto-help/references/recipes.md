@@ -44,3 +44,11 @@ Swap in the real paths, skills, and done checks. Informal wording works.
 - Autopilot-full and Autopilot-stack are cut from this port. Read [Delivery capability](../../poteto-mode/references/delivery-capability.md) for supported in-session alternatives.
 - `/pstack:reflect capture what we learned so the next run doesn't repeat it.` Approve only edits that change a future decision.
 - `/pstack:bro` restates the last reply in plain words.
+
+## Check the goal
+
+```text
+/pstack:in-your-own-words
+```
+
+Use this to hear the goals and problem the agent understood. It does not add a confirmation gate to ordinary work.

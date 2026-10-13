@@ -7,7 +7,7 @@ description: "Generate a project-local verification skill that drives your app t
 
 Every serious project needs a scripted way to drive the real app and prove behavior. Launch it. Exercise a feature the way a user would. Capture evidence. This skill writes that as a project-local skill under `.devin/skills/verify-<app>/`. You write the output for the next agent, not for a human. It will be read cold, mid-task, by an agent that has never seen the app.
 
-Read `skills/poteto-mode/references/verification.md` before writing Launch or Drive. There is no Devin `run` or `verify` skill. A test file is not proof.
+Read [Verification recipes](../poteto-mode/references/verification.md) before writing Launch or Drive. There is no Devin `run` or `verify` skill. A test file is not proof.
 
 ## 1. Interview the repo, not the user
 
@@ -27,7 +27,7 @@ Write `.devin/skills/verify-<app>/SKILL.md` with YAML frontmatter. `name: verify
 
 Include these sections, each grounded in what the interview found. No placeholders.
 
-- **Launch.** The exact command that starts the app for verification, and how to tell it is ready. Include teardown. For a short-lived CLI or TUI there is no server to keep alive. Build once, then start each drive in its own isolated PTY.
+- **Launch.** The exact command that starts the app for verification, and how to tell it is usable from an empty data directory. Include migrations, seed data, and teardown. A listening port or passing database health check does not prove initialization has finished. For a short-lived CLI or TUI there is no server to keep alive. Build once, then start each drive in its own isolated PTY.
 - **Doctor.** One read-only check that answers "is this instance worth driving?" Process up, right build, port owned by us, auth valid.
 - **Drive.** The harness recipe with real selectors or commands from this repo. Prefer stable handles. ARIA labels, data attributes, prompt strings, route paths. Not coordinates.
 - **Evidence.** What to capture and where it goes. Fill a `VerificationReceipt` per proof. Exercise the real user path. Capture the action and the resulting state. Verify side effects. Mock only at a production boundary.
@@ -36,11 +36,11 @@ Include these sections, each grounded in what the interview found. No placeholde
 
 ## 3. Seed the feature map
 
-Create `.devin/skills/verify-<app>/features/README.md` plus one file per user-facing feature you can identify. Aim for the top 3-5 from routes, commands, menus, or docs. Follow [`references/feature-map-example/`](references/feature-map-example/). Each file answers, from the user's point of view, what the feature is, how to reach it, how to drive it, and what observable end state proves it works. The four H2s are `Sub-features`, `How to get to it (user POV)`, `Driving it with <harness>`, and `Gotchas`.
+Create `.devin/skills/verify-<app>/features/README.md` plus one file per user-facing feature you can identify. Aim for the top 3-5 from routes, commands, menus, or docs. Follow [`references/feature-map-example/`](references/feature-map-example/). Each file answers, from the user's point of view, what the feature is, how to reach it, how to drive it, and what observable end state proves it works. The four H2s are `Sub-features`, `How to get to it (user POV)`, `Driving it with <harness>`, and `Gotchas`. If seed data lacks a journey precondition, report that journey as failed and record the reason in its `Gotchas`. Do not weaken the journey to make it pass.
 
 ## 4. Prove the generated skill before handing it over
 
-Run its own instructions once. Launch, doctor, drive one mapped feature, capture a `VerificationReceipt`, clean up. After cleanup, confirm the evidence still exists at `artifactPath`. Fix what fails. Run cleanup after every failed iteration too. A generated skill that was never executed is a draft, not a deliverable.
+Run its own instructions once. Launch, doctor, drive one mapped feature, capture a `VerificationReceipt`, clean up. After cleanup, confirm the evidence still exists at `artifactPath`. Fix what fails. Run cleanup after every failed iteration too. A generated skill that was never executed is a draft, not a deliverable. If the proof used a stand-in for the real target, list each setup step the stand-in performed that the target will not. Those steps remain unverified until a real-target run covers them.
 
 ## 5. Offer the maintenance loop
 
