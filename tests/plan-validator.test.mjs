@@ -89,3 +89,22 @@ test('rejects every shipped angle placeholder, including placeholders in fences'
   }
   assert.ok(validatePlan(`${valid}\n\`\`\`text\n<command>\n\`\`\`\n`).some(error => /placeholder/.test(error.message)));
 });
+
+test('fences close only with the opening character and enough delimiters', () => {
+  for (const fence of ['````', '~~~~']) {
+    for (const falseClose of [fence.slice(1), fence[0] === '`' ? '~~~~' : '````']) {
+      const inside = `${fence}markdown\n## Fake PR (PR99)\n- [ ] not a real receipt\n${falseClose}\n## Still inside\n${fence}   \n`;
+      assert.deepEqual(validatePlan(`${valid}\n${inside}`), []);
+      const after = `${valid}\n${inside}\n- [ ] real checkbox without a receipt\n`;
+      assert.ok(validatePlan(after).some(error => /receipt/.test(error.message)));
+    }
+  }
+});
+
+test('fence opening indentation and info strings follow CommonMark boundaries', () => {
+  assert.deepEqual(validatePlan(`${valid}\n   ~~~markdown\n## Hidden\n   ~~~~\n`), []);
+  for (const opener of ['    ```', '```bad`info']) {
+    assert.ok(validatePlan(`${valid}\n${opener}\n- [ ] missing receipt\n`).some(error => /receipt/.test(error.message)));
+  }
+  assert.deepEqual(validatePlan(`${valid}\n~~~\n~~~not a closer\n- [ ] hidden\n~~~\n`), []);
+});

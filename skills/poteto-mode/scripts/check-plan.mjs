@@ -12,10 +12,19 @@ export function validatePlan(source) {
   const lines = source.split(/\r?\n/);
   const errors = [];
   const fail = (line, message) => errors.push({ line: line + 1, message });
-  let fenced = false;
+  let fence = null;
   const prose = lines.map(line => {
-    if (/^\s*(`{3,}|~{3,})/.test(line)) { fenced = !fenced; return ''; }
-    return fenced ? '' : line;
+    if (fence) {
+      const close = line.match(/^ {0,3}(`+|~+)[ \t]*$/);
+      if (close && close[1][0] === fence.char && close[1].length >= fence.length) fence = null;
+      return '';
+    }
+    const open = line.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
+    if (open && !(open[1][0] === '`' && open[2].includes('`'))) {
+      fence = { char: open[1][0], length: open[1].length };
+      return '';
+    }
+    return line;
   });
   const headings = prose.flatMap((line, index) => /^## /.test(line) ? [{ title: line.slice(3).trim(), index }] : []);
   const titles = prose.flatMap((line, index) => /^# /.test(line) ? [{ line, index }] : []);

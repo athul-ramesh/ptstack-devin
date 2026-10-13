@@ -65,3 +65,11 @@ Shipping, Autopilot-full, and Autopilot-stack are cut from this port. Scheduled 
 Fix a misbehaving skill in its own PR. The [Eval playbook](../skills/poteto-mode/playbooks/eval.md) tests variants on the same task without telling candidates they are being evaluated. Inspect every output and question the rubric when the verdict conflicts with evidence.
 
 The help skill's [prompting reference](../skills/poteto-help/references/prompting.md) and [recipes](../skills/poteto-help/references/recipes.md) provide prompts and short steering messages.
+
+## Play back the goal and catch up
+
+Use `/pstack:in-your-own-words` to hear the goals and problem the agent understood. This explicit-user skill restates them without starting a workflow or adding a confirmation gate.
+
+Use `/pstack:ketchup` to catch up since your previous message. Replies stay under 250 words and include older unresolved user decisions. Existing captures and available diagrams show status and before/after options. When the Devin host cannot render them, compact text includes the same facts and unknowns. The skill does not start an app, install a renderer, or post anything to produce a visual.
+
+Verification skills must launch a usable app from an empty data directory. Include migrations and seed data. Missing journey preconditions are failed checks, not a reason to weaken the journey. Proof from a stand-in must identify target setup steps it has not exercised.
