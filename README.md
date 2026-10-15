@@ -34,7 +34,7 @@ Invoke [`/pstack:sharpen`](skills/sharpen/SKILL.md) before a task to have the ag
 
 Invoke [`/pstack:in-your-own-words`](skills/in-your-own-words/SKILL.md) to hear the goals and problem the agent understood. It runs only when requested and adds no confirmation gate.
 
-Release 0.6.0 selectively ports upstream pstack 0.15.24; see the [0.15.24 port audit](docs/pstack-0.15.24-port-audit.md). The prior release selectively ported upstream pstack 0.15.23. It adds goal playback, shorter ketchup replies, usable-state verification, a cheap observability proposal after deep debugging, robust Markdown fence checks, and configurable worktree merge bases. Devin dispatch, profile pins, and delivery authority are preserved. See the [port audit](docs/pstack-0.15.23-port-audit.md) for source coverage, exclusions, and evidence limits. Earlier audits cover [0.15.17](docs/pstack-0.15.17-port-audit.md) and [0.15.13](docs/pstack-0.15.13-port-audit.md).
+Release 0.6.1 selectively ports upstream pstack 0.15.25; see the [0.15.25 port audit](docs/pstack-0.15.25-port-audit.md). Release 0.6.0 selectively ported upstream pstack 0.15.24; see the [0.15.24 port audit](docs/pstack-0.15.24-port-audit.md). The prior release selectively ported upstream pstack 0.15.23. It adds goal playback, shorter ketchup replies, usable-state verification, a cheap observability proposal after deep debugging, robust Markdown fence checks, and configurable worktree merge bases. Devin dispatch, profile pins, and delivery authority are preserved. See the [port audit](docs/pstack-0.15.23-port-audit.md) for source coverage, exclusions, and evidence limits. Earlier audits cover [0.15.17](docs/pstack-0.15.17-port-audit.md) and [0.15.13](docs/pstack-0.15.13-port-audit.md).
 
 ## Features retained from 0.2.0
 
