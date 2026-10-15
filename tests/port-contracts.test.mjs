@@ -61,7 +61,7 @@ test('interleaved run documentation assigns boundaries and supersedes history', 
 });
 
 test('portable skills retain user activation and numeric principle model activation', () => {
-  for (const name of ['correct', 'benchmark-checklist', 'ketchup', 'in-your-own-words']) {
+  for (const name of ['correct', 'benchmark-checklist', 'ketchup', 'in-your-own-words', 'sharpen']) {
     const text = read(`skills/${name}/SKILL.md`);
     assert.match(text, new RegExp(`^name: ${name}$`, 'm'));
     assert.match(text, /triggers:\n  - user/);

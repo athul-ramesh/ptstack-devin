@@ -1,5 +1,7 @@
 # Release notes
 
+Plugin `pstack` 0.6.0 selectively ports upstream 0.15.24. It adds explicit-user `/pstack:sharpen`, rewrites ketchup to a reply well under 150 words with small plain-language visuals, states that Devin dispatch has no per-call effort or speed knob, and runs the full plan audit set once at the code-ready SHA with a single fresh-context verifier for rebases and minor fixes. Native activation of 0.6.0 remains untested. See the [port audit](pstack-0.15.24-port-audit.md).
+
 Plugin `pstack` 0.5.0 selectively ports upstream 0.15.23. It adds explicit-user `/pstack:in-your-own-words`, short ketchup replies with available visuals and a text fallback, usable-state verification, and an observability proposal after deep debugging. Plan validation tracks Markdown fence delimiters. Worktree audits use the remote default or an explicit base and accept merged-PR evidence only for that base. Native activation of 0.5.0 remains untested. See the [port audit](pstack-0.15.23-port-audit.md).
 
 Plugin `pstack` 0.4.0 adds explicit-user, read-only `/pstack:ketchup` and ports the prompt reductions from upstream pstack #538 and #539 at 0.15.17. Existing Devin profile pins, dispatch contracts, helpers, hooks, and delivery authority remain intact. Native activation of this release is untested. See the [port audit](pstack-0.15.17-port-audit.md).
@@ -10,7 +12,7 @@ Plugin 0.2.0 was verified on local Devin CLI 3000.11.3 (9c803229faa4). Earlier 3
 
 ## Shipped
 
-36 public skills under `/pstack:<name>`. 24 `principle-*` leaves, model-triggered. 20 poteto-mode playbooks. Profiles `pstack:poteto-agent`, `pstack:poteto-agent-{swe,opus,sonnet,codex}`, `pstack:comment-sicko`, and `pstack:panel-{swe,opus,sonnet,codex}`.
+37 public skills under `/pstack:<name>`. 24 `principle-*` leaves, model-triggered. 20 poteto-mode playbooks. Profiles `pstack:poteto-agent`, `pstack:poteto-agent-{swe,opus,sonnet,codex}`, `pstack:comment-sicko`, and `pstack:panel-{swe,opus,sonnet,codex}`.
 
 SessionStart injects `PSTACK_ROUTE=/pstack:poteto-mode`.
 

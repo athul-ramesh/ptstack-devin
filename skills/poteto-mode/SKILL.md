@@ -129,4 +129,6 @@ Implementation uses dedicated profiles. Resolve legacy `pstack:panel-<alias>` ro
 - judgment and prose: `pstack:panel-opus`
 - strongest judgment: `pstack:panel-opus`
 
+Devin dispatch has no per-call reasoning-level or speed parameter, because `run_subagent` takes a profile, not a model. Upstream pstack's per-spawn effort and fast-mode tuning therefore does not apply. Match the model to the job only by choosing among the configured role rows above, never by inventing a profile, editing a pin, or remapping a role at dispatch time.
+
 When an active panel skill requires N perspectives but fewer distinct profiles are available, use N sequential fresh-context `run_subagent` calls on the available registered profiles. One pass is not a panel. Do not claim a model ran without dispatch evidence.
