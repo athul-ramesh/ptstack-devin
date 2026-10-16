@@ -52,3 +52,11 @@ Swap in the real paths, skills, and done checks. Informal wording works.
 ```
 
 Use this to hear the goals and problem the agent understood. It does not add a confirmation gate to ordinary work.
+
+## Aim the task higher
+
+```text
+/pstack:sharpen <your task>
+```
+
+The agent frames the task the way a top expert would, keeps one outside check, leaves your choices open, and then does the work. It does not hand back a rewritten prompt.
