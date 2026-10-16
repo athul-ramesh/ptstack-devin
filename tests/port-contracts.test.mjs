@@ -116,3 +116,17 @@ test('all implementation and panel pins remain matched and unchanged', () => {
   }
   assert.match(read('agents/poteto-agent/AGENT.md'), /^model: gpt-6-1-sol-medium$/m);
 });
+
+test('0.15.25 port keeps ketchup fallback and reasoning-style principles', () => {
+  const ketchup = read('skills/ketchup/SKILL.md');
+  assert.match(ketchup, /help them understand each change/);
+  assert.match(ketchup, /action items as plain bullets/);
+  assert.match(ketchup, /When rendering is unavailable/);
+  assert.doesNotMatch(ketchup, /\/visualize/);
+  assert.doesNotMatch(read('skills/principle-attack-the-premise/SKILL.md'), /census/);
+  assert.match(read('skills/principle-fix-root-causes/SKILL.md'), /A guard is a fix only when the state it handles is legitimate/);
+  assert.doesNotMatch(read('skills/principle-test-behavior-not-implementation/SKILL.md'), /every imported function/);
+  for (const name of ['principle-attack-the-premise', 'principle-fix-root-causes', 'principle-make-operations-idempotent', 'principle-test-behavior-not-implementation']) {
+    assert.match(read(`skills/${name}/SKILL.md`), /triggers:\n  - model/);
+  }
+});

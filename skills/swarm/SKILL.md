@@ -5,8 +5,6 @@ description: "Fan out N parallel workers, drain them, and return one report. Use
 
 # Swarm
 
-Fan out N workers. They may cover separate slices, race the same brief, or mix both. The parent waits, aggregates, and returns one report.
-
 Resolve profiles from [`../poteto-mode/references/panel-run.md`](../poteto-mode/references/panel-run.md). Record a `PanelRun` before the first `run_subagent` call. Sequential when the host will not run them together or when distinct profiles are fewer than needed. Say so. Do not claim parallel execution in that mode.
 
 ## Start
@@ -22,9 +20,8 @@ Open a todolist with one entry per phase.
 
 1. State the done predicate and the artifact or report.
 2. Choose the shape. Partition, race, or mix. For a race or mix, declare `first pass`, `rank all`, or `best-of` before spawning.
-3. Set N from the user or the shape. N is total workers, not concurrency.
-4. Pick the worker profile from `swarm workers` in `$HOME/.config/devin/pstack-models.md`, else the Models default. For a model race, name each arm's profile up front.
-5. Give each writer its own root-provisioned output. A verified git worktree, or a separate directory such as `/tmp/swarm-<slug>/worker-<n>/`. A branch in the shared checkout is not isolation.
+3. Pick the worker profile from `swarm workers` in `$HOME/.config/devin/pstack-models.md`, else the Models default. For a model race, name each arm's profile up front.
+4. Give each writer its own root-provisioned output. A verified git worktree, or a separate directory such as `/tmp/swarm-<slug>/worker-<n>/`. A branch in the shared checkout is not isolation.
 
 ## Phase B: Fan out
 
