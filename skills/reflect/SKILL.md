@@ -57,6 +57,8 @@ Present the full Accepted / Rejected / Backlog list and wait for explicit approv
 
 Backlog items go to whatever tracker this team already uses. Only Accepted waits.
 
+Never edit a skill inside an installed plugin. Run `devin plugins info <plugin>` and read its Source line. A plugin installed from GitHub or a git URL is re-fetched by `devin plugins update`, which can replace local edits. A plugin installed with `--local` is linked to its source checkout, so an edit there changes that repository. Before approval, show each edit's destination. For a plugin skill, the default is a copy at `.devin/skills/<skill>/` for this project or `~/.config/devin/skills/<skill>/` for every project. After approval, copy the skill folder there and edit the copy. The copy is a separate skill invoked as `/<skill>`; `/<plugin>:<skill>` keeps the unedited version. Edit a `--local` plugin's checkout only when the user names it as the destination. Never open a PR or push.
+
 For each approved row, follow Routing:
 
 - Trivial existing-skill edit. Parent does it.
@@ -66,7 +68,7 @@ For each approved row, follow Routing:
 
 ## 6. Summarize
 
-- Edits applied. Path and one line.
+- Edits applied. Destination path and one line.
 - New skills created. Path and one line.
 - Backlog filed. Title.
 - Dropped. One line per rejection plus the synthesizer reason.

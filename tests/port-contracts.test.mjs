@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, readdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -61,7 +61,7 @@ test('interleaved run documentation assigns boundaries and supersedes history', 
 });
 
 test('portable skills retain user activation and numeric principle model activation', () => {
-  for (const name of ['correct', 'benchmark-checklist', 'ketchup', 'in-your-own-words', 'sharpen']) {
+  for (const name of ['correct', 'benchmark-checklist', 'ketchup', 'in-your-own-words', 'sharpen', 'create-formal-verification-skill', 'maintain-formal-verification-skill']) {
     const text = read(`skills/${name}/SKILL.md`);
     assert.match(text, new RegExp(`^name: ${name}$`, 'm'));
     assert.match(text, /triggers:\n  - user/);
@@ -129,4 +129,36 @@ test('0.15.25 port keeps ketchup fallback and reasoning-style principles', () =>
   for (const name of ['principle-attack-the-premise', 'principle-fix-root-causes', 'principle-make-operations-idempotent', 'principle-test-behavior-not-implementation']) {
     assert.match(read(`skills/${name}/SKILL.md`), /triggers:\n  - model/);
   }
+});
+
+test('every skill is named after its folder', () => {
+  for (const name of readdirSync(join(root, 'skills'))) {
+    assert.match(read(`skills/${name}/SKILL.md`), new RegExp(`^---\\n(?:[^\\n]*\\n)*?name: ${name}\\n`), name);
+  }
+});
+
+test('e73df47 port keeps Devin paths, honest tool limits, and local-only reflect edits', () => {
+  const sharpen = read('skills/sharpen/SKILL.md');
+  assert.match(sharpen, /rewrite my prompt to ask for exactly that/);
+  assert.match(sharpen, /Do not start the task/);
+  assert.doesNotMatch(sharpen, /then do the work/);
+  const ketchup = read('skills/ketchup/SKILL.md');
+  assert.match(ketchup, /Never cut items or shrink them to stay under a word count/);
+  assert.match(ketchup, /Give each item's risk even when it is low/);
+  assert.doesNotMatch(ketchup, /well under 150 words, not counting rendered screenshots/);
+  for (const name of ['create-formal-verification-skill', 'maintain-formal-verification-skill']) {
+    const text = read(`skills/${name}/SKILL.md`);
+    assert.match(text, /\.devin\/skills\//);
+    assert.match(text, /ask(?:s)? before installing|get the user's approval first/);
+    assert.doesNotMatch(text, /\.cursor|\/statechart|disable-model-invocation/);
+  }
+  assert.match(read('skills/create-formal-verification-skill/SKILL.md'), /TLA\+ is the default/);
+  assert.match(read('skills/create-formal-verification-skill/SKILL.md'), /test the real code with generated inputs/);
+  const reflect = read('skills/reflect/SKILL.md');
+  assert.match(reflect, /Never edit a skill inside an installed plugin/);
+  assert.match(reflect, /~\/\.config\/devin\/skills\/<skill>\//);
+  assert.match(reflect, /Never open a PR or push/);
+  assert.doesNotMatch(reflect, /plugins\/cache/);
+  assert.doesNotMatch(read('skills/typescript-best-practices/references/patterns.md'), /as AgentId/);
+  for (const cut of ['statechart', 'ketchup-video']) assert.throws(() => read(`skills/${cut}/SKILL.md`));
 });
