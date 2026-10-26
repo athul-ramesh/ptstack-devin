@@ -27,6 +27,7 @@ Check the state that changes the answer, and mention it only when it does:
 
 - No `$HOME/.config/devin/pstack-models.md` means each role uses its skill's default profile unless another explicit configuration applies.
 - No `verify-*` skill or other app harness in the project means agents have no scripted way to drive the app. Mention `/pstack:create-verification-skill` when the question is about proving a change works.
+- No formal verification skill in the project means no property is checked past what tests reach. Mention `/pstack:create-formal-verification-skill` when the question is about a race, an invariant, or another case tests rarely hit. When one exists and the code it covers changed after the commit it records as last in sync, mention `/pstack:maintain-formal-verification-skill` if the question touches that code.
 
 ## Get set up
 
@@ -52,11 +53,11 @@ The default answer is `/pstack:poteto-mode`, which runs most of the others when 
 |---|---|
 | Do any non-trivial task with rigor | [`/pstack:poteto-mode`](../poteto-mode/SKILL.md) |
 | Check that the agent understood the goals and the problem | [`/pstack:in-your-own-words`](../in-your-own-words/SKILL.md) |
-| Aim a task higher before starting: more expert, more outcome-focused, not overspecified | [`/pstack:sharpen`](../sharpen/SKILL.md) |
+| Get a prompt rewritten deeper, not bigger, before sending it: what a top professional would add, their raw material and methods, and an outside check. It returns the prompt and doesn't do the task | [`/pstack:sharpen`](../sharpen/SKILL.md) |
 | Know how code works now, or where new code should live | [`/pstack:how`](../how/SKILL.md) |
 | Know why code is shaped this way, or where a number came from | [`/pstack:why`](../why/SKILL.md) |
 | Understand a change or subsystem, explained plainly | [`/pstack:teach`](../teach/SKILL.md) |
-| Catch up on changes since their last message, in a few plain sentences and small available visuals | [`/pstack:ketchup`](../ketchup/SKILL.md) |
+| Catch up on changes since their last message, in plain words and small available visuals, with every item waiting on them listed and decidable from the reply alone | [`/pstack:ketchup`](../ketchup/SKILL.md) |
 | Catch up on their own recent work on a topic | [`/pstack:recall`](../recall/SKILL.md) |
 | Know what a small diff could break outside itself | [`/pstack:blast-radius`](../blast-radius/SKILL.md) |
 | Settle types and module shape before code that crosses a function boundary | [`/pstack:architect`](../architect/SKILL.md) |
@@ -71,6 +72,8 @@ The default answer is `/pstack:poteto-mode`, which runs most of the others when 
 | Hear the last reply again in plain words | [`/pstack:bro`](../bro/SKILL.md) |
 | Give agents a scripted way to drive the app and prove behavior | [`/pstack:create-verification-skill`](../create-verification-skill/SKILL.md) |
 | Bring a verification skill and its feature map back in line with the app | [`/pstack:maintain-verification-skill`](../maintain-verification-skill/SKILL.md) |
+| Formally verify a race, invariant, or other property that tests rarely reach | [`/pstack:create-formal-verification-skill`](../create-formal-verification-skill/SKILL.md) |
+| Bring a formal verification back in line after the code it covers changed, and learn whether a failure is drift or a bug | [`/pstack:maintain-formal-verification-skill`](../maintain-formal-verification-skill/SKILL.md) |
 | Vet a performance number before reporting or acting on it | [`/pstack:benchmark-checklist`](../benchmark-checklist/SKILL.md) |
 | Run a large or cross-cutting change, or one to review after stepping away | [`/pstack:figure-it-out`](../figure-it-out/SKILL.md) |
 | Keep a decision log during a run, and review it afterward | [`/pstack:show-me-your-work`](../show-me-your-work/SKILL.md) |
@@ -105,6 +108,7 @@ Port boundaries:
 - `control-cli`, `control-ui`, `/create-skill`, and `/make-bot-ui` are not shipped here. Use the skill-authoring playbook for skill work. Detect an available UI or CLI adapter before promising visual proof.
 - Devin's `/loop <prompt>` is an interactive command that auto-reviews a diff. It is not an agent-callable timer or unattended scheduler.
 - Orchestrate is a `/pstack:poteto-mode` playbook, not a public `/orchestrate` skill.
+- Upstream `/statechart` and `/ketchup-video` are not shipped here. They need a TLA+ toolchain with a chart renderer, or a video renderer, and Devin documents no inline image or video output in the CLI. Formal verification skills bundle no verifier; the agent confirms the tool runs on this machine and asks before installing one.
 
 ## Playbooks and principles
 

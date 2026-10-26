@@ -44,6 +44,8 @@ Keep the verification skill with the project when delivery is authorized. Update
 
 [`/pstack:benchmark-checklist`](../skills/benchmark-checklist/SKILL.md) vets a number before reporting or acting on it. Comparisons require five interleaved runs per side, median and range, correct outputs, and proof that timed work happened. A requested ballpark can use one labeled run while retaining error and work checks. Missing evidence means inconclusive. Performance playbooks already apply this checklist.
 
+Some bugs live on paths nobody drives: two retries that overlap, a lock that expires mid-write, a state change that arrives out of order. For code where such a bug is costly, use [`/pstack:create-formal-verification-skill`](../skills/create-formal-verification-skill/SKILL.md). The question picks the tool. TLA+ is the default for whether events can happen in a bad order. A verifier that runs on the code suits whether the code behaves for every input. When no verifier runs on the language, the agent says so and tests the real code with generated inputs. The plugin bundles no verifier, so the agent confirms the tool runs on this machine and asks before installing it. The check must fail on a broken variant, a finding stays a finding, and the generated skill under `.devin/skills/` records the covered code and the commit it last matched. After merges or refactors that skipped that skill, run [`/pstack:maintain-formal-verification-skill`](../skills/maintain-formal-verification-skill/SKILL.md). It updates the verification from the code, reruns it, and says whether each failure is drift or a bug.
+
 ## Deliver in this session
 
 Request commits, pushes, or a PR explicitly. Opening a PR does not start babysitting. [`/pstack:babysit`](../skills/babysit/SKILL.md) handles checks and feedback in the current session. Merge remains with the operator.
@@ -70,6 +72,8 @@ The help skill's [prompting reference](../skills/poteto-help/references/promptin
 
 Use `/pstack:in-your-own-words` to hear the goals and problem the agent understood. This explicit-user skill restates them without starting a workflow or adding a confirmation gate.
 
-Use `/pstack:ketchup` to catch up since your previous message. Replies stay under 250 words and include older unresolved user decisions. Existing captures and available diagrams show status and before/after options. When the Devin host cannot render them, compact text includes the same facts and unknowns. The skill does not start an app, install a renderer, or post anything to produce a visual.
+Use `/pstack:sharpen <the prompt you're about to send>` when you are unsure a prompt is aimed right. It hands back the prompt rewritten deeper, not bigger, with an outside check and your choices left open. It does not do the task. Send the rewrite yourself.
+
+Use `/pstack:ketchup` to catch up since your previous message. The story stays under 100 words. Every call waiting on you gets its own bullet with its link, what it changes, the evidence, the risk, and a pick, including older unresolved decisions, so a large batch makes a long reply instead of a cut list. Existing captures and available diagrams show status and before/after options. When the Devin host cannot render them, compact text includes the same facts and unknowns. The skill does not start an app, install a renderer, or post anything to produce a visual.
 
 Verification skills must launch a usable app from an empty data directory. Include migrations and seed data. Missing journey preconditions are failed checks, not a reason to weaken the journey. Proof from a stand-in must identify target setup steps it has not exercised.

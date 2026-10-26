@@ -32,6 +32,7 @@ Swap in the real paths, skills, and done checks. Informal wording works.
 ## Review and ship
 
 - `/pstack:interrogate the whole branch, but skeptically. don't change anything yet. no nitpicks unless it's a real bug or regression.` Read the dismissals too.
+- `/pstack:create-formal-verification-skill prove <property> holds in <module>, even when <steps> interleave or retry.` After merges or refactors in that code: `/pstack:maintain-formal-verification-skill`.
 - `/pstack:swarm check every package under <dir> against its check script. one worker per package. one report.`
 - `/pstack:poteto-mode open the pr. small ordered commits, evidence in the description.`
 - `/pstack:poteto-mode babysit this pr. get it green.` For status only: `/pstack:poteto-mode check on pr <number>. anything outstanding?`
@@ -41,6 +42,7 @@ Swap in the real paths, skills, and done checks. Informal wording works.
 
 - `/pstack:poteto-mode run <goal> in a fresh worktree off <base>. done means <checks>. bound this session to <N> iterations. keep a decision log. at the bound, write resume.md with the remaining work.`
 - `/pstack:show-me-your-work catch me up on the completed run.` Read its Attention section first.
+- `/pstack:ketchup` catches you up on this chat since your last message and lists every call that waits on you.
 - Autopilot-full and Autopilot-stack are cut from this port. Read [Delivery capability](../../poteto-mode/references/delivery-capability.md) for supported in-session alternatives.
 - `/pstack:reflect capture what we learned so the next run doesn't repeat it.` Approve only edits that change a future decision.
 - `/pstack:bro` restates the last reply in plain words.
@@ -53,10 +55,10 @@ Swap in the real paths, skills, and done checks. Informal wording works.
 
 Use this to hear the goals and problem the agent understood. It does not add a confirmation gate to ordinary work.
 
-## Aim the task higher
+## Sharpen a prompt before you send it
 
 ```text
-/pstack:sharpen <your task>
+/pstack:sharpen <the prompt you're about to send>
 ```
 
-The agent frames the task the way a top expert would, keeps one outside check, leaves your choices open, and then does the work. It does not hand back a rewritten prompt.
+The agent names what a top professional would do that you didn't ask for, the raw material they'd start from, their methods and tools, and an outside check that the result is right. It hands back your prompt rewritten to ask for that, leaves your choices open, and doesn't do the task. Send the rewrite when it reads right, for example with `/pstack:poteto-mode`.

@@ -22,19 +22,21 @@ The 0.2.0 release was verified against Devin CLI 3000.11.3 (9c803229faa4), local
 
 Avoid installing two copies with the same plugin name. Devin may source-qualify inventory names while loading skills from an older copy; verify the path returned by the skill tool.
 
-## Using 0.5.0
+## Using 0.7.0
 
 Ask `/pstack:poteto-help` with a setup or workflow question. This explicit-user skill answers with one suggested prompt and a source link. It does not start a task for a help question. A request to do work follows poteto-mode instead.
 
-Invoke [`/pstack:ketchup`](skills/ketchup/SKILL.md) to catch up on this chat since your last message. It is explicit-user and read-only. It summarizes changes and decisions well under 150 words in plain sentences, with small available visuals, options, costs, a recommendation, and what happens without an answer. The CLI uses compact text when no renderer is available.
+Invoke [`/pstack:ketchup`](skills/ketchup/SKILL.md) to catch up on this chat since your last message. It is explicit-user and read-only. It keeps the story short, then lists every call waiting on you, each with its link, what it changes, the evidence, the risk, and a pick, so you can decide from the reply alone. A large batch makes a long reply rather than a cut list. Small visuals appear only when the host renders them; the CLI uses compact text otherwise.
 
 The [usage guide](docs/usage-guide.md) covers prompting, investigation, prototypes before plans, real behavior verification, benchmark evidence, repeated-mistake enforcement, and bounded in-session delivery. The help skill includes [prompting guidance](skills/poteto-help/references/prompting.md) and [copyable recipes](skills/poteto-help/references/recipes.md).
 
-Invoke [`/pstack:sharpen`](skills/sharpen/SKILL.md) before a task to have the agent frame it the way a top expert would, keep one outside check, leave your choices open, and then do the work. It runs only when requested.
+Invoke [`/pstack:sharpen`](skills/sharpen/SKILL.md) on a prompt before you send it. The agent says what a top professional would add, the raw material and methods they would use, and an outside check, then hands back the rewritten prompt with your choices left open. It does not do the task. It runs only when requested.
+
+Invoke [`/pstack:create-formal-verification-skill`](skills/create-formal-verification-skill/SKILL.md) when tests cannot reach the case that breaks a race, retry, state machine, parser, or unsafe code. It verifies one property with a tool that fits and runs on your machine, shows the check failing on a broken variant, and writes a project skill under `.devin/skills/` to recheck it. [`/pstack:maintain-formal-verification-skill`](skills/maintain-formal-verification-skill/SKILL.md) brings that verification back in line after the covered code changes. This plugin bundles no verifier; the agent asks before installing one.
 
 Invoke [`/pstack:in-your-own-words`](skills/in-your-own-words/SKILL.md) to hear the goals and problem the agent understood. It runs only when requested and adds no confirmation gate.
 
-Release 0.6.1 selectively ports upstream pstack 0.15.25; see the [0.15.25 port audit](docs/pstack-0.15.25-port-audit.md). Release 0.6.0 selectively ported upstream pstack 0.15.24; see the [0.15.24 port audit](docs/pstack-0.15.24-port-audit.md). The prior release selectively ported upstream pstack 0.15.23. It adds goal playback, shorter ketchup replies, usable-state verification, a cheap observability proposal after deep debugging, robust Markdown fence checks, and configurable worktree merge bases. Devin dispatch, profile pins, and delivery authority are preserved. See the [port audit](docs/pstack-0.15.23-port-audit.md) for source coverage, exclusions, and evidence limits. Earlier audits cover [0.15.17](docs/pstack-0.15.17-port-audit.md) and [0.15.13](docs/pstack-0.15.13-port-audit.md).
+Release 0.7.0 selectively ports upstream pstack 0.15.26 through 0.15.32 and follow-ups to `e73df47`; see the [0.15.32 port audit](docs/pstack-0.15.32-port-audit.md). Release 0.6.1 selectively ported upstream pstack 0.15.25; see the [0.15.25 port audit](docs/pstack-0.15.25-port-audit.md). Release 0.6.0 selectively ported upstream pstack 0.15.24; see the [0.15.24 port audit](docs/pstack-0.15.24-port-audit.md). The prior release selectively ported upstream pstack 0.15.23. It adds goal playback, shorter ketchup replies, usable-state verification, a cheap observability proposal after deep debugging, robust Markdown fence checks, and configurable worktree merge bases. Devin dispatch, profile pins, and delivery authority are preserved. See the [port audit](docs/pstack-0.15.23-port-audit.md) for source coverage, exclusions, and evidence limits. Earlier audits cover [0.15.17](docs/pstack-0.15.17-port-audit.md) and [0.15.13](docs/pstack-0.15.13-port-audit.md).
 
 ## Features retained from 0.2.0
 

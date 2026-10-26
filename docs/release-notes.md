@@ -1,5 +1,7 @@
 # Release notes
 
+Plugin `pstack` 0.7.0 selectively ports upstream 0.15.26 through 0.15.32 and follow-ups to `e73df47`. It adds explicit-user `/pstack:create-formal-verification-skill` and `/pstack:maintain-formal-verification-skill`, which write project skills under `.devin/skills/`, bundle no verifier, and ask before installing one. `/pstack:sharpen` now hands back a rewritten prompt and does not do the task. Ketchup lists every waiting item with its link, evidence, risk, and pick, and never cuts items to meet a word count. Reflect never edits a skill inside an installed plugin. The TypeScript brand example uses a type guard. Statechart and ketchup-video are not shipped. Native activation of 0.7.0 remains untested. See the [port audit](pstack-0.15.32-port-audit.md).
+
 Plugin `pstack` 0.6.1 selectively ports upstream 0.15.25. Four principles (attack-the-premise, fix-root-causes, make-operations-idempotent, test-behavior-not-implementation) are restated as reasoning instead of rules, and `/pstack:correct` follows the new test rule. Marginal sections are cut from interrogate's lead judgment, migrate-callers, type-system-discipline, and swarm. Ketchup now explains each change, leads with existing screenshots, videos, and diagrams when the host renders them, sums up in bullets, and lists action items as plain bullets. The Devin text fallback is kept. Native activation of 0.6.1 and inline image rendering remain untested. See the [port audit](pstack-0.15.25-port-audit.md).
 
 Plugin `pstack` 0.6.0 selectively ports upstream 0.15.24. It adds explicit-user `/pstack:sharpen`, rewrites ketchup to a reply well under 150 words with small plain-language visuals, states that Devin dispatch has no per-call effort or speed knob, and runs the full plan audit set once at the code-ready SHA with a single fresh-context verifier for rebases and minor fixes. Native activation of 0.6.0 remains untested. See the [port audit](pstack-0.15.24-port-audit.md).
@@ -14,7 +16,7 @@ Plugin 0.2.0 was verified on local Devin CLI 3000.11.3 (9c803229faa4). Earlier 3
 
 ## Shipped
 
-37 public skills under `/pstack:<name>`. 24 `principle-*` leaves, model-triggered. 20 poteto-mode playbooks. Profiles `pstack:poteto-agent`, `pstack:poteto-agent-{swe,opus,sonnet,codex}`, `pstack:comment-sicko`, and `pstack:panel-{swe,opus,sonnet,codex}`.
+39 public skills under `/pstack:<name>`. 24 `principle-*` leaves, model-triggered. 20 poteto-mode playbooks. Profiles `pstack:poteto-agent`, `pstack:poteto-agent-{swe,opus,sonnet,codex}`, `pstack:comment-sicko`, and `pstack:panel-{swe,opus,sonnet,codex}`.
 
 SessionStart injects `PSTACK_ROUTE=/pstack:poteto-mode`.
 
