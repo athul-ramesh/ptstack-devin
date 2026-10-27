@@ -22,7 +22,7 @@ The 0.2.0 release was verified against Devin CLI 3000.11.3 (9c803229faa4), local
 
 Avoid installing two copies with the same plugin name. Devin may source-qualify inventory names while loading skills from an older copy; verify the path returned by the skill tool.
 
-## Using 0.7.0
+## Using 0.8.0
 
 Ask `/pstack:poteto-help` with a setup or workflow question. This explicit-user skill answers with one suggested prompt and a source link. It does not start a task for a help question. A request to do work follows poteto-mode instead.
 
@@ -36,7 +36,7 @@ Invoke [`/pstack:create-formal-verification-skill`](skills/create-formal-verific
 
 Invoke [`/pstack:in-your-own-words`](skills/in-your-own-words/SKILL.md) to hear the goals and problem the agent understood. It runs only when requested and adds no confirmation gate.
 
-Release 0.7.0 selectively ports upstream pstack 0.15.26 through 0.15.32 and follow-ups to `e73df47`; see the [0.15.32 port audit](docs/pstack-0.15.32-port-audit.md). Release 0.6.1 selectively ported upstream pstack 0.15.25; see the [0.15.25 port audit](docs/pstack-0.15.25-port-audit.md). Release 0.6.0 selectively ported upstream pstack 0.15.24; see the [0.15.24 port audit](docs/pstack-0.15.24-port-audit.md). The prior release selectively ported upstream pstack 0.15.23. It adds goal playback, shorter ketchup replies, usable-state verification, a cheap observability proposal after deep debugging, robust Markdown fence checks, and configurable worktree merge bases. Devin dispatch, profile pins, and delivery authority are preserved. See the [port audit](docs/pstack-0.15.23-port-audit.md) for source coverage, exclusions, and evidence limits. Earlier audits cover [0.15.17](docs/pstack-0.15.17-port-audit.md) and [0.15.13](docs/pstack-0.15.13-port-audit.md).
+Release 0.8.0 selectively ports upstream pstack 0.15.33 through 0.15.35 to `ab1f702`; see the [0.15.35 port audit](docs/pstack-0.15.35-port-audit.md). Release 0.7.0 selectively ported upstream pstack 0.15.26 through 0.15.32 and follow-ups to `e73df47`; see the [0.15.32 port audit](docs/pstack-0.15.32-port-audit.md). Release 0.6.1 selectively ported upstream pstack 0.15.25; see the [0.15.25 port audit](docs/pstack-0.15.25-port-audit.md). Release 0.6.0 selectively ported upstream pstack 0.15.24; see the [0.15.24 port audit](docs/pstack-0.15.24-port-audit.md). The prior release selectively ported upstream pstack 0.15.23. It adds goal playback, shorter ketchup replies, usable-state verification, a cheap observability proposal after deep debugging, robust Markdown fence checks, and configurable worktree merge bases. Devin dispatch, profile pins, and delivery authority are preserved. See the [port audit](docs/pstack-0.15.23-port-audit.md) for source coverage, exclusions, and evidence limits. Earlier audits cover [0.15.17](docs/pstack-0.15.17-port-audit.md) and [0.15.13](docs/pstack-0.15.13-port-audit.md).
 
 ## Features retained from 0.2.0
 

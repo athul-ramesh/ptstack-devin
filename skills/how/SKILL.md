@@ -45,7 +45,7 @@ User asked for architectural issues, problems, or improvements.
 
 1. Run Explain first.
 2. Spawn one critic per how-critics profile. Same filled [`references/critic-prompt.md`](references/critic-prompt.md) plus [`references/critique-rubric.md`](references/critique-rubric.md), the explanation, and file paths. Sequential when `executionMode` is sequential. Say so.
-3. Lead judgment. Same buckets as `/pstack:interrogate`: Act on, Consider, Noted, Dismissed. Parent owns the verdict.
+3. Lead judgment. Put each finding in one bucket with its critic profile and a one-line rationale: Act on (would block a real change), Consider (real, cost unclear), Noted (valid, not actionable now), Dismissed (wrong, a nit, or missing context, with the reason). Parent owns the verdict.
 
 Present the explanation, then the critique. The explanation stands alone.
 

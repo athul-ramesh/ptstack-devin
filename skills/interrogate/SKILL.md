@@ -1,79 +1,45 @@
 ---
 name: interrogate
-description: "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Multiple LLM reviewers challenge changes from independent angles."
+description: "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Adversaries try to break a change or design, and only findings proven by a run survive."
 ---
 
 # Interrogate
 
-Spawn one reviewer per configured profile with the same prompt and rubric. Diversity of profile is the signal, not assigned personas. Deliver a synthesized verdict. Do not auto-apply changes.
+Adversaries try to break a change or a design. A finding survives only when a run proves it. Report the findings. Do not apply fixes.
 
 Resolve profiles from [`../poteto-mode/references/panel-run.md`](../poteto-mode/references/panel-run.md). Record a `PanelRun` before the first `run_subagent` call. Sequential when distinct profiles are fewer than the required count. Say so.
 
-## Step 1. Scope
+## Frame
 
-- User-named files or diff
-- Else `git diff main...HEAD` (or the real base) via `exec`, including the working tree when that is the work
-- Else files this conversation already named
+The scope is what the user names. Otherwise it is the branch diff from its merge base with the base branch, through the working tree, read with `git` via `exec`. State the intent with `/pstack:in-your-own-words`, from the user's message, the commits, and the PR description. Ask the user when the intent is unclear.
 
-Package the diff plus surrounding files reviewers need.
+## Fan out
 
-## Step 2. Intent
+Run Phase A steps 3 and 4 and Phase B of `/pstack:arena`, with these changes:
 
-One paragraph. What this code is trying to accomplish. From the user message, commits, PR body, and the code. Reviewers challenge execution, not the intent. If intent is unclear, ask before spawning.
+- Read the `interrogate reviewers` row in place of `arena runners`.
+- Copy the scope's uncommitted changes into each adversary's worktree, so each runs against the code under review.
+- Dispatch each adversary on its configured `pstack:panel-*` profile. Its brief allows writes only inside its own assigned worktree, for repro scripts and tests. It never edits the user's checkout.
+- In place of the arena task and rationale, give each adversary the scope, the intent, its worktree path, and this brief:
 
-## Step 3. Spawn reviewers
+> Break this change. Prove each finding with a run against the real code, such as a failing test, a repro script, or command output that shows the wrong behavior. For a design or plan, run a prototype or probe the current tree. Keep repros in your own worktree. Report each finding with a title, the exact command, the output it printed, and the output the intent requires. Leave out anything you did not run. That covers style, naming, structure, and risks that need a future change to matter. No findings is a valid result.
 
-One reviewer per `interrogate reviewers` entry. Default table when the sheet is missing:
+Adversaries need `exec`. A background worker gets only tools already approved in this session, so dispatch in the foreground when command approval is not already granted, per panel-run.
 
-| Reviewer | Default profile |
-|---|---|
-| Reviewer A | `pstack:panel-opus` |
-| Reviewer B | `pstack:panel-swe` |
-| Reviewer C | `pstack:panel-sonnet` |
+## Verify
 
-Each `run_subagent` uses that profile. Reviewers must not write files.
+Verify each finding per arena Phase F by rerunning its command yourself. Keep a finding when the output shows the failure and the failure breaks the intent. Drop the rest. Merge findings that share a root cause.
 
-Fill [`references/reviewer-prompt.md`](references/reviewer-prompt.md) with the intent, the diff, [`references/rubric.md`](references/rubric.md), and [`references/code-quality-review.md`](references/code-quality-review.md). Same filled template for every reviewer.
-
-## Step 4. Synthesize
-
-Parse findings. Consensus is 2+ independent raises. Keep lone-model findings at lower weight. Deduplicate. Note disagreements.
-
-## Step 5. Lead judgment
-
-You are a pragmatic lead, not a neutral aggregator. Read [`references/lead-judgment.md`](references/lead-judgment.md). You have the full conversation. Reviewers saw a slice. Put each finding in a bucket with its reviewer profile and a one-line rationale:
-
-- **Act on.** Would block a real PR.
-- **Consider.** Real, cost unclear.
-- **Noted.** Valid, not actionable now.
-- **Dismissed.** Wrong, nit, or missing context. Say why.
+Skip arena Phases C, D, and E. Adversaries find different failures, so the verdict keeps every verified finding, not one adversary's list. The parent writes the verdict. Worker reports are evidence.
 
 ## Output
 
-### Intent
-
-> stated paragraph
-
-### Reviewers
-
-- Reviewer [label]: [profile], [N findings]
-
-### Act On
-
-### Consider
-
-### Noted
-
-### Dismissed
-
-### Agreement Map
-
-Where they agreed, where they diverged, and what that pattern means.
-
-The parent writes this verdict. Worker reports are evidence.
+- **Intent**: the restatement.
+- **Findings**: for each verified finding, the command, its output, how it breaks the intent, and the adversary profiles that found it. Say "no verified findings" when none survive.
+- **Dropped**: for each adversary, the count of dropped findings and why.
 
 ## Models
 
-`$HOME/.config/devin/pstack-models.md` overrides the table above.
+`$HOME/.config/devin/pstack-models.md` overrides these defaults.
 
 - interrogate reviewers: `pstack:panel-opus`, `pstack:panel-swe`, `pstack:panel-sonnet`

@@ -14,7 +14,7 @@ Read [`../references/delivery-capability.md`](../references/delivery-capability.
 
 **Descriptions.** A one-minute briefing for a reviewer who has the diff. Use short, simple sentences and few identifiers. Keep the body under about 40 lines. Use these sections in order. Keep required sections. Omit Tradeoffs only when empty.
 
-- `## Why`. Intent and why this approach fits.
+- `## Why`. Open with the user's goal, then intent and why this approach fits.
 - `## What changed`. 1-3 short bullets. Name a symbol or path only when it carries the change. Name both sides of a rename or retarget.
 - `## Scope`. Always state coverage and deliberate exclusions in 1-3 short items, without a file-by-file essay.
 - `## Tradeoffs`. Real choices only. Skip when there are none.
@@ -33,6 +33,6 @@ Do not use `## Summary` or `## Test plan`.
 
 **Babysit.** Opening a PR does not start a babysit. Post the URL and stop. Run `/pstack:babysit` only when the user asks.
 
-A subagent that opens a PR runs `/pstack:interrogate`, `/pstack:deslop`, and `/pstack:no-comments`. It returns the URL and does not babysit.
+A subagent that opens a PR runs `/pstack:deslop` and `/pstack:no-comments`. It returns the URL and does not babysit.
 
 Never merge. Merge authority stays with the operator.
