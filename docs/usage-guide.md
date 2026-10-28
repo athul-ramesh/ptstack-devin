@@ -77,3 +77,9 @@ Use `/pstack:sharpen <the prompt you're about to send>` when you are unsure a pr
 Use `/pstack:ketchup` to catch up since your previous message. The story stays under 100 words. Every call waiting on you gets its own bullet with its link, what it changes, the evidence, the risk, and a pick, including older unresolved decisions, so a large batch makes a long reply instead of a cut list. Existing captures and available diagrams show status and before/after options. When the Devin host cannot render them, compact text includes the same facts and unknowns. The skill does not start an app, install a renderer, or post anything to produce a visual.
 
 Verification skills must launch a usable app from an empty data directory. Include migrations and seed data. Missing journey preconditions are failed checks, not a reason to weaken the journey. Proof from a stand-in must identify target setup steps it has not exercised.
+
+## Statecharts
+
+Invoke [`/pstack:statechart`](../skills/statechart/SKILL.md) to check a TLA+ model and show the paths that break its rules. The skill returns Mermaid text, a report, and SVG output through Pele. Paste the complete Mermaid code block into Obsidian, or embed the SVG to preserve Pele styling. Native Devin CLI inline rendering is untested.
+
+The checker needs a supported TypeScript runtime, TLC, and Java. It can use an existing TLC jar through `TLA2TOOLS`, or install TLC and Java through mise after authorization. Renderer installation also requires authorization. See the [statechart port audit](statechart-port-audit.md) for source and verification limits.

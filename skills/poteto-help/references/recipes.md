@@ -62,3 +62,5 @@ Use this to hear the goals and problem the agent understood. It does not add a c
 ```
 
 The agent names what a top professional would do that you didn't ask for, the raw material they'd start from, their methods and tools, and an outside check that the result is right. It hands back your prompt rewritten to ask for that, leaves your choices open, and doesn't do the task. Send the rewrite when it reads right, for example with `/pstack:poteto-mode`.
+
+- `/pstack:statechart check <model.tla> and give me Mermaid text to paste into Obsidian, plus an SVG.`

@@ -1,5 +1,12 @@
 # Release notes
 
+## 0.9.0
+
+- Add `/pstack:statechart` with the upstream TLA+ checker, regression corpus, and Pele SVG instructions.
+- Return complete Mermaid text for Obsidian and SVG file paths when the CLI cannot show charts inline.
+- Document existing-toolchain overrides and installation authorization. Native Devin activation remains untested.
+
+
 Plugin `pstack` 0.8.0 selectively ports upstream 0.15.33 through 0.15.35 to `ab1f702`. `/pstack:interrogate` now has adversaries try to break the change with real runs in their own worktrees, and keeps only findings the root reproduces by rerunning the command; the reviewer prompt, rubric, lead-judgment, and code-quality references are removed. Arena never picks a cross-judge whose model pin matches the parent session, and skips the judge when none qualifies. Poteto-mode restates the user's goal in its first message, briefs, PR `## Why`, and final reports. Explain the Number starts before the run. Plan verdicts block only on a shown problem, and a wording-only change gets no verifier. Statechart, ketchup-video, Autopilot, and Cursor model-slug fallbacks are not shipped. Native activation of 0.8.0 remains untested. See the [port audit](pstack-0.15.35-port-audit.md).
 
 Plugin `pstack` 0.7.0 selectively ports upstream 0.15.26 through 0.15.32 and follow-ups to `e73df47`. It adds explicit-user `/pstack:create-formal-verification-skill` and `/pstack:maintain-formal-verification-skill`, which write project skills under `.devin/skills/`, bundle no verifier, and ask before installing one. `/pstack:sharpen` now hands back a rewritten prompt and does not do the task. Ketchup lists every waiting item with its link, evidence, risk, and pick, and never cuts items to meet a word count. Reflect never edits a skill inside an installed plugin. The TypeScript brand example uses a type guard. Statechart and ketchup-video are not shipped. Native activation of 0.7.0 remains untested. See the [port audit](pstack-0.15.32-port-audit.md).

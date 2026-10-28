@@ -61,7 +61,7 @@ test('interleaved run documentation assigns boundaries and supersedes history', 
 });
 
 test('portable skills retain user activation and numeric principle model activation', () => {
-  for (const name of ['correct', 'benchmark-checklist', 'ketchup', 'in-your-own-words', 'sharpen', 'create-formal-verification-skill', 'maintain-formal-verification-skill']) {
+  for (const name of ['statechart', 'correct', 'benchmark-checklist', 'ketchup', 'in-your-own-words', 'sharpen', 'create-formal-verification-skill', 'maintain-formal-verification-skill']) {
     const text = read(`skills/${name}/SKILL.md`);
     assert.match(text, new RegExp(`^name: ${name}$`, 'm'));
     assert.match(text, /triggers:\n  - user/);
@@ -150,7 +150,7 @@ test('e73df47 port keeps Devin paths, honest tool limits, and local-only reflect
     const text = read(`skills/${name}/SKILL.md`);
     assert.match(text, /\.devin\/skills\//);
     assert.match(text, /ask(?:s)? before installing|get the user's approval first/);
-    assert.doesNotMatch(text, /\.cursor|\/statechart|disable-model-invocation/);
+    assert.doesNotMatch(text, /\.cursor|disable-model-invocation/);
   }
   assert.match(read('skills/create-formal-verification-skill/SKILL.md'), /TLA\+ is the default/);
   assert.match(read('skills/create-formal-verification-skill/SKILL.md'), /test the real code with generated inputs/);
@@ -160,5 +160,5 @@ test('e73df47 port keeps Devin paths, honest tool limits, and local-only reflect
   assert.match(reflect, /Never open a PR or push/);
   assert.doesNotMatch(reflect, /plugins\/cache/);
   assert.doesNotMatch(read('skills/typescript-best-practices/references/patterns.md'), /as AgentId/);
-  for (const cut of ['statechart', 'ketchup-video']) assert.throws(() => read(`skills/${cut}/SKILL.md`));
+  for (const cut of ['ketchup-video']) assert.throws(() => read(`skills/${cut}/SKILL.md`));
 });

@@ -58,3 +58,9 @@ node --test tests/*.test.mjs
 ```
 
 They cover relative reference resolution, the principle catalog, registered profile mapping and same-pin comparison, explicit cut-workflow routing, writer workspace provisioning, and the documented `run_subagent` fields. They are static checks, not native Devin execution.
+
+## Statecharts
+
+Invoke [`/pstack:statechart`](skills/statechart/SKILL.md) to check a TLA+ model and show the paths that break its rules. The skill returns Mermaid text, a report, and SVG output through Pele. Paste the complete Mermaid code block into Obsidian, or embed the SVG to preserve Pele styling. Native Devin CLI inline rendering is untested.
+
+The checker needs a supported TypeScript runtime, TLC, and Java. It can use an existing TLC jar through `TLA2TOOLS`, or install TLC and Java through mise after authorization. Renderer installation also requires authorization. See the [statechart port audit](docs/statechart-port-audit.md) for source and verification limits.

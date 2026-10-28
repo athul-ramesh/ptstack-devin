@@ -24,6 +24,7 @@ function frontmatterModel(path) {
 function walkMarkdown(dir) {
   const out = [];
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name === "node_modules") continue;
     const path = join(dir, entry.name);
     if (entry.isDirectory()) out.push(...walkMarkdown(path));
     else if (entry.name.endsWith(".md")) out.push(path);
