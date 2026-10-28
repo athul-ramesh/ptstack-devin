@@ -63,7 +63,7 @@ The default answer is `/pstack:poteto-mode`, which runs most of the others when 
 | Settle types and module shape before code that crosses a function boundary | [`/pstack:architect`](../architect/SKILL.md) |
 | Get several attempts at one brief, merged into the best one | [`/pstack:arena`](../arena/SKILL.md) |
 | Run parallel checks over slices, or race workers, with local isolated workspaces | [`/pstack:swarm`](../swarm/SKILL.md) |
-| Have several models review a diff and try to break it | [`/pstack:interrogate`](../interrogate/SKILL.md) |
+| Have several models try to break a diff, keeping only findings a run proves | [`/pstack:interrogate`](../interrogate/SKILL.md) |
 | Fix a bug test-first when a cheap local test exists | [`/pstack:tdd`](../tdd/SKILL.md) |
 | Apply TypeScript rules to `.ts` or `.tsx` work | [`/pstack:typescript-best-practices`](../typescript-best-practices/SKILL.md) |
 | Strip comments before review, using a reviewer that didn't write them | [`/pstack:no-comments`](../no-comments/SKILL.md) |

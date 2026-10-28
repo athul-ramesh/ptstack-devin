@@ -26,7 +26,7 @@ Read this catalog only when a live decision needs more than the default engineer
 
 **Verification**
 
-- **Explain the Number** (`skills/principle-explain-the-number/SKILL.md`). Before trusting, reporting, or acting on measured latency, throughput, regressions, speedups, or eval results. Validate actual work, spread, and the limiter.
+- **Explain the Number** (`skills/principle-explain-the-number/SKILL.md`). Before measuring, and before trusting, reporting, or acting on measured latency, throughput, regressions, speedups, or eval results. Validate actual work, spread, and the limiter.
 
 - **Prove It Works** (`skills/principle-prove-it-works/SKILL.md`). After a task, before declaring done. Verify against the real artifact, not a proxy or "it compiles".
 - **Fix Root Causes** (`skills/principle-fix-root-causes/SKILL.md`). Debugging. Trace each symptom back to the first place the system went wrong and fix it there. A guard is a fix only when the state it handles is legitimate.

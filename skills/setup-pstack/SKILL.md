@@ -13,7 +13,7 @@ Do not write `~/.claude/` or any host path this plugin does not own.
 
 `opus` is the strongest configured model, `sonnet` is the medium-capability model for bounded work, and `swe` supplies an alternate model perspective. These labels do not select model families or reasoning levels; configure profile pins separately.
 
-Keep broad features/refactoring, performance diagnosis, synthesis, prose, and final judgment on `opus`. Use `sonnet` for scoped bug fixes, measurable hillclimbing, exploration, evidence gathering, tooling review, and swarm slices. Scope those briefs tightly; select `opus` explicitly when the work requires broad design or difficult diagnosis. Panels retain all three perspectives; the arena cross-judge pool uses `opus` and `swe` so the judge can differ from the parent.
+Keep broad features/refactoring, performance diagnosis, synthesis, prose, and final judgment on `opus`. Use `sonnet` for scoped bug fixes, measurable hillclimbing, exploration, evidence gathering, tooling review, and swarm slices. Scope those briefs tightly; select `opus` explicitly when the work requires broad design or difficult diagnosis. Panels retain all three perspectives; the arena cross-judge pool uses `opus` and `swe`. Arena runs one judge and tries only pool entries whose pin differs from the parent's model, in list order, so order the pool by preference.
 
 Keep paired `panel-*` and `poteto-agent-*` model pins equal. Setup writes role routing only; it does not change those pins or the main session model.
 

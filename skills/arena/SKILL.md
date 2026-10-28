@@ -26,13 +26,13 @@ If a candidate produces nothing, continue with N-1 and note the dropout.
 
 ## Phase C: Cross-judge
 
-After every candidate finishes, pick one profile from `arena cross-judge pool`. Prefer a distinct profile from the parent. One `run_subagent`. It is read-only. It sees the rubric and candidates by path label, scores each criterion, and recommends a base.
+After every candidate finishes, pick one profile from `arena cross-judge pool`. The judge never shares the parent's model. A profile's model is its `model:` pin, so compare each pool entry's pin with the parent session's model and try only entries whose pin differs, in pool order. Two profiles with the same pin are the same model, such as `panel-opus` and `panel-codex` at their shipped pins. If no entry with a different pin is registered and runs, skip the judge, pick the base alone in Phase D, and say so. Devin does not label the parent's model to the agent. When you cannot confirm it, use the first pool entry and say that the model check did not run. One `run_subagent`. It is read-only. It sees the rubric and candidates by path label, scores each criterion, and recommends a base.
 
 Do not start the judge while candidates are still writing.
 
 ## Phase D: Pick a base
 
-Read every candidate end to end. Score criterion by criterion. Compare with the cross-judge. Agreement confirms. Disagreement means bias or a fuzzy rubric. Read both rationales before deciding.
+Read every candidate end to end. Score criterion by criterion. Compare with the cross-judge when Phase C ran one. Agreement confirms. Disagreement means bias or a fuzzy rubric. Read both rationales before deciding.
 
 Pick the base a future maintainer can extend without breaking invariants. Prefer the cleaner boundary when tied.
 
@@ -50,7 +50,7 @@ A verification miss means re-frame or return to graft. Do not paper over.
 
 ## Outputs
 
-One synthesized artifact, with a short synthesis note naming the base and why, the cross-judge verdict, each graft and its source, rejections and why, convergence or dropouts, and the verification result.
+One synthesized artifact, with a short synthesis note naming the base and why, the cross-judge verdict or that Phase C skipped the judge, each graft and its source, rejections and why, convergence or dropouts, and the verification result.
 
 ## Models
 

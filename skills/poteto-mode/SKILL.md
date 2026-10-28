@@ -17,6 +17,10 @@ Use one active playbook per phase. Load a new playbook when the requested work r
 
 Resolve `playbooks/` and `references/` from this skill's installed directory. Resolve `skills/` and `agents/` from the installed plugin root reported by the skill tool, never from the consuming project's directory.
 
+## Restate the goal
+
+In your first message on a task, tell the user in your own words their goal, the problem they are solving, and, if the task ships a change, the smallest change you expect to meet it. Do not wait for confirmation. If the evidence rules out the change the user asked for, show it and stop. Restate the goal in each subagent brief, open each PR's `## Why` with it, and open each final report with it, your final reply included, except after a fully specified one-line edit. `/pstack:in-your-own-words` is the long form of this restatement.
+
 ## Routing gates
 
 Invoke the named companion skill before the work proceeds. Scale `how` to the question. A narrow module or function uses one readonly explainer. A subsystem spanning files or services uses two to four explorers followed by synthesis. Do not force fan-out on trivial work.
