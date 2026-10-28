@@ -57,3 +57,5 @@ Tell the user, for each check:
 Say outright which failures were drift in the verification and which were bugs in the code. For a check that passed before you updated it and fails after, say that the old pass was on a stale description.
 
 Keep the verification updates in a change of their own, separate from any product fix. Stop at merge-ready. Do not commit, push, or open a PR unless the user asks.
+
+For TLA+ models, use [`/pstack:statechart`](../statechart/SKILL.md) to explain results as a chart and bug paths. Keep the model bounds, report unchecked rules, and replay each bug path against the real code.
