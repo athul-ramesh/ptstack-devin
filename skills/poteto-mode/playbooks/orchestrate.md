@@ -1,77 +1,32 @@
 ### Orchestrate
 
-**You own the program, never the code. Author briefs, drain the queue, keep the frontier green, decide.** For a whole project handed to one standing coordinator chat. Multi-day, many stacked PRs, a fleet of subagents, the human checking in twice a day instead of every five minutes. One task driven to a predicate is Autonomous run. One ambitious run needing a bespoke workflow is figure-it-out. Route here when the work outlives any single agent. Work one agent could finish inside the session's budget is not a program.
+**You run the program, never the code. Decide which agent does each piece of work, then check what each one produces.** For a standing project handed to one coordinator chat: multi-day, many stacked PRs, a fleet of subagents, few human turns. One task driven to a predicate is Autonomous run. One ambitious run that needs a bespoke workflow is figure-it-out. Work that one agent could finish inside the session's budget is not a program.
 
-Three rules carry the rest.
+Run it with your own tools. Dispatch workers with `run_subagent` through [`../references/delegation.md`](../references/delegation.md). Keep the program's state in the store below, written with `scripts/program-state.sh` and read as plain files. Check PRs with `gh` when you need their state; Devin has no PR or CI event subscription and no scheduled wakeup. Run no polling loops and never relay messages or status between agents.
 
-- Completions are queue events, not interrupts.
-- Every spawn and every resume carries the standing orders verbatim.
-- The brief is the product. A vague brief fails quietly, because a worker cannot ask you a question.
+#### Topology
 
-Open a todolist with the steps below copied in verbatim. A step you skip stays listed with `skip: <reason>`.
+- **One owner per PR.** The owner is the only writer of its branch and carries the PR from build to merge. Only the owner pushes, rebases, or retargets it. Closing or retargeting a base PR orphans every PR above it, so the owner does that only on your call. You never author or edit code. Conflicted merges, chain rebases, and fixes go to owners. Mechanically landing a verified unit is bookkeeping you may do yourself when authorized.
+- **A fresh worker for each independent task.** Its brief carries everything it needs, including each upstream report it depends on, pasted in full. Workers can't see their siblings. Code-writing workers use the deterministic same-pin `pstack:poteto-agent-<alias>` counterpart of the configured `pstack:panel-<alias>` profile, or an explicitly configured `pstack:poteto-agent-*` row. Panel profiles remain for investigation and review. Isolation is a root-provisioned, verified, recorded worktree or directory per writer, not a branch in one shared checkout. Devin dispatch has no per-call effort or speed knob; pick the profile for the job.
+- **No sub-coordinators.** Actual agent depth is root → worker. Devin disables `run_subagent` inside subagents unless a custom profile opts into `max-nesting`, and this port ships no such profile. Tracks are logical records the root owns, not agents. Keep about ten workers in flight, and start the next one as each finishes instead of waiting on a whole batch.
+- **Resume a worker only for a follow-up on the same work,** such as one that needs its worktree or its findings. Never resume one to check on it. Devin resumes run in the foreground and restart an idle agent.
+- **Each PR gets a verifier that isn't its author,** on a profile whose `model:` pin differs from the owner's. Run it as a separate review pass with edits prohibited. The owner merges only on that verifier's pass at the current head. The root resolves `references/verification.md` from the installed poteto-mode source and supplies its absolute path.
+- **Start with one unit.** Take it through brief, owner, verifier, and merge before you fan out, so a flaw in the brief costs one agent instead of fifty. On near-identical cheap units, the first unit is that test.
 
-#### Roles and placement
+#### Store
 
-- **Coordinator (this root chat).** Frames tracks and units, authors briefs, dispatches every worker, drains results, owns dependency gates and the human report, and makes retry and judgment decisions. It never authors or edits code. Conflicted merges, restacks, and code changes are tasks. Mechanically landing a verified unit is bookkeeping the coordinator may do itself when authorized.
-- **Track.** A logical record grouping dependent units, status, and evidence. It is not an agent and does not dispatch. The root owns every track's queue and reconciliation.
-- **Worker / verifier.** `run_subagent` with a registered profile, dispatched by the root through [`../references/delegation.md`](../references/delegation.md). Code-writing workers use the deterministic same-pin `pstack:poteto-agent-<alias>` counterpart of the configured `pstack:panel-<alias>` profile, or an explicitly configured `pstack:poteto-agent-*` row. Panel profiles remain for investigation and review. Isolation is a root-provisioned, verified, recorded worktree or directory per writer, not a branch in one shared checkout. The root resolves `references/verification.md` from the installed poteto-mode source and supplies its absolute path. Proof uses `exec` on the real CLI or TUI, and the browser only when this session has one. Prefer fewer, broader workers. Run a unit's verifier as a separate review pass with edits prohibited.
+Create `$HOME/.config/devin/pstack/<project-slug>/`, outside the repo and outside the session, and read `references/program-state.md`. Every file has exactly one writer. `objective.txt` and `units.tsv` go through `program-state.sh`; `status.md` is derived by `program-state.sh status` and never hand-edited. `preferences.md` holds the standing orders, numbered one constraint per line, pasted verbatim into every brief and every resume. `decisions.tsv` goes through `/pstack:show-me-your-work`, and `resume.md` through pause-safely.
 
-Actual agent depth is root → worker. Workers report unresolved work to the root. Nested coordinators are a future feature requiring a bounded nesting profile, an explicit cost policy, and a dedicated runtime test.
+#### Supervision
 
-#### Store layout
+- **Each brief names the evidence that proves the work is done,** such as a command and its expected output via `exec`, a real CLI or TUI check, or an artifact. It also names the goal, the paths the worker may and may not write, its worktree, a timebox, and the actions it must not take (no force-push, no fixes outside scope). If you can't name the evidence, the unit isn't scoped yet. Never resume-chain a brief; respawn fresh with consolidated scope.
+- **Read the diff or the artifact, not only the worker's summary.** Green CI is an input to a verdict, not a verdict. Behavioral work needs more than a type check. A verdict covers one head SHA, so a new push needs a new verdict. Advance `lastVerifiedHead` only on merge or a reported new head SHA.
+- **Send back work that drifts from scope or grows past what was asked.** Keep only the fixes that block the program, and park the rest as follow-ups.
+- **Check a PR's live state before you report on it,** with `gh pr view` and `gh pr checks`, not the worker's last report. Account for every worker you dispatched as done, replaced, or absorbed into another worker's scope, as a terminal row in `units.tsv`.
+- **Stop or replace a worker that stalls or loops.** Judge it by its pushes and PR activity, not its status text. Retry by cause: a smaller scope after a context limit, the same brief after a dropped connection, and a foreground resume on the same profile after a background permission denial. An unavailable model pin stays unavailable; substituting a profile is degraded execution and must be reported. After two retries, drop the unit and replan around it. When a stopped worker returns late, check its result against the PR's current state, and hand any unique findings to a fresh worker.
+- **Bound the session.** Run a bounded number of waves, then write `resume.md` and stop. The operator starts a new session. Its subagents from the old session are gone; pushed branches, open PRs, and the store are not. Re-read the standing orders and `units.tsv`, reattach work by PR and branch rather than agent id, and continue.
+- **Ask the user only for a real decision or a blocker,** such as an irreversible action, a product or preference call that no experiment settles, or a dead end that survived a replan. Rebase mechanics, retries, CI flakes, review triage, and "should I keep going" never reach the user.
 
-Create `$HOME/.config/devin/pstack/<project-slug>/`, outside the repo and outside the session. The store has to outlive this chat. Read `references/program-state.md`. Every file has exactly one writer.
+Do not claim cloud agents or nested dispatch.
 
-- `objective.txt` and `units.tsv` via `scripts/program-state.sh`.
-- `preferences.md` is the standing-orders register. Numbered lines, one constraint each. Paste it verbatim into every spawn and every resume.
-- `decisions.tsv` via `/pstack:show-me-your-work`.
-- `resume.md` via pause-safely.
-- `status.md` derived by `program-state.sh status`. Never hand-edit.
-
-Do not use a bun orch CLI. The TSV and text files are the interface. `exec` the helper. Read the files.
-
-#### The brief
-
-```
-GOAL         one sentence, the outcome, executable by a stranger with no chat access
-SCOPE        paths this unit may write; paths it may not; its exclusive worktree or branch
-CONTEXT      pointers to files and PRs; upstream reports pasted in full when this unit
-             depends on them, because workers cannot see siblings
-ACCEPTANCE   checkable criteria, one per line
-VERIFY       exact commands via exec, plus known gotchas
-TIMEBOX      rough cap on runtime; on expiry, return partial findings and stop rather than run on
-FORBIDDEN    no rebase, no force-push, no fixes outside scope, plus unit-specific bans
-REPORT       status, branch, head SHA, PRs, verdict, what you actually ran, deviations,
-             suggested follow-ups
-STANDING     <preferences.md pasted verbatim>
-```
-
-Size the brief to the unit. Missing fields are a refuse-to-spawn condition. Never resume-chain a brief. Respawn fresh with consolidated scope.
-
-#### Steps
-
-1. **Frame.** State the done predicate as something countable. Quantify scope. If one agent could finish inside that budget, stop here and run Autonomous run instead.
-2. **Install the runtime.** `exec` `program-state.sh init`. Open the trail via `/pstack:show-me-your-work`. Write standing orders before any spawn.
-3. **Pilot.** Push one unit through the whole path. Brief, root dispatch, verification, unit row, log row. Fix the contract from pilot evidence before any fan-out.
-4. **Scale.** The root dispatches a rolling window of ready units up to the in-flight cap, refilling as results arrive. Use separate worktrees or directories for concurrent writers; otherwise serialize them. Recompute ready work after each drain. Relay upstream reports into downstream briefs.
-5. **Drain.** The root classifies every finished worker (landed, needs-verify, failed, noise), updates the unit row, runs `status`, decides retries, and dispatches the next ready wave.
-6. **Land.** Landing is continuous. One writer per worktree or directory. Advance `lastVerifiedHead` only on merge or a reported new head SHA.
-7. **Close.** Reconcile every spawned child to a terminal row. Confirm the predicate on the real artifact. Audit the trail per show-me-your-work. Leave the store intact.
-
-#### Liveness and failure
-
-This plugin has no agent-callable scheduled wakeup and no heartbeat watcher. Bound the wave count in this session. Then write `resume.md` and stop. The operator starts a new session. In-flight subagents from the dead session are gone. Pushed branches, open PRs, and the store are not. Re-read standing orders and `units.tsv`, reattach in-flight work by PR and branch rather than agent id, drain, resume.
-
-Never resume an agent to check on it. Probe read-only. The store, `gh`, and pushed branches.
-
-Retry only after classifying the failure. Cap-hit may justify a fresh smaller scope. A background permission denial may use foreground resume on the same profile. Network drop may justify one same-profile retry. An unavailable model pin remains unavailable; substituting a profile is degraded execution and must be reported. After two deliberate attempts, abandon the unit and replan around it.
-
-Do not claim cloud agents or nested dispatch. Track and unit records do not add agent depth.
-
-#### Escalation
-
-Reaches the human, batched. Irreversible actions, genuine product or preference calls no experiment settles, a standing order that contradicts observed reality, a program-level dead end that survived a replan.
-
-Never reaches the human. Retries, flake triage, format fixes, scope the brief already forbids, and "should I keep going". When in doubt, act and log.
-
-**Reply:** at checkpoints and close. The predicate and the count against it from `units.tsv`, tracks and what each landed, verdicts summary, what was abandoned and why, gates awaiting the human, the store path, and the trail path. Numbers from the tables, not narrative.
+**Reply:** what landed against the goal with the count from `units.tsv`, each PR's live state and verdict with its link, what was dropped and why, the decisions waiting on the user, and the store and trail paths.
