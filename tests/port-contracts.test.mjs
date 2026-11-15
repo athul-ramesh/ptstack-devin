@@ -137,12 +137,20 @@ test('every skill is named after its folder', () => {
   }
 });
 
+test('plugin manifest is local-only and current release', () => {
+  const manifest = JSON.parse(read('.devin-plugin/plugin.json'));
+  assert.deepEqual(manifest.platforms, ['local']);
+  assert.equal(manifest.version, '0.9.2');
+});
+
 test('e73df47 port keeps Devin paths, honest tool limits, and local-only reflect edits', () => {
   const sharpen = read('skills/sharpen/SKILL.md');
   assert.match(sharpen, /rewrite my prompt to ask for exactly that/);
+  assert.match(sharpen, /prototype any choice an experiment can settle/);
   assert.match(sharpen, /Do not start the task/);
   assert.doesNotMatch(sharpen, /then do the work/);
   const ketchup = read('skills/ketchup/SKILL.md');
+  assert.match(ketchup, /permissions:\n  deny:\n    - edit/);
   assert.match(ketchup, /Never cut items or shrink them to stay under a word count/);
   assert.match(ketchup, /Give each item's risk even when it is low/);
   assert.doesNotMatch(ketchup, /well under 150 words, not counting rendered screenshots/);

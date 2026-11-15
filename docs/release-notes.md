@@ -1,5 +1,9 @@
 # Release notes
 
+## 0.9.2
+
+- Local drift fixes: declare `platforms: ["local"]` in `.devin-plugin/plugin.json` so the plugin loads only in Devin CLI and Devin Desktop. README and AGENTS.md say so explicitly. Restore sharpen prototype wording, obligatory `/pstack:unslop` and `/pstack:technical-writing` routing in poteto-mode, and ketchup `permissions.deny: [edit]`. Native activation remains untested.
+
 ## 0.9.1
 
 - Port upstream 0.15.36 (`c742dd6`): the Orchestrate playbook is rewritten around one owner per PR, an independent verifier, starting with one unit, reading diffs instead of summaries, and checking live PR state with `gh`. Devin keeps the local store, root-only dispatch, and bounded waves. Cloud workers, sub-coordinators, forks, and event subscriptions are not shipped. Native activation remains untested. See the [port audit](pstack-0.15.36-port-audit.md).

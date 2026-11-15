@@ -14,6 +14,6 @@ I want a deeper version of this task, not a bigger one. Before rewriting it, do 
 
 Then rewrite my prompt to ask for exactly that.
 
-Leave choices that are mine to make open instead of deciding them.
+Have the rewritten prompt ask the agent to prototype any choice an experiment can settle and recommend an option based on what it observed. Leave product or preference choices that no experiment can settle for me to make.
 
 Hand back only the rewritten prompt. Do not start the task, edit files, or dispatch workers. I will send the rewrite myself, for example with `/pstack:poteto-mode`.

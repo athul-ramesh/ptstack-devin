@@ -1,6 +1,7 @@
 {
   "name": "pstack",
-  "version": "0.9.1",
+  "version": "0.9.2",
+  "platforms": ["local"],
   "description": "Rigorous agent workflows for Devin CLI. Write less, higher quality code.",
   "homepage": "https://github.com/athul-ramesh/ptstack-devin",
   "repository": "https://github.com/athul-ramesh/ptstack-devin",

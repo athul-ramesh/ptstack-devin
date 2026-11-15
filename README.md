@@ -1,6 +1,6 @@
 # pstack for Devin CLI
 
-Local Devin CLI plugin. It does not load in cloud Devin sessions.
+Local Devin CLI plugin. `.devin-plugin/plugin.json` declares `platforms: ["local"]`, so this plugin loads only in Devin CLI and Devin Desktop. Custom plugin subagents are local-only per Devin docs.
 
 Install from this directory, then start a new session:
 
@@ -22,7 +22,7 @@ The 0.2.0 release was verified against Devin CLI 3000.11.3 (9c803229faa4), local
 
 Avoid installing two copies with the same plugin name. Devin may source-qualify inventory names while loading skills from an older copy; verify the path returned by the skill tool.
 
-## Using 0.8.0
+## Using 0.9.2
 
 Ask `/pstack:poteto-help` with a setup or workflow question. This explicit-user skill answers with one suggested prompt and a source link. It does not start a task for a help question. A request to do work follows poteto-mode instead.
 

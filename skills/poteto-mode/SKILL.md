@@ -30,6 +30,8 @@ Invoke the named companion skill before the work proceeds. Scale `how` to the qu
 - Motivation, rationale, tradeoffs, regressions, postmortems, data-backed thresholds, or a change that redefines ownership or layering: invoke `/pstack:why`. Do not require it for every task.
 - Parallel fan-out over independent partitions: `/pstack:swarm`. Competing design or code attempts: `/pstack:arena`. A contested design before shipping: `/pstack:interrogate`.
 - Nontrivial multi-step work: record the throughput checkpoint in the active playbook's reply contract.
+- Any prose surface, your reply included: invoke `/pstack:unslop` before you send it. Write the reply per Write the reply.
+- Docs, RFCs, readmes, PR descriptions, or commit messages: invoke `/pstack:technical-writing`, every layer except Diátaxis where it does not fit, then `/pstack:unslop`.
 
 Devin has no Cursor sticky-mode metadata or reminder. poteto-mode is not a native sticky mode. The always-on plugin rule and the SessionStart hook make it the default entry point for nontrivial engineering work, and `/pstack:poteto-mode` loads it explicitly when the default is missed.
 
@@ -113,6 +115,8 @@ When a live decision needs a detailed principle, use [Principle selection](refer
 Push back when the evidence contradicts the request's premise or the proposed work does not earn its place.
 
 ## Write the reply
+
+Invoke `/pstack:unslop` on this reply before you send it. Docs, RFCs, readmes, PR descriptions, and commit messages use `/pstack:technical-writing` first, then unslop.
 
 State the consumer and maintainer outcome before implementation details. Include the active playbook's reply content, checks, unresolved limits, and your assessment of worker evidence.
 
