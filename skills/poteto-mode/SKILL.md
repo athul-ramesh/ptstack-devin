@@ -23,9 +23,9 @@ In your first message on a task, tell the user in your own words their goal, the
 
 ## Routing gates
 
-Invoke the named companion skill before the work proceeds. Scale `how` to the question. A narrow module or function uses one readonly explainer. A subsystem spanning files or services uses two to four explorers followed by synthesis. Do not force fan-out on trivial work.
+Invoke the named companion skill before the work proceeds. Do not force fan-out on trivial work.
 
-- Nontrivial change, architecture decision, or a request that challenges confidence: invoke `/pstack:how` over the affected subsystem.
+- Mechanics of code you have not traced: trace it with `read`, `grep`, and `glob`. Do not route that trace through `/pstack:how`.
 - A change crossing a function boundary, including within one module: invoke `/pstack:architect` before code. It grounds the design and compares at least two structurally distinct candidates before synthesis.
 - Motivation, rationale, tradeoffs, regressions, postmortems, data-backed thresholds, or a change that redefines ownership or layering: invoke `/pstack:why`. Do not require it for every task.
 - Parallel fan-out over independent partitions: `/pstack:swarm`. Competing design or code attempts: `/pstack:arena`. A contested design before shipping: `/pstack:interrogate`.
@@ -131,11 +131,13 @@ Read `$HOME/.config/devin/pstack-models.md` when it exists. Its exact role row o
 Implementation uses dedicated profiles. Resolve legacy `pstack:panel-<alias>` rows to `pstack:poteto-agent-<alias>` only after verifying registration and equal `model:` frontmatter pins, as specified in Root-owned delegation. This mapping is not a failure fallback. Preserve explicit implementation-profile rows.
 
 - feature, refactoring: `pstack:poteto-agent-opus`
-- bug-fix: `pstack:poteto-agent-sonnet`
+- bug-fix: `pstack:poteto-agent-opus`
 - perf-issue: `pstack:poteto-agent-opus`
-- hillclimb: `pstack:poteto-agent-sonnet`
+- hillclimb: `pstack:poteto-agent-opus`
 - judgment and prose: `pstack:panel-opus`
 - strongest judgment: `pstack:panel-opus`
+
+A sheet without a `# defaults: 2` line is an older setup. Honor its lines for this session and tell the user once to rerun `/pstack:setup-pstack`. Do not remap a profile at dispatch time.
 
 Devin dispatch has no per-call reasoning-level or speed parameter, because `run_subagent` takes a profile, not a model. Upstream pstack's per-spawn effort and fast-mode tuning therefore does not apply. Match the model to the job only by choosing among the configured role rows above, never by inventing a profile, editing a pin, or remapping a role at dispatch time.
 

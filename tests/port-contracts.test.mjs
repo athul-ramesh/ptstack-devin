@@ -137,10 +137,26 @@ test('every skill is named after its folder', () => {
   }
 });
 
+test('0.15.42 port keeps a short why, one how pass, and traced playbooks', () => {
+  const why = read('skills/why/SKILL.md');
+  const how = read('skills/how/SKILL.md');
+  assert.match(why, /Quote what the authors wrote/);
+  assert.match(why, /exec` for `git` and `gh`/);
+  assert.doesNotMatch(why, /references\/|Datadog|Linear|synthesizer/);
+  assert.match(how, /subagent_explore/);
+  assert.doesNotMatch(how, /how explorer|how explainer|references\//);
+  assert.match(read('skills/poteto-mode/SKILL.md'), /Do not route that trace through `\/pstack:how`/);
+  assert.match(read('skills/poteto-mode/playbooks/feature.md'), /Trace the affected subsystem/);
+  assert.match(read('skills/recall/SKILL.md'), /one investigator `run_subagent` per source/);
+  assert.match(read('skills/reflect/references/synthesizer.md'), /readConfig` to `loadSettings/);
+  assert.throws(() => read('skills/why/references/epistemics.md'));
+  assert.throws(() => read('skills/how/references/explainer-prompt.md'));
+});
+
 test('plugin manifest is local-only and current release', () => {
   const manifest = JSON.parse(read('.devin-plugin/plugin.json'));
   assert.deepEqual(manifest.platforms, ['local']);
-  assert.equal(manifest.version, '0.9.2');
+  assert.equal(manifest.version, '0.10.0');
 });
 
 test('e73df47 port keeps Devin paths, honest tool limits, and local-only reflect edits', () => {

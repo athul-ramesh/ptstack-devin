@@ -96,7 +96,7 @@ If a skill directory next to this one is missing from the table, read its frontm
 
 Close calls:
 
-- `/pstack:how` explains what the code does. `/pstack:why` explains the reasons. `/pstack:teach` runs one or both and explains the result plainly.
+- `/pstack:how` explains what the code does, in one read-only pass. `/pstack:why` cites the commits and the PR discussion. `/pstack:teach` runs one or both and explains the result plainly.
 - `/pstack:arena` gives every worker the same brief and merges the best parts. `/pstack:swarm` splits work into slices or a race and returns one report.
 - `/pstack:architect` implements right after it settles the design. Add "with checkpoint" to review the design before it writes code.
 - `/pstack:interrogate` reviews the diff. `/pstack:blast-radius` looks for breakage outside the diff and proves the one fact that makes the change safe.
