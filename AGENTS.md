@@ -1,6 +1,6 @@
 # pstack-devin
 
-Local Devin CLI plugin. Not a generic skill pack.
+Local Devin CLI plugin. `.devin-plugin/plugin.json` declares `platforms: ["local"]`, so the plugin loads only in Devin CLI and Devin Desktop. Not a generic skill pack.
 
 ## Default routing
 
@@ -12,7 +12,7 @@ User and repository instructions take precedence over this default.
 
 - Skill format: Devin SKILL.md under skills/<name>/SKILL.md.
 - Plugin manifest: .devin-plugin/plugin.json.
-- Subagents: agents/<name>/AGENT.md. Custom plugin subagents load in local Devin CLI and Devin Desktop, not cloud Devin sessions.
+- Subagents: agents/<name>/AGENT.md. Custom plugin subagents are local-only per Devin docs, consistent with `platforms: ["local"]`.
 - Hooks: hooks.json (Devin SessionStart). Plugin hooks are best effort and fail open, so they assist routing rather than carry critical obligations alone.
 - Model ids: swe, opus, sonnet, codex (and whatever `devin` reports). Never leave claude-* or Cursor slugs in shipped files.
 - Tool names in shipped prose: read, edit, grep, glob, exec, skill, run_subagent, read_subagent.

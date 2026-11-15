@@ -31,7 +31,7 @@ Check the state that changes the answer, and mention it only when it does:
 
 ## Get set up
 
-1. Install from the plugin checkout with `devin plugins install --local -y .`, then start a new session. This port targets local Devin CLI; cloud sessions do not load its plugin agents or SessionStart hook.
+1. Install from the plugin checkout with `devin plugins install --local -y .`, then start a new session. The manifest declares `platforms: ["local"]`, so the plugin loads only in Devin CLI and Devin Desktop.
 2. Run [`/pstack:setup-pstack`](../setup-pstack/SKILL.md). It reads `devin models list`, preserves existing role choices and notes, and writes `$HOME/.config/devin/pstack-models.md`. Start a new session afterward.
 3. Start a real task with `/pstack:poteto-mode`, a goal, and a check that can pass or fail.
 
