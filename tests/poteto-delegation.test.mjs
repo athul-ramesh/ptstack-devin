@@ -274,7 +274,6 @@ describe("poteto core completion contract", () => {
       join(potetoRoot, "playbooks", "hillclimb.md"),
       join(potetoRoot, "playbooks", "prototype.md"),
       join(potetoRoot, "playbooks", "visual-parity.md"),
-      join(potetoRoot, "playbooks", "orchestrate.md"),
       join(skillsRoot, "figure-it-out", "SKILL.md"),
       join(skillsRoot, "swarm", "SKILL.md"),
       join(skillsRoot, "arena", "SKILL.md"),

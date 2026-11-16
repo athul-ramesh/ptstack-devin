@@ -41,7 +41,7 @@ If cost is the worry, explain that workers and review panels spend extra tokens.
 
 ## Start a task with `/pstack:poteto-mode`
 
-`/pstack:poteto-mode` matches the task to a playbook, tracks the playbook's outcomes and checks in a compact checklist, and runs the other skills as the steps need them. A step it skips stays in the list as `skip: <reason>`. A good prompt states the goal and how to tell it's done. It doesn't list skills, because a hand-written sequence tends to drop or reorder steps the playbook would keep. Read [`references/prompting.md`](references/prompting.md) before you help word one. [The usage guide](../../docs/usage-guide.md) has examples.
+`/pstack:poteto-mode` matches the task to a playbook, copies that playbook's steps into a compact checklist, and runs the other skills as the steps need them. Do not leave a skipped step in the list. A good prompt states the goal and how to tell it's done. It doesn't list skills, because a hand-written sequence tends to drop or reorder steps the playbook would keep. Read [`references/prompting.md`](references/prompting.md) before you help word one. [The usage guide](../../docs/usage-guide.md) has examples.
 
 Devin has no native sticky mode for this plugin. The always-on rule and SessionStart hook provide default routing. If that routing is missed, invoke `/pstack:poteto-mode` explicitly. Say "new task" when the subject changes, or say the turn does not need the mode. Scoped workers follow their briefs and do not reload the root mode or dispatch more workers. Read [poteto-mode](../poteto-mode/SKILL.md) before explaining worker profiles.
 
@@ -98,17 +98,17 @@ Close calls:
 
 - `/pstack:how` explains what the code does, in one read-only pass. `/pstack:why` cites the commits and the PR discussion. `/pstack:teach` runs one or both and explains the result plainly.
 - `/pstack:arena` gives every worker the same brief and merges the best parts. `/pstack:swarm` splits work into slices or a race and returns one report.
-- `/pstack:architect` implements right after it settles the design. Add "with checkpoint" to review the design before it writes code.
+- `/pstack:architect` sketches two shapes. A large or contested design runs `/pstack:arena`.
 - `/pstack:interrogate` reviews the diff. `/pstack:blast-radius` looks for breakage outside the diff and proves the one fact that makes the change safe.
 - `/pstack:recall` rebuilds context from this conversation, named exports, and the shared record. Unavailable history remains a gap. Resuming one specific chat or branch is the Session pickup playbook.
-- `/pstack:figure-it-out` designs one rigorous run. The Orchestrate playbook runs a program that spans days and many PRs. The Autonomous run playbook drives one task to a finish condition.
+- `/pstack:figure-it-out` designs one rigorous run, including a standing program of many PRs. The Autonomous run playbook drives one task to a finish condition.
 
 Port boundaries:
 
 - This port includes `/pstack:deslop` and the other Devin companion skills listed above. Do not send users to Cursor's team-kit plugin.
 - `control-cli`, `control-ui`, `/create-skill`, and `/make-bot-ui` are not shipped here. Use the skill-authoring playbook for skill work. Detect an available UI or CLI adapter before promising visual proof.
 - Devin's `/loop <prompt>` is an interactive command that auto-reviews a diff. It is not an agent-callable timer or unattended scheduler.
-- Orchestrate is a `/pstack:poteto-mode` playbook, not a public `/orchestrate` skill.
+- There is no Orchestrate playbook. A standing program routes to `/pstack:figure-it-out`. If the slash menu shows `/orchestrate`, another plugin provides it.
 - `/pstack:statechart` checks TLA+ models and returns Mermaid text and SVG files. Native CLI inline rendering is untested. `/ketchup-video` remains unshipped. Formal verification skills bundle no verifier; the agent confirms the tool runs on this machine and asks before installing one.
 
 ## Playbooks and principles

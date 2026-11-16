@@ -1,6 +1,6 @@
 # Program state
 
-Durable record for figure-it-out, orchestrate, autonomous-run, pause-safely, and session-pickup.
+Durable record for figure-it-out, autonomous-run, pause-safely, and session-pickup.
 
 ```
 ProgramState

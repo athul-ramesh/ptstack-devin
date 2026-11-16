@@ -75,7 +75,7 @@ Fix the log, not the story. If the work diverged from what a row claims, the row
 
 ## Cross-model review of the trail
 
-Before handing back, `run_subagent` on a different panel profile from the one that did the work. Self-review is not a substitute. The point is fresh eyes you cannot bring yourself. The subagent reads the audit trail and the named session evidence, then flags what the user should pay attention to. Not a redo of the work. A scan for what's suboptimal or risky.
+Before handing back, `run_subagent` on a panel profile whose `model:` pin differs from the one that did the work. Self-review is not a substitute. The point is fresh eyes you cannot bring yourself. The subagent reads the audit trail and the named session evidence, then flags what the user should pay attention to. Not a redo of the work. A scan for what's suboptimal or risky.
 
 If pinned profiles fail or only one profile exists, run one sequential fresh-context pass on the available profile and say so.
 
