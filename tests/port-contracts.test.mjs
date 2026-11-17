@@ -148,7 +148,6 @@ test('0.15.42 port keeps a short why, one how pass, and traced playbooks', () =>
   assert.match(read('skills/poteto-mode/SKILL.md'), /Do not route that trace through `\/pstack:how`/);
   assert.match(read('skills/poteto-mode/playbooks/feature.md'), /Trace the affected subsystem/);
   assert.match(read('skills/recall/SKILL.md'), /one investigator `run_subagent` per source/);
-  assert.match(read('skills/reflect/references/synthesizer.md'), /readConfig` to `loadSettings/);
   assert.throws(() => read('skills/why/references/epistemics.md'));
   assert.throws(() => read('skills/how/references/explainer-prompt.md'));
 });
@@ -156,7 +155,7 @@ test('0.15.42 port keeps a short why, one how pass, and traced playbooks', () =>
 test('plugin manifest is local-only and current release', () => {
   const manifest = JSON.parse(read('.devin-plugin/plugin.json'));
   assert.deepEqual(manifest.platforms, ['local']);
-  assert.equal(manifest.version, '0.10.0');
+  assert.equal(manifest.version, '0.11.0');
 });
 
 test('e73df47 port keeps Devin paths, honest tool limits, and local-only reflect edits', () => {
@@ -185,4 +184,30 @@ test('e73df47 port keeps Devin paths, honest tool limits, and local-only reflect
   assert.doesNotMatch(reflect, /plugins\/cache/);
   assert.doesNotMatch(read('skills/typescript-best-practices/references/patterns.md'), /as AgentId/);
   for (const cut of ['ketchup-video']) assert.throws(() => read(`skills/${cut}/SKILL.md`));
+});
+
+test('0.15.43 port shortens skills and drops reflect reviewers, architect runners, and orchestrate', () => {
+  assert.match(read('skills/unslop/SKILL.md'), /14\. A colon goes before a list/);
+  assert.match(read('skills/principle-attack-the-premise/SKILL.md'), /triggers:\n  - model/);
+  assert.doesNotMatch(read('skills/architect/SKILL.md'), /architect runners|parallel design/);
+  assert.match(read('skills/architect/SKILL.md'), /\/pstack:arena/);
+  assert.match(read('skills/reflect/SKILL.md'), /Read the whole transcript yourself/);
+  assert.doesNotMatch(read('skills/reflect/SKILL.md'), /run_subagent/);
+  assert.match(read('skills/poteto-mode/worker.md'), /Uncertain in this port/);
+  assert.match(read('skills/poteto-mode/SKILL.md'), /worker\.md before anything else/);
+  assert.match(read('skills/poteto-mode/SKILL.md'), /# defaults: 3/);
+  assert.match(read('skills/poteto-mode/SKILL.md'), /do not change these pins/);
+  assert.doesNotMatch(read('skills/poteto-mode/SKILL.md'), /: `claude-opus-5-5/);
+  assert.match(read('skills/figure-it-out/SKILL.md'), /one owner per PR/);
+  assert.match(read('skills/setup-pstack/SKILL.md'), /does not write those slugs/);
+  assert.match(read('skills/setup-pstack/SKILL.md'), /claude-opus-5-5-xhigh-fast/);
+  assert.doesNotMatch(read('skills/setup-pstack/write-models.mjs'), /claude-opus-5-5|claude-fable|gemini-4-carbon/);
+  for (const gone of [
+    'skills/poteto-mode/playbooks/orchestrate.md',
+    'skills/poteto-mode/scripts/check-plan.mjs',
+    'skills/reflect/references/synthesizer.md',
+    'skills/architect/references/runner-prompt.md',
+  ]) {
+    assert.throws(() => read(gone), gone);
+  }
 });

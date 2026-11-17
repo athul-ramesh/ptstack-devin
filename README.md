@@ -22,6 +22,12 @@ The 0.2.0 release was verified against Devin CLI 3000.11.3 (9c803229faa4), local
 
 Avoid installing two copies with the same plugin name. Devin may source-qualify inventory names while loading skills from an older copy; verify the path returned by the skill tool.
 
+## Using 0.11.0
+
+This release ports upstream pstack 0.15.43 (`e559e62`). Fourteen principle leaves, unslop, and technical-writing have shorter bodies. Opening a PR, Babysit, and the multi-phase plan are shorter. The plan no longer runs `check-plan.mjs`. Reflect reads the transcript itself and waits for approval. Architect is a short brief and sends a large or contested design to arena. A standing program routes to `/pstack:figure-it-out`. Every `run_subagent` task starts by pointing at `skills/poteto-mode/worker.md`. Whether a child follows that pointer is untested.
+
+`/pstack:setup-pstack` writes `# defaults: 3` and drops the architect and reflect roles. A sheet that already has `# defaults: 2` keeps its choices. Profile pins stay `gpt-6-1-sol-medium`, `glm-5-3-flash-high`, and `swe`. Devin's docs still do not publish `claude-opus-5-5-xhigh-fast`, `claude-fable-5-2-high`, or `gemini-4-carbon-high`, so those pins and the three effort budgets were not added. See the [0.15.43 port audit](docs/pstack-0.15.43-port-audit.md).
+
 ## Using 0.10.0
 
 `/pstack:why` is a short cited read of commits and PR discussion. `/pstack:how` is one read-only `subagent_explore` pass. Poteto-mode traces the code itself. Teach and poteto-help still offer both skills. Recall starts one investigator per git or `gh` source.
@@ -50,7 +56,7 @@ Release 0.8.0 selectively ports upstream pstack 0.15.33 through 0.15.35 to `ab1f
 - Invoke `/pstack:benchmark-checklist` before trusting a measured speedup or regression. Comparisons require at least five interleaved runs per side, median and range, correct outputs, and proof that the timed work happened. A requested ballpark permits one labeled run with errors and actual work still checked.
 - Run `/pstack:setup-pstack` without losing your configured role lists or notes. Explicit role changes use repeatable `--role "role=profile[,profile...]"` arguments to its installed `write-models.mjs` helper. Repeated profiles remain separate fresh-context perspectives.
 - Existing performance workflows now use the measurement checklist and try avoiding work before optimizing its cost. Follow-ups after a completed worker use a fresh context; permission repair retains the same worker.
-- Multi-phase plans must pass the installed `check-plan.mjs` helper. Verification records the exact code-ready SHA and two independent audit focuses. CLI evidence can be a transcript; screenshots require a UI adapter.
+- Multi-phase plans are a checklist with one section per PR. As of 0.11.0 they do not run `check-plan.mjs`. CLI evidence can be a transcript; screenshots require a UI adapter.
 - Decision logs retain their history and identify separate runs. PR descriptions now include both What changed and Scope, with deliberate exclusions stated explicitly.
 
 Profile pins and merge authority are unchanged. Native verification confirmed routing, both new slash commands, foreground workers, separate sequential passes, and background collection. Narrowly approved background permissions and same-worker permission repair remain untested.

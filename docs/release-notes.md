@@ -1,5 +1,11 @@
 # Release notes
 
+## 0.11.0
+
+- Port upstream 0.15.43 (`e559e62`). Principle leaves, unslop, and technical-writing are shorter. Opening a PR, Babysit, and the multi-phase plan are shorter, and `check-plan.mjs` is gone. Reflect is one file with no reviewers. Architect is a short brief plus `/pstack:arena` for a large or contested design. The Orchestrate playbook is deleted. A standing program routes to `/pstack:figure-it-out` and keeps one owner per PR, a verifier on a different model pin, and a first unit before fan-out.
+- `skills/poteto-mode/worker.md` holds the rules for a started agent. The first line of a `run_subagent` task points at it. Devin documents subagents and withholds `ask_user_question` from them. It does not document Project workers or a kickoff file. Following that pointer is untested.
+- Setup writes `# defaults: 3` and drops `architect runners`, `reflect tooling`, and `reflect judgment, divergent, synthesizer`. A `# defaults: 2` sheet keeps its other choices. Profile pins are unchanged. Cursor slugs for Opus 5.5, Fable 5.2, and Gemini 4 Carbon, and the three effort budgets, are not written. Native activation remains untested. See the [port audit](pstack-0.15.43-port-audit.md).
+
 ## 0.10.0
 
 - Port upstream 0.15.37 through 0.15.42 (`bf0c7cd`). `/pstack:why` is one short file. `/pstack:how` is one read-only `subagent_explore` pass. Poteto-mode, the code playbooks, architect, no-comments, and comment-sicko trace the code. Teach and poteto-help still offer how. Recall starts its own investigator per git or `gh` source. Reflect's drift example is a function rename. Sharpen's prototype line was already on main in 0.9.2. The docs now say so.
@@ -39,7 +45,7 @@ Plugin 0.2.0 was verified on local Devin CLI 3000.11.3 (9c803229faa4). Earlier 3
 
 ## Shipped
 
-39 public skills under `/pstack:<name>`. 24 `principle-*` leaves, model-triggered. 20 poteto-mode playbooks. Profiles `pstack:poteto-agent`, `pstack:poteto-agent-{swe,opus,sonnet,codex}`, `pstack:comment-sicko`, and `pstack:panel-{swe,opus,sonnet,codex}`.
+39 public skills under `/pstack:<name>`. 24 `principle-*` leaves, model-triggered. 19 poteto-mode playbooks. Profiles `pstack:poteto-agent`, `pstack:poteto-agent-{swe,opus,sonnet,codex}`, `pstack:comment-sicko`, and `pstack:panel-{swe,opus,sonnet,codex}`.
 
 SessionStart injects `PSTACK_ROUTE=/pstack:poteto-mode`.
 

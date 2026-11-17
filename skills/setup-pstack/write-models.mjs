@@ -14,19 +14,17 @@ export const SINGLE_ROLES = Object.freeze([
   ["hillclimb", "opus"],
   ["judgment and prose", "opus"],
   ["strongest judgment", "opus"],
-  ["reflect tooling", "sonnet"],
-  ["reflect judgment, divergent, synthesizer", "opus"],
   ["swarm workers", "sonnet"],
 ]);
 
 export const PANEL_ROLES = Object.freeze([
   ["arena runners", ["opus", "swe", "sonnet"]],
   ["arena cross-judge pool", ["opus", "swe"]],
-  ["architect runners", ["opus", "swe", "sonnet"]],
   ["interrogate reviewers", ["opus", "swe", "sonnet"]],
 ]);
 
-export const DEFAULTS_MARKER = "# defaults: 2";
+export const DEFAULTS_MARKER = "# defaults: 3";
+export const PREVIOUS_MARKER = "# defaults: 2";
 
 export const RETIRED_ROLES = Object.freeze([
   "how explorer",
@@ -34,6 +32,9 @@ export const RETIRED_ROLES = Object.freeze([
   "how critics",
   "why investigators",
   "why synthesizer",
+  "architect runners",
+  "reflect tooling",
+  "reflect judgment, divergent, synthesizer",
 ]);
 
 const RETIRED = new Set(RETIRED_ROLES);
@@ -182,7 +183,8 @@ export function parseExistingSheet(content, available) {
     rows.set(role, { role, profiles, requiredPerspectives: profiles.length, line: index });
   }
   const hasMarker = lines.some((line) => line.trim() === DEFAULTS_MARKER);
-  return { rows, lines, hasMarker };
+  const hasPreviousMarker = lines.some((line) => line.trim() === PREVIOUS_MARKER);
+  return { rows, lines, hasMarker, hasPreviousMarker };
 }
 
 function sameProfiles(left, right) {
@@ -197,12 +199,23 @@ function dropRetired(lines) {
 }
 
 function ensureMarker(lines) {
-  if (lines.some((line) => line.trim() === DEFAULTS_MARKER)) return lines;
-  const at = lines.findIndex((line) => {
+  const next = [];
+  let wrote = false;
+  for (const line of lines) {
+    if (line.trim() === DEFAULTS_MARKER || line.trim() === PREVIOUS_MARKER) {
+      if (!wrote) {
+        next.push(DEFAULTS_MARKER);
+        wrote = true;
+      }
+      continue;
+    }
+    next.push(line);
+  }
+  if (wrote) return next;
+  const at = next.findIndex((line) => {
     const match = line.match(/^([^#`][^:]*):/);
     return Boolean(match && KNOWN_ROLES.has(match[1].trim()));
   });
-  const next = lines.slice();
   next.splice(at === -1 ? next.length : at, 0, DEFAULTS_MARKER);
   return next;
 }
@@ -270,7 +283,7 @@ export function writeFromModelsList(text, options = {}) {
       if (match && RETIRED.has(match[1].trim())) dropped.push(match[1].trim());
     }
   }
-  if (!parsed.hasMarker) {
+  if (!parsed.hasMarker && !parsed.hasPreviousMarker) {
     for (const [role, previous] of PREVIOUS_DEFAULTS) {
       const row = parsed.rows.get(role);
       const alias = MIGRATION_ALIAS.get(role);
