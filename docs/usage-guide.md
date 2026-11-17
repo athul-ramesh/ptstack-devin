@@ -16,13 +16,13 @@ State the goal, a check that can pass or fail, the proof you want, known evidenc
 
 The playbook supplies the steps. A list of skills can override that order, so name a skill only when you want to change a default. Short follow-ups work when the conversation already holds the task. Say "new task" when changing subjects.
 
-Workers and review panels spend extra tokens. Choose suitable registered profiles through setup. Preserve required perspective counts; repeated profiles still run separate fresh-context passes. A trivial edit needs no playbook or worker. This port does not offer `auto` or `inherit-parent` routing.
+Workers and review panels spend extra tokens. Choose suitable registered profiles through setup. Preserve required perspective counts; repeated profiles still run separate fresh-context passes. A trivial edit needs no playbook or worker. This port does not offer `auto` or `inherit-parent` routing. The first line of a `run_subagent` task points at [worker.md](../skills/poteto-mode/worker.md). Whether the child follows that pointer is untested.
 
 ## Understand before editing
 
 For a noisy report, ask the agent to restate the underlying issue before sharing your theory of the cause. For an unclear cause, request evidence and hypotheses without code changes.
 
-[`/pstack:how`](../skills/how/SKILL.md) traces mechanics. [`/pstack:why`](../skills/why/SKILL.md) finds reasons and history. [`/pstack:teach`](../skills/teach/SKILL.md) explains choices and tradeoffs in plain language. [`/pstack:recall`](../skills/recall/SKILL.md) uses this conversation, named Devin exports, and the shared record. Unavailable history stays an evidence gap.
+[`/pstack:how`](../skills/how/SKILL.md) is one read-only explanation of how code works. During a change, poteto-mode traces the code itself. [`/pstack:why`](../skills/why/SKILL.md) cites the commits and PR discussion. [`/pstack:teach`](../skills/teach/SKILL.md) explains choices and tradeoffs in plain language. [`/pstack:recall`](../skills/recall/SKILL.md) uses this conversation, named Devin exports, and one investigator per git or `gh` source. Unavailable history stays an evidence gap.
 
 For a captured profile, use [Trace forensics](../skills/poteto-mode/playbooks/trace-forensics.md). For a live leak, CPU spin, or glitch, use [Runtime forensics](../skills/poteto-mode/playbooks/runtime-forensics.md). Both produce diagnosis before a fix.
 
@@ -30,11 +30,11 @@ Use [`/pstack:ketchup`](../skills/ketchup/SKILL.md) after stepping away from thi
 
 ## Settle the design before the plan
 
-[`/pstack:architect`](../skills/architect/SKILL.md) compares designs for changes crossing function boundaries. Add "with checkpoint" to review before implementation. If implementation needs repeated workarounds or forced casts, revisit the design.
+[`/pstack:architect`](../skills/architect/SKILL.md) traces every system the change touches, sketches two shapes, and picks the one with one owner per piece of state. A large or contested design runs [`/pstack:arena`](../skills/arena/SKILL.md) instead of sketching alone. If the same workaround keeps coming back, redesign instead of patching.
 
 Use the [Prototype playbook](../skills/poteto-mode/playbooks/prototype.md) to answer open questions with executable probes. UI captures require an available adapter. For a new package, write a usage tutorial first and work back to the API. [`/pstack:arena`](../skills/arena/SKILL.md) compares attempts at one brief; [`/pstack:swarm`](../skills/swarm/SKILL.md) covers independent slices or declared races.
 
-Once the design settles, request the [Multi-phase plan playbook](../skills/poteto-mode/playbooks/multi-phase-plan.md). The plan is the deliverable; the request does not authorize implementation. Each PR unit ends in evidence. For exact migrations, state that existing behavior, including known bugs, must match.
+Once the design settles, request the [Multi-phase plan playbook](../skills/poteto-mode/playbooks/multi-phase-plan.md). The plan is the deliverable; the request does not authorize implementation. It is five steps, with one checkbox section per PR, and it does not run a plan checker. Execution starts when you say go. For exact migrations, state that existing behavior, including known bugs, must match.
 
 ## Prove behavior and vet numbers
 
@@ -62,7 +62,7 @@ Shipping, Autopilot-full, and Autopilot-stack are cut from this port. Scheduled 
 
 [`/pstack:correct`](../skills/correct/SKILL.md) requires at least two real occurrences of a mistake. It prefers architecture, then types, lint or CI, behavioral tests, and documentation last. Each new check must reject a historical bad form. Human review is not a substitute for enforcement.
 
-[`/pstack:reflect`](../skills/reflect/SKILL.md) proposes skill improvements from a finished session and waits for approval before editing. [`/pstack:automate-me`](../skills/automate-me/SKILL.md) drafts a personal workflow from available history. Start with the failures you observe rather than adding skills without a task for them.
+[`/pstack:reflect`](../skills/reflect/SKILL.md) reads the transcript itself, keeps only lessons that would change a future agent's work, and waits for approval before editing. [`/pstack:automate-me`](../skills/automate-me/SKILL.md) drafts a personal workflow from available history. Start with the failures you observe rather than adding skills without a task for them.
 
 Fix a misbehaving skill in its own PR. The [Eval playbook](../skills/poteto-mode/playbooks/eval.md) tests variants on the same task without telling candidates they are being evaluated. Inspect every output and question the rubric when the verdict conflicts with evidence.
 
@@ -72,7 +72,7 @@ The help skill's [prompting reference](../skills/poteto-help/references/promptin
 
 Use `/pstack:in-your-own-words` to hear the goals and problem the agent understood. This explicit-user skill restates them without starting a workflow or adding a confirmation gate.
 
-Use `/pstack:sharpen <the prompt you're about to send>` when you are unsure a prompt is aimed right. It hands back the prompt rewritten deeper, not bigger, with an outside check and your choices left open. It does not do the task. Send the rewrite yourself.
+Use `/pstack:sharpen <the prompt you're about to send>` when you are unsure a prompt is aimed right. It hands back the prompt rewritten deeper, not bigger, with an outside check. The rewrite asks the agent to prototype a choice an experiment can settle and recommend from what it observed. Product and preference choices stay with you. It does not do the task. Send the rewrite yourself.
 
 Use `/pstack:ketchup` to catch up since your previous message. The story stays under 100 words. Every call waiting on you gets its own bullet with its link, what it changes, the evidence, the risk, and a pick, including older unresolved decisions, so a large batch makes a long reply instead of a cut list. Existing captures and available diagrams show status and before/after options. When the Devin host cannot render them, compact text includes the same facts and unknowns. The skill does not start an app, install a renderer, or post anything to produce a visual.
 

@@ -84,15 +84,7 @@ Every implementation brief follows the single-source procedure in
 
 | Role | Default profiles | Count |
 |---|---|---|
-| how explorer | `pstack:panel-opus` | 1 |
-| how explainer | `pstack:panel-opus` | 1 |
-| how critics | `pstack:panel-opus`, `pstack:panel-swe`, `pstack:panel-sonnet` | 3 |
-| why investigators | `pstack:panel-opus` | 1 |
-| why synthesizer | `pstack:panel-opus` | 1 |
-| architect runners | `pstack:panel-opus`, `pstack:panel-swe`, `pstack:panel-sonnet` | 3 |
 | arena runners | `pstack:panel-opus`, `pstack:panel-swe`, `pstack:panel-sonnet` | 3 |
 | arena cross-judge pool | `pstack:panel-opus`, `pstack:panel-swe`, `pstack:panel-sonnet` | 3 |
 | interrogate reviewers | `pstack:panel-opus`, `pstack:panel-swe`, `pstack:panel-sonnet` | 3 |
-| reflect tooling | `pstack:panel-opus` | 1 |
-| reflect judgment, divergent, synthesizer | `pstack:panel-opus` | 1 |
 | swarm workers | `pstack:panel-opus` | 1 |

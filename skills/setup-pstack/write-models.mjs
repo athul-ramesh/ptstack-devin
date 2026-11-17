@@ -9,26 +9,44 @@ export const CORE_ALIASES = Object.freeze(["opus", "swe", "sonnet", "codex"]);
 
 export const SINGLE_ROLES = Object.freeze([
   ["feature, refactoring", "opus"],
-  ["bug-fix", "sonnet"],
+  ["bug-fix", "opus"],
   ["perf-issue", "opus"],
-  ["hillclimb", "sonnet"],
+  ["hillclimb", "opus"],
   ["judgment and prose", "opus"],
   ["strongest judgment", "opus"],
-  ["how explorer", "sonnet"],
-  ["how explainer", "opus"],
-  ["why investigators", "sonnet"],
-  ["why synthesizer", "opus"],
-  ["reflect tooling", "sonnet"],
-  ["reflect judgment, divergent, synthesizer", "opus"],
   ["swarm workers", "sonnet"],
 ]);
 
 export const PANEL_ROLES = Object.freeze([
-  ["how critics", ["opus", "swe", "sonnet"]],
   ["arena runners", ["opus", "swe", "sonnet"]],
   ["arena cross-judge pool", ["opus", "swe"]],
-  ["architect runners", ["opus", "swe", "sonnet"]],
   ["interrogate reviewers", ["opus", "swe", "sonnet"]],
+]);
+
+export const DEFAULTS_MARKER = "# defaults: 3";
+export const PREVIOUS_MARKER = "# defaults: 2";
+
+export const RETIRED_ROLES = Object.freeze([
+  "how explorer",
+  "how explainer",
+  "how critics",
+  "why investigators",
+  "why synthesizer",
+  "architect runners",
+  "reflect tooling",
+  "reflect judgment, divergent, synthesizer",
+]);
+
+const RETIRED = new Set(RETIRED_ROLES);
+
+const PREVIOUS_DEFAULTS = new Map([
+  ["bug-fix", ["pstack:poteto-agent-sonnet"]],
+  ["hillclimb", ["pstack:poteto-agent-sonnet"]],
+]);
+
+const MIGRATION_ALIAS = new Map([
+  ["bug-fix", "opus"],
+  ["hillclimb", "opus"],
 ]);
 
 const IMPLEMENTATION_ROLES = new Set([
@@ -110,6 +128,8 @@ export function renderSheet(roles) {
     "When a role needs more perspectives than distinct profiles, run that many sequential fresh-context",
     "`run_subagent` calls on the available profile. Do not label one pass as a panel.",
     "",
+    DEFAULTS_MARKER,
+    "",
   ];
   for (const row of roles) {
     lines.push(`${row.role}: ${row.profiles.join(", ")}`);
@@ -154,6 +174,7 @@ export function parseExistingSheet(content, available) {
     const match = lines[index].match(/^([^#`]+?):\s*(.*)$/);
     if (!match) continue;
     const role = match[1].trim();
+    if (RETIRED.has(role)) continue;
     if (!KNOWN_ROLES.has(role) && !match[2].includes("pstack:")) continue;
     if (rows.has(role)) throw new Error(`line ${index + 1}: duplicate role ${role}`);
     const profiles = match[2].split(",").map((profile) => profile.trim());
@@ -161,7 +182,42 @@ export function parseExistingSheet(content, available) {
     catch (error) { throw new Error(`line ${index + 1}: ${error.message}`); }
     rows.set(role, { role, profiles, requiredPerspectives: profiles.length, line: index });
   }
-  return { rows, lines };
+  const hasMarker = lines.some((line) => line.trim() === DEFAULTS_MARKER);
+  const hasPreviousMarker = lines.some((line) => line.trim() === PREVIOUS_MARKER);
+  return { rows, lines, hasMarker, hasPreviousMarker };
+}
+
+function sameProfiles(left, right) {
+  return left.length === right.length && left.every((profile, index) => profile === right[index]);
+}
+
+function dropRetired(lines) {
+  return lines.filter((line) => {
+    const match = line.match(/^([^#`][^:]*):/);
+    return !(match && RETIRED.has(match[1].trim()));
+  });
+}
+
+function ensureMarker(lines) {
+  const next = [];
+  let wrote = false;
+  for (const line of lines) {
+    if (line.trim() === DEFAULTS_MARKER || line.trim() === PREVIOUS_MARKER) {
+      if (!wrote) {
+        next.push(DEFAULTS_MARKER);
+        wrote = true;
+      }
+      continue;
+    }
+    next.push(line);
+  }
+  if (wrote) return next;
+  const at = next.findIndex((line) => {
+    const match = line.match(/^([^#`][^:]*):/);
+    return Boolean(match && KNOWN_ROLES.has(match[1].trim()));
+  });
+  next.splice(at === -1 ? next.length : at, 0, DEFAULTS_MARKER);
+  return next;
 }
 
 export function defaultOutPath(home = process.env.HOME) {
@@ -219,6 +275,26 @@ export function writeFromModelsList(text, options = {}) {
   const path = options.out ?? defaultOutPath(options.home);
   const existing = existsSync(path) ? readFileSync(path, "utf8") : undefined;
   const parsed = parseExistingSheet(existing ?? renderSheet(defaults), available);
+  const migrations = [];
+  const dropped = [];
+  if (existing) {
+    for (const line of existing.split("\n")) {
+      const match = line.match(/^([^#`][^:]*):\s*/);
+      if (match && RETIRED.has(match[1].trim())) dropped.push(match[1].trim());
+    }
+  }
+  if (!parsed.hasMarker && !parsed.hasPreviousMarker) {
+    for (const [role, previous] of PREVIOUS_DEFAULTS) {
+      const row = parsed.rows.get(role);
+      const alias = MIGRATION_ALIAS.get(role);
+      if (!row || !alias || !available.has(alias) || !sameProfiles(row.profiles, previous)) continue;
+      const next = defaults.find((item) => item.role === role);
+      row.profiles = next.profiles.slice();
+      row.requiredPerspectives = next.profiles.length;
+      parsed.lines[row.line] = `${role}: ${next.profiles.join(", ")}`;
+      migrations.push(`${role}: ${previous.join(", ")} -> ${next.profiles.join(", ")}`);
+    }
+  }
   const overrides = new Map();
   for (const override of options.roles ?? []) {
     const equals = override.indexOf("=");
@@ -244,8 +320,12 @@ export function writeFromModelsList(text, options = {}) {
   }
   let content = parsed.lines.join("\n");
   if (additions.length) content = `${content}${content.endsWith("\n") ? "" : "\n"}${additions.join("\n")}\n`;
+  content = `${ensureMarker(dropRetired(content.split("\n"))).join("\n")}`;
+  if (!content.endsWith("\n")) content = `${content}\n`;
+  for (const line of migrations) console.error(`migrated ${line}`);
+  for (const role of dropped) console.error(`dropped ${role}`);
   writeAtomic(path, content);
-  return { path, content, roles, available: [...available].sort() };
+  return { path, content, roles, available: [...available].sort(), migrations, dropped };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

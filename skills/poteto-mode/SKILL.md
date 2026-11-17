@@ -23,13 +23,13 @@ In your first message on a task, tell the user in your own words their goal, the
 
 ## Routing gates
 
-Invoke the named companion skill before the work proceeds. Scale `how` to the question. A narrow module or function uses one readonly explainer. A subsystem spanning files or services uses two to four explorers followed by synthesis. Do not force fan-out on trivial work.
+Invoke the named companion skill before the work proceeds. Do not force fan-out on trivial work.
 
-- Nontrivial change, architecture decision, or a request that challenges confidence: invoke `/pstack:how` over the affected subsystem.
-- A change crossing a function boundary, including within one module: invoke `/pstack:architect` before code. It grounds the design and compares at least two structurally distinct candidates before synthesis.
+- Mechanics of code you have not traced: trace it with `read`, `grep`, and `glob`. Do not route that trace through `/pstack:how`.
+- A change crossing a function boundary, including within one module: invoke `/pstack:architect` for the shape. A large or contested design runs `/pstack:arena`.
 - Motivation, rationale, tradeoffs, regressions, postmortems, data-backed thresholds, or a change that redefines ownership or layering: invoke `/pstack:why`. Do not require it for every task.
 - Parallel fan-out over independent partitions: `/pstack:swarm`. Competing design or code attempts: `/pstack:arena`. A contested design before shipping: `/pstack:interrogate`.
-- Nontrivial multi-step work: record the throughput checkpoint in the active playbook's reply contract.
+- Starting any agent with `run_subagent`: the first line of its `task` is `Read <path>/worker.md before anything else.`, with `<path>` the absolute path of this skill's folder. See [worker.md](worker.md). Whether the child follows that line is untested.
 - Any prose surface, your reply included: invoke `/pstack:unslop` before you send it. Write the reply per Write the reply.
 - Docs, RFCs, readmes, PR descriptions, or commit messages: invoke `/pstack:technical-writing`, every layer except Diátaxis where it does not fit, then `/pstack:unslop`.
 
@@ -45,7 +45,7 @@ For other work, select the first applicable route:
 
 1. Follow an explicitly requested workflow. If the request is to resume or pause, use Session pickup or Pause safely first.
 2. For an answer, plan, skill edit, evaluation, prototype, cleanup, or PR operation, use its table entry. A plan request produces a plan. A question produces an answer. A skill edit uses Authoring a skill even when it changes behavior.
-3. For execution, use Orchestrate for a standing project that outlives one session. Use `/pstack:figure-it-out` for one large or cross-cutting run needing a bespoke workflow. Use Autonomous run when the user asks to drive one bounded task to a predicate without stopping. Each implementation unit uses its own task classification.
+3. For execution, use `/pstack:figure-it-out` for a standing project, a large or cross-cutting run, or a task no playbook fits. Use Autonomous run when the user asks to drive one bounded task to a predicate without stopping. Each implementation unit uses its own task classification.
 4. For an explicit `shipping`, `autopilot-full`, or `autopilot-stack` request, read [Delivery capability](references/delivery-capability.md) and report its verdict with the bounded in-session alternative. Those source workflows are cut from this port, so do not route the request to `figure-it-out` unnamed.
 5. Otherwise use the specific task route below. If none fits, invoke `/pstack:figure-it-out`.
 
@@ -64,7 +64,6 @@ For other work, select the first applicable route:
 | Write or edit a SKILL.md | [Authoring a skill](playbooks/authoring-a-skill.md) |
 | Measure how a skill or prompt changes agent behavior | [Eval](playbooks/eval.md) |
 | Drive one task to a predicate in this session | [Autonomous run](playbooks/autonomous-run.md) |
-| Coordinate a standing project | [Orchestrate](playbooks/orchestrate.md) |
 | Resume prior work | [Session pickup](playbooks/session-pickup.md) |
 | Leave a resumable checkpoint | [Pause safely](playbooks/pause-safely.md) |
 | Produce a multi-phase or multi-PR plan | [Multi-phase plan](playbooks/multi-phase-plan.md) |
@@ -81,7 +80,7 @@ Inside poteto-mode, use the Babysit playbook rather than the standalone `/pstack
 ## Execute and verify
 
 1. Inspect the affected artifact and establish the requested outcome before editing. Reproduce a reported bug before fixing it.
-2. Track the active playbook's outcomes and checks in a compact checklist. Record `skip: <reason>` for each skipped required outcome or check. This replaces instructions to copy playbook steps verbatim into todos. Preserve durable standing orders and required plan artifacts in program workflows.
+2. Copy the active playbook's steps into a compact checklist, then track outcomes and checks there. Do not leave a skipped step in the list. Devin's documented tools do not include Cursor's todolist tool, so the checklist is the list. Preserve durable standing orders and required plan artifacts in program workflows.
 3. Settle the design, then apply the implementation gate below. Remove obsolete paths within scope instead of adding compatibility nobody requested.
 4. Review the changed artifact and diff yourself. For runtime behavior, read [Verification recipes](references/verification.md), detect the control surface the change needs before promising evidence, and exercise the real user path. A worker report, build, or test file alone is not proof. Compile or exit-code success is not proof of changed UI or CLI behavior. Report a missing control surface as a precise limitation, not a pass.
 5. For static artifacts, inspect the rendered or source result and run the relevant structural checks. For skill routing changes, trace representative requests through the instructions. Distinguish these checks from a live evaluation of agent behavior.
@@ -89,7 +88,9 @@ Inside poteto-mode, use the Babysit playbook rather than the standalone `/pstack
 
 ## Implementation gate
 
-Unless the user requires inline work or forbids subagents, every nontrivial code implementation is delegated, including tests and follow-up corrections. This includes code written during prototypes, visual parity, PR fixes, and autonomous or orchestrated units. Writing prose, answering questions, and reviewing artifacts stay with the root unless delegation adds value.
+Unless the user requires inline work or forbids subagents, every nontrivial code implementation is delegated, including tests and follow-up corrections. This includes code written during prototypes, visual parity, PR fixes, and autonomous or figure-it-out units. Writing prose, answering questions, and reviewing artifacts stay with the root unless delegation adds value.
+
+The first line of every `run_subagent` `task` is `Read <path>/worker.md before anything else.`, where `<path>` is the absolute path of this skill's folder. Devin documents subagents as separate conversations that can read and that cannot call `ask_user_question` ([Subagents](https://docs.devin.ai/cli/subagents)). It does not document Project workers or a kickoff file. Whether the child follows that first line is untested.
 
 The root owns inspection, reproduction, diagnosis, design, decomposition, review, and independent verification. Every nontrivial implementation uses its dedicated implementation profile, including one sequential worker. Read-only exploration is optional when its time or quality benefit outweighs its context cost. Do not dispatch a narrow lookup or trivial edit.
 
@@ -118,11 +119,7 @@ Push back when the evidence contradicts the request's premise or the proposed wo
 
 Invoke `/pstack:unslop` on this reply before you send it. Docs, RFCs, readmes, PR descriptions, and commit messages use `/pstack:technical-writing` first, then unslop.
 
-State the consumer and maintainer outcome before implementation details. Include the active playbook's reply content, checks, unresolved limits, and your assessment of worker evidence.
-
-Name each principle that shaped a decision and the specific choice it changed. Cite only leaves whose SKILL.md you read this session. Never claim to have read or applied a principle you did not.
-
-Use short declarative sentences with one thought each. Do not use long dashes or a mid-sentence colon as a connector. A colon before a list is fine. Never fabricate a link, citation, or transcript reference.
+Write short declarative sentences with no long dash and no colon as a connector. A colon before a list is fine. Lead with what changes for the user. Give each claim its evidence or a label (measured, inferred, or guess). Never hand the human a check you could run. Name each principle that shaped a decision and the specific choice it changed. Cite only leaves whose SKILL.md you read this session. Include the active playbook's reply content, checks, unresolved limits, and your assessment of worker evidence. Never fabricate a link, citation, or transcript reference.
 
 ## Models
 
@@ -131,12 +128,14 @@ Read `$HOME/.config/devin/pstack-models.md` when it exists. Its exact role row o
 Implementation uses dedicated profiles. Resolve legacy `pstack:panel-<alias>` rows to `pstack:poteto-agent-<alias>` only after verifying registration and equal `model:` frontmatter pins, as specified in Root-owned delegation. This mapping is not a failure fallback. Preserve explicit implementation-profile rows.
 
 - feature, refactoring: `pstack:poteto-agent-opus`
-- bug-fix: `pstack:poteto-agent-sonnet`
+- bug-fix: `pstack:poteto-agent-opus`
 - perf-issue: `pstack:poteto-agent-opus`
-- hillclimb: `pstack:poteto-agent-sonnet`
+- hillclimb: `pstack:poteto-agent-opus`
 - judgment and prose: `pstack:panel-opus`
 - strongest judgment: `pstack:panel-opus`
 
-Devin dispatch has no per-call reasoning-level or speed parameter, because `run_subagent` takes a profile, not a model. Upstream pstack's per-spawn effort and fast-mode tuning therefore does not apply. Match the model to the job only by choosing among the configured role rows above, never by inventing a profile, editing a pin, or remapping a role at dispatch time.
+A sheet without a `# defaults: 3` line is an older setup. Honor its lines for this session and tell the user once to rerun `/pstack:setup-pstack`. Do not remap a profile at dispatch time.
+
+Devin dispatch has no per-call reasoning-level or speed parameter, because `run_subagent` takes a profile, not a model. The CLI documents aliases `opus`, `sonnet`, `swe`, `codex`, and `gemini` ([Models](https://docs.devin.ai/cli/models)). Desktop names Fable 5.2 reasoning levels and does not publish `claude-opus-5-5-xhigh-fast`, `claude-fable-5-2-high`, or `gemini-4-carbon-high`. Upstream's Opus 5.5 xhigh-fast default, Fable-only-as-an-exception rule, xhigh cap, and three budgets therefore do not change these pins. Match the model to the job only by choosing among the configured role rows above, never by inventing a profile, editing a pin, or remapping a role at dispatch time.
 
 When an active panel skill requires N perspectives but fewer distinct profiles are available, use N sequential fresh-context `run_subagent` calls on the available registered profiles. One pass is not a panel. Do not claim a model ran without dispatch evidence.

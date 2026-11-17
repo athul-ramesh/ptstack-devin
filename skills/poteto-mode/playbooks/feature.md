@@ -2,8 +2,8 @@
 
 **You own the design. Plan, review, verify.** Delegate implementation. Stay in the lead.
 
-1. Invoke `/pstack:how` over the affected subsystem before changing it. Scale it as the how skill prescribes: one readonly explainer for a narrow module or function, explorers plus synthesis when the subsystem spans files or services. Inspect with `read`, `grep`, and `glob` as needed.
-2. Invoke `/pstack:architect` before code that crosses a function boundary, including within one module. It grounds the design and compares at least two structurally distinct candidates before synthesis. Skipping stays as `architect skipped: <reason>`. Do not fold the design decision silently into implementation.
+1. Trace the affected subsystem with `read`, `grep`, and `glob` before changing it.
+2. Invoke `/pstack:architect` for the shape before code that crosses a function boundary, including within one module.
 3. Write the throughput checkpoint as four todo items. A dimension that genuinely does not apply (single file, no fan-out) keeps its item with `n/a: <reason>` rather than being dropped:
    - **Blocking first steps.** Gates run before fan-out.
    - **Independent workstreams.** Disjoint files, services, or layers parallelize. Shared writes serialize.

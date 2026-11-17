@@ -7,7 +7,9 @@ description: "Design an auditable playbook when no narrower one fits: a large mi
 
 When the task matches no playbook, design one. The deliverable before any code is the workflow itself. A sequence of phases that scales rigor to the task, runs the scientific method, and leaves a decision trail a human can audit after stepping away. Bias toward more rigor. The cost of building the wrong thing dwarfs the cost of being careful.
 
-Don't reinvent a playbook you already have. A focused single-unit task that matches Bug fix, Perf, Feature, Visual parity, Eval, or Multi-phase plan routes there. A large or cross-cutting version of one, or work the user reviews after stepping away, belongs here even when a single-unit version would be a Feature. The rigor and the audit trail are the point.
+Don't reinvent a playbook you already have. A focused single-unit task that matches Bug fix, Perf, Feature, Visual parity, Eval, or Multi-phase plan routes there. A large or cross-cutting version of one, a standing program of many PRs, or work the user reviews after stepping away, belongs here even when a single-unit version would be a Feature. The rigor and the audit trail are the point.
+
+A standing program keeps one owner per PR. A verifier whose `model:` pin differs from the owner's reviews that head. Start with one unit through owner and verifier before you fan out. Dispatch stays root to worker. There is no sub-coordinator.
 
 Read [`../poteto-mode/references/program-state.md`](../poteto-mode/references/program-state.md). Persist `ProgramState` before the first unit. Resume from that store. Do not keep the plan only in the todolist.
 

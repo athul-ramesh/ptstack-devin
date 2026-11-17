@@ -20,7 +20,7 @@ A prompt states the intent and the check for done. The playbook supplies the ste
 
 - For a noisy report, ask the agent to restate the underlying issue in its own words and in plain English before it does anything else. A misreading shows up before any code exists.
 - In a fresh chat, `/pstack:recall` earlier work on the topic. Use this conversation, user-named Devin exports, and live git or gh state. Unavailable history stays an evidence gap.
-- Before a change to unfamiliar code, ask `/pstack:how` for the mechanics and `/pstack:why` for the reasons. An agent with no traced model fixes the symptom at the first plausible spot.
+- Before a change to unfamiliar code, ask the agent to trace the code. Ask `/pstack:how` when you want that trace as its own explanation, and `/pstack:why` for the reasons in the commits and PRs. An agent with no traced model fixes the symptom at the first plausible spot.
 - Ask `/pstack:teach` to make the case for a choice, as in "convince me it fixes the cause and not the symptom". A case is easier to check than a summary.
 
 ## Design before the plan

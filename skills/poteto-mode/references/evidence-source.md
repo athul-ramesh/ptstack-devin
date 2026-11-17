@@ -34,7 +34,7 @@ A `ProgramState` store is a first-class resume source. Read `<cwd>/.pstack/<slug
 
 ## Unavailable
 
-Do not add backends this session has not configured. Copy `/pstack:why` coverage failures and unchased leads as `kind: unavailable`, preserving their locator and reason. Use the matching category, or `other` for a category outside the enum. Distinguish an unregistered source from a configured tool that failed. Synthesis that leans on a missing category must say so.
+Do not add backends this session has not configured. Copy gaps from recall's investigators as `kind: unavailable`, with the locator and reason. Use the matching category, or `other` for a category outside the enum. Distinguish an unregistered source from a configured tool that failed. Synthesis that leans on a missing category must say so.
 
 ## Cite
 

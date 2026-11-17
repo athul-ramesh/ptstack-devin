@@ -9,7 +9,7 @@ Rebuild the user's recent working context before you start or resume. Hand back 
 
 Keep it tight. Read only what the in-scope threads need, then stop. Heavy reading fans out to `run_subagent`. The main thread keeps findings and the brief.
 
-Context lives in two records. Session evidence is this conversation and any export the user named. The shared record is everything that happened around the same code under other names. Symptoms, shipped then reverted fixes, errors still firing. `/pstack:why` searches that record. Do not reconstruct a named feature from session evidence alone.
+Context lives in two records. Session evidence is this conversation and any export the user named. The shared record is everything that happened around the same code under other names. Symptoms, shipped then reverted fixes, errors still firing. Search that record from git and `gh`. Do not reconstruct a named feature from session evidence alone. Do not send the sweep through `/pstack:why`.
 
 Read [`../poteto-mode/references/evidence-source.md`](../poteto-mode/references/evidence-source.md). Every source you use or skip is an `EvidenceSource`.
 
@@ -19,7 +19,7 @@ Read [`../poteto-mode/references/evidence-source.md`](../poteto-mode/references/
 
 3. Collect session evidence. Use the session-bodies order in `evidence-source.md`. For one named export, `read` it here. For several named exports, one `run_subagent` per file on `pstack:panel-opus`. Sequential when `executionMode` is sequential. Say so. Each worker returns topic, the user's goal, decisions, open threads, struggles, and artifacts, citing the export path. Raw files stay with the workers.
 
-4. Sweep the shared record whenever the topic names a feature, file, subsystem, area, or bug. This is the default. "My work on X" does not skip it. Invoke `/pstack:why`. Steer the question to current state, what was tried and did not hold, and what users still report. why records a `PanelRun` and reports source coverage failures and unchased leads. Copy those gaps as `unavailable` sources with their reasons. Run this with the session mining, not after it.
+4. Sweep the shared record whenever the topic names a feature, file, subsystem, area, or bug. This is the default. "My work on X" does not skip it. Start one investigator `run_subagent` per source, on `pstack:panel-opus`, together with the session mining. Sequential when `executionMode` is sequential. Say so. Each investigator must not write files, commit, or change external state. Devin's `run_subagent` has no readonly flag, and `subagent_explore` is the wrong profile here because pull requests need `gh`. Ask each investigator for the current state, what was tried and did not hold, and what users still report. The sources are git history and, when `gh` is authenticated, pull requests and issues. A source with no tool is `unavailable`, with the reason. An empty search is a finding. Do not borrow a playbook from `/pstack:why`. Skip this step only for pure activity recall with no named target.
 
 5. Verify against live state. An export or a stale ticket is history. Take PRs, branches, and tickets the mining surfaced and check them with `exec` git and `gh`. When the answer hinges on what an agent did, read the full named export, not a digest.
 
