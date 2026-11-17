@@ -116,6 +116,7 @@ describe("poteto delegation contract", () => {
       "panel-opus": "gpt-6-1-sol-medium",
       "panel-sonnet": "glm-5-3-flash-high",
       "panel-swe": "swe",
+      "panel-terra": "gpt-6-1-terra-medium",
       "poteto-agent": "gpt-6-1-sol-medium",
     };
 
@@ -138,6 +139,7 @@ describe("poteto delegation contract", () => {
       "poteto-agent-sonnet": "glm-5-3-flash-high",
       "poteto-agent-swe": "swe",
       "poteto-agent-codex": "gpt-6-1-sol-medium",
+      "poteto-agent-terra": "gpt-6-1-terra-medium",
     };
     for (const [profile, pin] of Object.entries(profiles)) {
       const path = join(repoRoot, "agents", profile, "AGENT.md");

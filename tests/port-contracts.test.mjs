@@ -110,8 +110,8 @@ test('fresh-worker and swarm evidence contracts preserve bounded recovery and ow
   for (const pattern of [/exact SHAs/, /sample count, sample definition, and execution order/, /Results repeat those identifiers and methodology/, /ISSUES.*every demonstrated issue/, /Reject a result missing required evidence/, /at most one fresh-worker retry/, /second miss stays an evidence gap/, /Never replace an in-flight writer/]) assert.match(swarm, pattern);
 });
 
-test('all implementation and panel pins remain matched and unchanged', () => {
-  for (const [alias, pin] of Object.entries({ codex: 'gpt-6-1-sol-medium', opus: 'gpt-6-1-sol-medium', sonnet: 'glm-5-3-flash-high', swe: 'swe' })) {
+test('all implementation and panel pins remain matched', () => {
+  for (const [alias, pin] of Object.entries({ codex: 'gpt-6-1-sol-medium', opus: 'gpt-6-1-sol-medium', sonnet: 'glm-5-3-flash-high', swe: 'swe', terra: 'gpt-6-1-terra-medium' })) {
     for (const prefix of ['panel', 'poteto-agent']) assert.match(read(`agents/${prefix}-${alias}/AGENT.md`), new RegExp(`^model: ${pin}$`, 'm'));
   }
   assert.match(read('agents/poteto-agent/AGENT.md'), /^model: gpt-6-1-sol-medium$/m);
