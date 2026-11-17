@@ -6,6 +6,7 @@ Swap in the real paths, skills, and done checks. Informal wording works.
 
 - `/pstack:poteto-mode read <thread>. restate the underlying issue in your own words, in plain english.`
 - `/pstack:poteto-mode investigate why <symptom>. give me what we know, what data you used, and your best hypotheses. don't change any code yet.`
+- `/pstack:understand-bug <symptom>. repro it, draw the failing path and the proposed path, and stop for my approval before any fix.`
 - `use /pstack:how to understand <subsystem>. then use /pstack:why to find out why it broke recently.`
 - `/pstack:recall my work on <topic> from last week, then read <issue>.`
 - `/pstack:teach me why you implemented it this way and not <other way>. what did you trade off?`
