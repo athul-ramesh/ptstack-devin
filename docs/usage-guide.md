@@ -26,6 +26,8 @@ For a noisy report, ask the agent to restate the underlying issue before sharing
 
 For a captured profile, use [Trace forensics](../skills/poteto-mode/playbooks/trace-forensics.md). For a live leak, CPU spin, or glitch, use [Runtime forensics](../skills/poteto-mode/playbooks/runtime-forensics.md). Both produce diagnosis before a fix.
 
+To understand a bug, or to explain it before a fix, run [`/pstack:understand-bug`](../skills/understand-bug/SKILL.md). It reproduces the defect, draws the failing path and the proposed path, and waits for approval before the Bug fix playbook.
+
 Use [`/pstack:ketchup`](../skills/ketchup/SKILL.md) after stepping away from this chat. It reports changes since your last message and any unresolved decisions only you can make, including older ones. It stays read-only and does not resume the work.
 
 ## Settle the design before the plan

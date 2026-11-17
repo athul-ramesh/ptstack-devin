@@ -65,6 +65,7 @@ The default answer is `/pstack:poteto-mode`, which runs most of the others when 
 | Run parallel checks over slices, or race workers, with local isolated workspaces | [`/pstack:swarm`](../swarm/SKILL.md) |
 | Have several models try to break a diff, keeping only findings a run proves | [`/pstack:interrogate`](../interrogate/SKILL.md) |
 | Fix a bug test-first when a cheap local test exists | [`/pstack:tdd`](../tdd/SKILL.md) |
+| Understand a bug, or explain it before fixing, and wait for approval | [`/pstack:understand-bug`](../understand-bug/SKILL.md) |
 | Apply TypeScript rules to `.ts` or `.tsx` work | [`/pstack:typescript-best-practices`](../typescript-best-practices/SKILL.md) |
 | Strip comments before review, using a reviewer that didn't write them | [`/pstack:no-comments`](../no-comments/SKILL.md) |
 | Clean AI tells out of prose | [`/pstack:unslop`](../unslop/SKILL.md) |
@@ -97,6 +98,7 @@ If a skill directory next to this one is missing from the table, read its frontm
 Close calls:
 
 - `/pstack:how` explains what the code does, in one read-only pass. `/pstack:why` cites the commits and the PR discussion. `/pstack:teach` runs one or both and explains the result plainly.
+- `/pstack:understand-bug` reproduces a defect, draws the current path and the path after the proposed fix, and waits for approval before Bug fix. The Bug fix playbook starts the fix once the defect is reproduced.
 - `/pstack:arena` gives every worker the same brief and merges the best parts. `/pstack:swarm` splits work into slices or a race and returns one report.
 - `/pstack:architect` sketches two shapes. A large or contested design runs `/pstack:arena`.
 - `/pstack:interrogate` reviews the diff. `/pstack:blast-radius` looks for breakage outside the diff and proves the one fact that makes the change safe.

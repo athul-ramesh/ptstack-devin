@@ -71,7 +71,7 @@ For other work, select the first applicable route:
 | Open a PR at the user's request | [Opening a PR](playbooks/opening-a-pr.md) |
 | Check or drive an open PR to merge-ready | [Babysit](playbooks/babysit.md) |
 
-When routes overlap, choose the required evidence. For diagnosis without a fix, use Trace forensics for a captured trace and Runtime forensics for live instrumentation. Exact visual equivalence uses Visual parity. A sustained metric target uses Hillclimb. A specific performance regression uses Perf issue. Other defects use Bug fix. Other behavior-preserving changes use Refactoring, and other product changes use Feature. An explicit shipping or autopilot request gets the delivery-capability verdict, never an unnamed fallback.
+When routes overlap, choose the required evidence. A request to understand a bug, or to explain a bug before fixing it, invokes `/pstack:understand-bug`. That skill stops for approval and then uses Bug fix. For diagnosis without a fix, use Trace forensics for a captured trace and Runtime forensics for live instrumentation. Exact visual equivalence uses Visual parity. A sustained metric target uses Hillclimb. A specific performance regression uses Perf issue. Other defects use Bug fix. Other behavior-preserving changes use Refactoring, and other product changes use Feature. An explicit shipping or autopilot request gets the delivery-capability verdict, never an unnamed fallback.
 
 Use Prototype for questions an experiment can answer. Reserve questions for product or preference decisions evidence cannot settle. Return the result to the controlling workflow and implement only within the authorized scope.
 
