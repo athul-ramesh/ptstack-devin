@@ -47,29 +47,31 @@ describe("pstack models sheet", () => {
 
   it("maps panel roles to registered profiles and keeps list length", () => {
     const roles = buildRoleConfigs(parseDevinModelsList(LIST_FOUR));
-    const critics = roles.find((row) => row.role === "how critics");
-    assert.deepEqual(critics.profiles, [
+    const runners = roles.find((row) => row.role === "arena runners");
+    assert.deepEqual(runners.profiles, [
       "pstack:panel-opus",
       "pstack:panel-swe",
       "pstack:panel-sonnet",
     ]);
-    assert.equal(critics.requiredPerspectives, 3);
+    assert.equal(runners.requiredPerspectives, 3);
   });
 
   it("routes implementation roles to dedicated workers and keeps panels for review roles", () => {
     const roles = new Map(buildRoleConfigs(parseDevinModelsList(LIST_FOUR)).map((row) => [row.role, row]));
     assert.deepEqual(roles.get("feature, refactoring").profiles, [implementationProfile("opus")]);
-    assert.deepEqual(roles.get("bug-fix").profiles, [implementationProfile("sonnet")]);
+    assert.deepEqual(roles.get("bug-fix").profiles, [implementationProfile("opus")]);
     assert.deepEqual(roles.get("perf-issue").profiles, [implementationProfile("opus")]);
-    assert.deepEqual(roles.get("hillclimb").profiles, [implementationProfile("sonnet")]);
+    assert.deepEqual(roles.get("hillclimb").profiles, [implementationProfile("opus")]);
     assert.deepEqual(roles.get("judgment and prose").profiles, ["pstack:panel-opus"]);
-    assert.deepEqual(roles.get("how critics").profiles, ["pstack:panel-opus", "pstack:panel-swe", "pstack:panel-sonnet"]);
+    assert.deepEqual(roles.get("arena runners").profiles, ["pstack:panel-opus", "pstack:panel-swe", "pstack:panel-sonnet"]);
+    assert.equal(roles.has("how explorer"), false);
+    assert.equal(roles.has("why investigators"), false);
   });
 
   it("repeats one profile for three critic perspectives when only swe exists", () => {
     const roles = buildRoleConfigs(parseDevinModelsList(LIST_SWE));
-    const critics = roles.find((row) => row.role === "how critics");
-    assert.deepEqual(critics.profiles, [
+    const runners = roles.find((row) => row.role === "arena runners");
+    assert.deepEqual(runners.profiles, [
       "pstack:panel-swe",
       "pstack:panel-swe",
       "pstack:panel-swe",
@@ -89,14 +91,16 @@ describe("pstack models sheet", () => {
     assert.match(first.content, /Do not label one pass as a panel/);
     assert.match(first.content, /Implementation roles use `pstack:poteto-agent-<alias>`; review roles use `pstack:panel-<alias>`/);
     assert.match(first.content, /frontmatter `model:` pin is authoritative/);
-    assert.doesNotMatch(first.content, /claude-/);
+    assert.match(first.content, /^# defaults: 2$/m);
+    assert.doesNotMatch(first.content, /claude-|grok-|gemini-4-carbon|claude-fable/);
   });
   it("preserves role order, notes, repeated perspectives and explicit overrides on rerun", () => {
     const out = join(mkdtempSync(join(tmpdir(), "pstack-models-")), "sheet.md");
-    writeFileSync(out, "# My models\n\nNotes: Keep my preferred review order.\nhow critics: pstack:panel-codex, pstack:panel-codex\nbug-fix: pstack:panel-opus\n");
+    writeFileSync(out, "# My models\n\nNotes: Keep my preferred review order.\narena runners: pstack:panel-codex, pstack:panel-codex\nbug-fix: pstack:panel-opus\n");
     const first = writeFromModelsList(LIST_FOUR, { out, roles: ["swarm workers=pstack:panel-sonnet", "feature, refactoring=pstack:poteto-agent-codex"] });
     assert.match(first.content, /Notes: Keep my preferred review order/);
-    assert.equal(first.roles[0].role, "how critics");
+    assert.match(first.content, /^# defaults: 2$/m);
+    assert.equal(first.roles[0].role, "arena runners");
     assert.equal(first.roles[0].requiredPerspectives, 2);
     assert.deepEqual(first.roles[1].profiles, ["pstack:panel-opus"]);
     assert.match(first.content, /swarm workers: pstack:panel-sonnet/);
@@ -109,7 +113,7 @@ describe("pstack models sheet", () => {
       "bug-fix: pstack:poteto-agent-swe\nbug-fix: pstack:poteto-agent-opus\n",
       "unknown role: pstack:panel-opus\n",
       "bug-fix: pstack:panel-missing\n",
-      "how critics: pstack:poteto-agent-opus\n",
+      "arena runners: pstack:poteto-agent-opus\n",
       "bug-fix: \n",
     ]) {
       writeFileSync(out, content);
@@ -123,7 +127,7 @@ describe("pstack models sheet", () => {
     const content = writeFromModelsList(LIST_FOUR, { out }).content;
     for (const roles of [
       ["no such role=pstack:panel-opus"],
-      ["how critics=pstack:poteto-agent-opus"],
+      ["arena runners=pstack:poteto-agent-opus"],
       ["bug-fix=pstack:poteto-agent-claude"],
       ["bug-fix=pstack:poteto-agent-opus", "bug-fix=pstack:poteto-agent-swe"],
     ]) {
@@ -139,11 +143,40 @@ describe("pstack models sheet", () => {
     const script = join(dirname(fileURLToPath(import.meta.url)), "../skills/setup-pstack/write-models.mjs");
     const result = spawnSync(process.execPath, [script, "--out", out,
       "--role", "bug-fix=pstack:poteto-agent-codex",
-      "--role", "how critics=pstack:panel-swe,pstack:panel-swe"], { input: LIST_FOUR, encoding: "utf8" });
+      "--role", "arena runners=pstack:panel-swe,pstack:panel-swe"], { input: LIST_FOUR, encoding: "utf8" });
     assert.equal(result.status, 0, result.stderr);
     const sheet = readFileSync(out, "utf8");
     assert.match(sheet, /bug-fix: pstack:poteto-agent-codex/);
-    assert.match(sheet, /how critics: pstack:panel-swe, pstack:panel-swe/);
+    assert.match(sheet, /arena runners: pstack:panel-swe, pstack:panel-swe/);
+  });
+
+  it("migrates old bug-fix and hillclimb defaults once, and drops retired roles", () => {
+    const out = join(mkdtempSync(join(tmpdir(), "pstack-models-")), "sheet.md");
+    writeFileSync(out, [
+      "# old",
+      "bug-fix: pstack:poteto-agent-sonnet",
+      "hillclimb: pstack:poteto-agent-sonnet",
+      "swarm workers: pstack:panel-codex",
+      "how explorer: pstack:panel-sonnet",
+      "why investigators: pstack:panel-opus",
+      "",
+    ].join("\n"));
+    const first = writeFromModelsList(LIST_FOUR, { out });
+    assert.match(first.content, /^# defaults: 2$/m);
+    assert.match(first.content, /bug-fix: pstack:poteto-agent-opus/);
+    assert.match(first.content, /hillclimb: pstack:poteto-agent-opus/);
+    assert.match(first.content, /swarm workers: pstack:panel-codex/);
+    assert.doesNotMatch(first.content, /how explorer|why investigators|how critics/);
+    assert.deepEqual(first.migrations, [
+      "bug-fix: pstack:poteto-agent-sonnet -> pstack:poteto-agent-opus",
+      "hillclimb: pstack:poteto-agent-sonnet -> pstack:poteto-agent-opus",
+    ]);
+    assert.deepEqual(first.dropped, ["how explorer", "why investigators"]);
+    writeFileSync(out, first.content.replace("bug-fix: pstack:poteto-agent-opus", "bug-fix: pstack:poteto-agent-codex"));
+    const kept = writeFromModelsList(LIST_FOUR, { out });
+    assert.match(kept.content, /bug-fix: pstack:poteto-agent-codex/);
+    assert.deepEqual(kept.migrations, []);
+    assert.equal(writeFromModelsList(LIST_FOUR, { out }).content, kept.content);
   });
 
 });

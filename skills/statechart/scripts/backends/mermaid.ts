@@ -93,6 +93,52 @@ const esc = (s: string, quoted = false) => {
 
 const or = (names: Iterable<string>) => [...names].sort(byText).join(" or ");
 
+type Edge = { from: string[]; start: boolean; to: string[]; label: string | undefined };
+
+const within = (parent: string[], path: string[]) =>
+  path.length >= parent.length && parent.every((part, index) => path[index] === part);
+const wayIn = (edge: Edge) => tupleKey([edge.start, edge.from]);
+
+export function drawnEdges(region: Region): Edge[] {
+  let out: Edge[] = [];
+  for (const state of region.states)
+    if (state.start) out.push({ from: [], start: true, to: state.path, label: undefined });
+  for (const step of region.steps)
+    out.push({
+      from: step.from,
+      start: false,
+      to: step.to,
+      label: step.label + (step.when ? ` [${step.when}]` : ""),
+    });
+  const parents = new Map<string, string[]>();
+  for (const state of region.states)
+    for (let index = 1; index < state.path.length; index++) {
+      const prefix = state.path.slice(0, index);
+      parents.set(tupleKey(prefix), prefix);
+    }
+  for (const parent of [...parents.values()].sort((left, right) => left.length - right.length)) {
+    const into = out.filter(
+      (edge) => edge.to.length > parent.length && within(parent, edge.to) && !within(parent, edge.from),
+    );
+    if (!into.length || into.some((edge) => wayIn(edge) !== wayIn(into[0]))) continue;
+    const one = into.length === 1;
+    const at = out.indexOf(into[0]);
+    out = out.filter((edge) => !into.includes(edge));
+    out.splice(
+      at,
+      0,
+      { ...into[0], to: parent, label: one ? into[0].label : undefined },
+      ...into.map((edge) => ({
+        from: parent,
+        start: true,
+        to: edge.to,
+        label: one ? undefined : edge.label,
+      })),
+    );
+  }
+  return out;
+}
+
 const MARK_STYLES = {
   breaks: "fill:#ffecee,stroke:#e72e3b,stroke-width:2.5px,color:#cd2834",
   mayBreak: "fill:#fff3e6,stroke:#e8730c,stroke-width:2.5px,color:#b85a06",
@@ -121,6 +167,9 @@ export function mermaidLines(chart: Chart) {
       if (s === undefined) known.set(path, (s = id(path)));
       return s;
     };
+    const drawn = drawnEdges(r);
+    const line = (edge: Edge, indent: string) =>
+      `${indent}${edge.start ? "[*]" : idOf(edge.from)} --> ${idOf(edge.to)}${edge.label === undefined ? "" : `: ${esc(edge.label)}`}`;
     const tree = (prefix: string[], indent: string, below: ChartState[]) => {
       const heads = new Map<string, ChartState[]>();
       for (const s of below) append(heads, s.path[prefix.length], s);
@@ -134,6 +183,9 @@ export function mermaidLines(chart: Chart) {
         if (inner.length) {
           out.push(`${indent}state "${esc(head, true)}" as ${id(path)} {`);
           tree(path, indent + "  ", inner);
+          const key = tupleKey(path);
+          for (const edge of drawn)
+            if (edge.start && tupleKey(edge.from) === key) out.push(line(edge, `${indent}  `));
           out.push(`${indent}}`);
         } else if (leaf) {
           const sid = idOf(leaf.path);
@@ -153,11 +205,7 @@ export function mermaidLines(chart: Chart) {
       }
     };
     tree([], "  ", r.states);
-    for (const s of r.states) if (s.start) out.push(`  [*] --> ${idOf(s.path)}`);
-    for (const s of r.steps)
-      out.push(
-        `  ${idOf(s.from)} --> ${idOf(s.to)}: ${esc(s.label + (s.when ? ` [${s.when}]` : ""))}`,
-      );
+    for (const edge of drawn) if (!edge.start || !edge.from.length) out.push(line(edge, "  "));
     return out;
   };
   let body: string[];

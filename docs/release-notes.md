@@ -1,5 +1,11 @@
 # Release notes
 
+## 0.10.0
+
+- Port upstream 0.15.37 through 0.15.42 (`bf0c7cd`). `/pstack:why` is one short file. `/pstack:how` is one read-only `subagent_explore` pass. Poteto-mode, the code playbooks, architect, no-comments, and comment-sicko trace the code. Teach and poteto-help still offer how. Recall starts its own investigator per git or `gh` source. Reflect's drift example is a function rename. Sharpen's prototype line was already on main in 0.9.2. The docs now say so.
+- Setup writes `# defaults: 2`. An older sheet drops the retired how and why roles. Old default `bug-fix` and `hillclimb` rows move from `pstack:poteto-agent-sonnet` to `pstack:poteto-agent-opus` when `opus` is available. Other choices stay. Profile pins stay `gpt-6-1-sol-medium`, `glm-5-3-flash-high`, and `swe`. Cursor slugs for Fable 5.2, Opus 5.5, and Gemini 4 Carbon are not written. Swarm workers and reflect tooling stay on `sonnet`.
+- Statechart reports SANY's own error section, capped at 40 lines, and draws an outside arrow to a parent state's border. Benny is not shipped. Native activation remains untested. See the [port audit](pstack-0.15.42-port-audit.md).
+
 ## 0.9.2
 
 - Local drift fixes: declare `platforms: ["local"]` in `.devin-plugin/plugin.json` so the plugin loads only in Devin CLI and Devin Desktop. README and AGENTS.md say so explicitly. Restore sharpen prototype wording, obligatory `/pstack:unslop` and `/pstack:technical-writing` routing in poteto-mode, and ketchup `permissions.deny: [edit]`. Native activation remains untested.

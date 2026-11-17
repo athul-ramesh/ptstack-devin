@@ -74,9 +74,9 @@ describe("poteto delegation contract", () => {
     );
     const expected = new Map([
       ["feature, refactoring", "pstack:poteto-agent-opus"],
-      ["bug-fix", "pstack:poteto-agent-sonnet"],
+      ["bug-fix", "pstack:poteto-agent-opus"],
       ["perf-issue", "pstack:poteto-agent-opus"],
-      ["hillclimb", "pstack:poteto-agent-sonnet"],
+      ["hillclimb", "pstack:poteto-agent-opus"],
       ["judgment and prose", "pstack:panel-opus"],
       ["strongest judgment", "pstack:panel-opus"],
     ]);
@@ -149,7 +149,7 @@ describe("poteto delegation contract", () => {
 
   it("keeps implementation defaults on legacy-equivalent model pins", () => {
     const roles = new Map(buildRoleConfigs(new Set(["opus", "swe", "sonnet"])).map((row) => [row.role, row]));
-    for (const [role, alias] of [["feature, refactoring", "opus"], ["bug-fix", "sonnet"], ["perf-issue", "opus"], ["hillclimb", "sonnet"]]) {
+    for (const [role, alias] of [["feature, refactoring", "opus"], ["bug-fix", "opus"], ["perf-issue", "opus"], ["hillclimb", "opus"]]) {
       const implementationPath = join(repoRoot, "agents", `poteto-agent-${alias}`, "AGENT.md");
       const panelPath = join(repoRoot, "agents", `panel-${alias}`, "AGENT.md");
       assert.deepEqual(roles.get(role).profiles, [`pstack:poteto-agent-${alias}`]);

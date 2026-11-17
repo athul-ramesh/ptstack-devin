@@ -22,7 +22,7 @@ Workers and review panels spend extra tokens. Choose suitable registered profile
 
 For a noisy report, ask the agent to restate the underlying issue before sharing your theory of the cause. For an unclear cause, request evidence and hypotheses without code changes.
 
-[`/pstack:how`](../skills/how/SKILL.md) traces mechanics. [`/pstack:why`](../skills/why/SKILL.md) finds reasons and history. [`/pstack:teach`](../skills/teach/SKILL.md) explains choices and tradeoffs in plain language. [`/pstack:recall`](../skills/recall/SKILL.md) uses this conversation, named Devin exports, and the shared record. Unavailable history stays an evidence gap.
+[`/pstack:how`](../skills/how/SKILL.md) is one read-only explanation of how code works. During a change, poteto-mode traces the code itself. [`/pstack:why`](../skills/why/SKILL.md) cites the commits and PR discussion. [`/pstack:teach`](../skills/teach/SKILL.md) explains choices and tradeoffs in plain language. [`/pstack:recall`](../skills/recall/SKILL.md) uses this conversation, named Devin exports, and one investigator per git or `gh` source. Unavailable history stays an evidence gap.
 
 For a captured profile, use [Trace forensics](../skills/poteto-mode/playbooks/trace-forensics.md). For a live leak, CPU spin, or glitch, use [Runtime forensics](../skills/poteto-mode/playbooks/runtime-forensics.md). Both produce diagnosis before a fix.
 
@@ -72,7 +72,7 @@ The help skill's [prompting reference](../skills/poteto-help/references/promptin
 
 Use `/pstack:in-your-own-words` to hear the goals and problem the agent understood. This explicit-user skill restates them without starting a workflow or adding a confirmation gate.
 
-Use `/pstack:sharpen <the prompt you're about to send>` when you are unsure a prompt is aimed right. It hands back the prompt rewritten deeper, not bigger, with an outside check and your choices left open. It does not do the task. Send the rewrite yourself.
+Use `/pstack:sharpen <the prompt you're about to send>` when you are unsure a prompt is aimed right. It hands back the prompt rewritten deeper, not bigger, with an outside check. The rewrite asks the agent to prototype a choice an experiment can settle and recommend from what it observed. Product and preference choices stay with you. It does not do the task. Send the rewrite yourself.
 
 Use `/pstack:ketchup` to catch up since your previous message. The story stays under 100 words. Every call waiting on you gets its own bullet with its link, what it changes, the evidence, the risk, and a pick, including older unresolved decisions, so a large batch makes a long reply instead of a cut list. Existing captures and available diagrams show status and before/after options. When the Devin host cannot render them, compact text includes the same facts and unknowns. The skill does not start an app, install a renderer, or post anything to produce a visual.
 

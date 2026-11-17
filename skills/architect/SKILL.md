@@ -21,7 +21,7 @@ Open a todolist with one entry per phase.
 
 ## Phase A: Ground
 
-Build a real model of every system the new code touches. Invoke `/pstack:how` over those subsystems. Critique mode when existing structure is the constraint. Naming a file is not grounding. Produce the architectural explanation how prescribes. If the design redefines ownership or layering, also invoke `/pstack:why` so the rationale is a constraint.
+Build a real model of every system the new code touches. Trace those subsystems with `read`, `grep`, and `glob`. Naming a file is not grounding. Write what the system is, how the pieces move, where they live, and the traps. If the design redefines ownership or layering, also invoke `/pstack:why` so the rationale is a constraint.
 
 Skip Phase A only for genuine greenfield work.
 
@@ -70,7 +70,7 @@ A few edge cases do not condemn a design.
 
 When you scrap:
 
-1. Invoke `/pstack:how` over what was built.
+1. Trace what was built.
 2. Redesign as if the new constraints were day-one assumptions. Read `skills/principle-redesign-from-first-principles/SKILL.md`.
 3. Subtract first. Read `skills/principle-subtract-before-you-add/SKILL.md`. The new sketch starts smaller.
 4. Return to Phase B.
