@@ -155,7 +155,7 @@ test('0.15.42 port keeps a short why, one how pass, and traced playbooks', () =>
 test('plugin manifest is local-only and current release', () => {
   const manifest = JSON.parse(read('.devin-plugin/plugin.json'));
   assert.deepEqual(manifest.platforms, ['local']);
-  assert.equal(manifest.version, '0.11.0');
+  assert.equal(manifest.version, '0.11.1');
 });
 
 test('e73df47 port keeps Devin paths, honest tool limits, and local-only reflect edits', () => {

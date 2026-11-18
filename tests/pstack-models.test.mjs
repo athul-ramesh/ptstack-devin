@@ -8,6 +8,7 @@ import { describe, it } from "node:test";
 
 import {
   buildRoleConfigs,
+  chooseModelsListOutput,
   implementationProfile,
   parseDevinModelsList,
   writeFromModelsList,
@@ -16,12 +17,16 @@ import {
 const LIST_FOUR = `
 Claude Opus 5 (claude-opus-5)
   aliases: opus
+  model_uid: gpt-6-1-sol-medium
 SWE-1.7 Lightning (swe-1.7-lightning)
   aliases: swe
+  model_uid: swe
 Claude Sonnet 5 (claude-sonnet-5)
   aliases: claude, sonnet
+  model_uid: glm-5-3-flash-high
 GPT-5.3-Codex (gpt-5.3-codex)
   aliases: codex
+  model_uid: gpt-6-1-sol-medium
 `;
 
 const LIST_SWE = `
@@ -38,11 +43,26 @@ describe("pstack models sheet", () => {
     assert.match(skill, /frontmatter `model:` pin is authoritative/);
     assert.match(skill, /maps implementation roles to registered `poteto-agent` profiles/);
     assert.match(skill, /replaces the file atomically/);
+    assert.match(skill, /devin models list --format json/);
+    assert.match(skill, /model_uid/);
+    assert.match(skill, /agents\/<name>\/AGENT\.md/);
   });
 
-  it("parses only alias lines from devin models list", () => {
+  it("parses text aliases, parenthetical ids, and model_uid lines", () => {
     const ids = parseDevinModelsList(LIST_FOUR);
-    assert.deepEqual([...ids].sort(), ["claude", "codex", "opus", "sonnet", "swe"]);
+    assert.deepEqual([...ids].sort(), [
+      "claude",
+      "claude-opus-5",
+      "claude-sonnet-5",
+      "codex",
+      "glm-5-3-flash-high",
+      "gpt-5.3-codex",
+      "gpt-6-1-sol-medium",
+      "opus",
+      "sonnet",
+      "swe",
+      "swe-1.7-lightning",
+    ]);
   });
 
   it("maps panel roles to registered profiles and keeps list length", () => {
@@ -209,4 +229,169 @@ describe("pstack models sheet", () => {
     assert.deepEqual(first.dropped, ["architect runners", "reflect tooling"]);
   });
 
+  it("accepts profile pins from a json catalog when opus and sonnet have no aliases", () => {
+    const ids = parseDevinModelsList(ownerJson());
+    assert.equal(ids.has("opus"), false);
+    assert.equal(ids.has("sonnet"), false);
+    assert.equal(ids.has("gpt-6-1-sol-medium"), true);
+    assert.equal(ids.has("glm-5-3-flash-high"), true);
+    assert.equal(ids.has("swe"), true);
+    assert.equal(ids.has("claude-opus-5-5"), true);
+    assert.equal(ids.has("claude-opus-5.5"), true);
+    const out = join(mkdtempSync(join(tmpdir(), "pstack-models-")), "sheet.md");
+    writeFileSync(out, "# notes stay\n\n# defaults: 3\nfeature, refactoring: pstack:poteto-agent-sonnet\n");
+    const first = writeFromModelsList(ownerJson(), { out });
+    assert.match(first.content, /# notes stay/);
+    assert.match(first.content, /^# defaults: 3$/m);
+    assert.match(first.content, /feature, refactoring: pstack:poteto-agent-sonnet/);
+    assert.match(first.content, /bug-fix: pstack:poteto-agent-opus/);
+    assert.match(first.content, /swarm workers: pstack:panel-sonnet/);
+    assert.equal(writeFromModelsList(ownerJson(), { out }).content, first.content);
+    const bare = writeFromModelsList(JSON.stringify(OWNER_CATALOG.families), {
+      out: join(mkdtempSync(join(tmpdir(), "pstack-models-")), "sheet.md"),
+    });
+    assert.match(bare.content, /bug-fix: pstack:poteto-agent-opus/);
+  });
+
+  it("names an unavailable model pin and leaves the sheet unchanged", () => {
+    const families = OWNER_CATALOG.families.filter((family) => family.family_uid !== "gpt-6-1-sol");
+    const out = join(mkdtempSync(join(tmpdir(), "pstack-models-")), "sheet.md");
+    const content = "bug-fix: pstack:poteto-agent-opus\n";
+    writeFileSync(out, content);
+    assert.throws(
+      () => writeFromModelsList(JSON.stringify({ families }), { out }),
+      (error) => {
+        assert.match(error.message, /model pin gpt-6-1-sol-medium for pstack:poteto-agent-opus is unavailable/);
+        assert.doesNotMatch(error.message, /unregistered profile/);
+        assert.doesNotMatch(error.message, /alias opus is unavailable/);
+        return true;
+      },
+    );
+    assert.equal(readFileSync(out, "utf8"), content);
+  });
+
+  it("names the missing agent file when the profile is not registered", () => {
+    const out = join(mkdtempSync(join(tmpdir(), "pstack-models-")), "sheet.md");
+    const content = "judgment and prose: pstack:panel-aurora\n";
+    writeFileSync(out, content);
+    assert.throws(
+      () => writeFromModelsList(ownerJson(), { out }),
+      (error) => {
+        assert.match(error.message, /unregistered profile pstack:panel-aurora/);
+        assert.match(error.message, /agents\/panel-aurora\/AGENT\.md/);
+        assert.doesNotMatch(error.message, /unavailable/);
+        return true;
+      },
+    );
+    assert.equal(readFileSync(out, "utf8"), content);
+  });
+
+  it("accepts registered panel-terra when gpt-6-1-terra-medium is listed", () => {
+    const out = join(mkdtempSync(join(tmpdir(), "pstack-models-")), "sheet.md");
+    writeFileSync(out, "judgment and prose: pstack:panel-terra\n");
+    const result = writeFromModelsList(ownerJson(), { out });
+    assert.match(result.content, /judgment and prose: pstack:panel-terra/);
+  });
+
+  it("uses the text listing when json is missing or not a catalog", () => {
+    const json = ownerJson();
+    assert.equal(
+      chooseModelsListOutput({ status: 1, stdout: "", stderr: "unknown flag" }, { status: 0, stdout: LIST_FOUR }),
+      LIST_FOUR,
+    );
+    assert.equal(
+      chooseModelsListOutput({ status: 0, stdout: "not-json\n" }, { status: 0, stdout: LIST_FOUR }),
+      LIST_FOUR,
+    );
+    assert.equal(
+      chooseModelsListOutput({ status: 0, stdout: "{\"error\":true}" }, { status: 0, stdout: LIST_FOUR }),
+      LIST_FOUR,
+    );
+    assert.equal(
+      chooseModelsListOutput({ status: 0, stdout: json }, { status: 1, stdout: "", stderr: "text failed" }),
+      json,
+    );
+    const out = join(mkdtempSync(join(tmpdir(), "pstack-models-")), "sheet.md");
+    const written = writeFromModelsList(LIST_FOUR, { out });
+    assert.match(written.content, /bug-fix: pstack:poteto-agent-opus/);
+    assert.match(written.content, /swarm workers: pstack:panel-sonnet/);
+  });
+
+  it("does not treat a text alias as the profile model pin", () => {
+    const text = "Claude Opus 5 (claude-opus-5)\n  aliases: opus\nSWE (swe)\n  aliases: swe\n";
+    const out = join(mkdtempSync(join(tmpdir(), "pstack-models-")), "sheet.md");
+    const content = "bug-fix: pstack:poteto-agent-opus\n";
+    writeFileSync(out, content);
+    assert.throws(
+      () => writeFromModelsList(text, { out }),
+      /model pin gpt-6-1-sol-medium for pstack:poteto-agent-opus is unavailable/,
+    );
+    assert.equal(readFileSync(out, "utf8"), content);
+  });
+
 });
+
+const OWNER_CATALOG = {
+  families: [
+    {
+      family_label: "SWE-2",
+      family_uid: "swe-2",
+      slug: "swe-2",
+      aliases: ["swe"],
+      variants: [
+        { model_uid: "swe-2-high" },
+        { model_uid: "swe-2-medium" },
+        { model_uid: "swe" },
+      ],
+    },
+    {
+      family_label: "Claude Opus 5.5",
+      family_uid: "claude-opus-5-5",
+      slug: "claude-opus-5.5",
+      aliases: [],
+      variants: [
+        { model_uid: "claude-opus-5-5-medium" },
+        { model_uid: "claude-opus-5-5-low" },
+      ],
+    },
+    {
+      family_label: "Claude Sonnet 5.5",
+      family_uid: "claude-sonnet-5-5",
+      slug: "claude-sonnet-5.5",
+      aliases: [],
+      variants: [{ model_uid: "claude-sonnet-5-5-medium" }],
+    },
+    {
+      family_label: "GPT-6.1 Sol",
+      family_uid: "gpt-6-1-sol",
+      slug: "gpt-6-1-sol",
+      aliases: [],
+      variants: [{ model_uid: "gpt-6-1-sol-medium" }],
+    },
+    {
+      family_label: "GLM 5.3 Flash",
+      family_uid: "glm-5-3-flash",
+      slug: "glm-5-3-flash",
+      aliases: [],
+      variants: [{ model_uid: "glm-5-3-flash-high" }],
+    },
+    {
+      family_label: "Gemini 3.8 Flash",
+      family_uid: "gemini-3-8-flash",
+      slug: "gemini-3.8-flash",
+      aliases: ["gemini"],
+      variants: [{ model_uid: "gemini-3-8-flash" }],
+    },
+    {
+      family_label: "GPT-6.1 Terra",
+      family_uid: "gpt-6-1-terra",
+      slug: "gpt-6-1-terra",
+      aliases: [],
+      variants: [{ model_uid: "gpt-6-1-terra-medium" }],
+    },
+  ],
+};
+
+function ownerJson() {
+  return JSON.stringify(OWNER_CATALOG);
+}
