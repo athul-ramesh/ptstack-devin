@@ -11,13 +11,23 @@ Understand the bug before you change it. This skill wraps the [Bug fix playbook]
 
 You own the reproduction and the diagnosis. Do not change production code. Repro scripts and temporary instrumentation are allowed. Remove both before the gate. The regression test comes after approval.
 
-1. Reproduce the defect yourself on the matching surface. Drive CLIs and TUIs with `exec`. Drive a web UI only with the browser mechanism Devin actually exposes. Quote the decisive failing output. If you cannot reproduce it, stop and report how far you got. Do not invent a cause, a diagram, or a fix for a defect you did not reproduce.
+### Bug in plain terms
+
+Write this section first in the reply, before the repro, the root cause, the diagrams, the longer explanation, and the proposed fix. Use short sentences a non-expert can follow. Define any term the first time you use it. Do not invent facts you have not reproduced.
+
+1. What breaks. One or two sentences that name the wrong behavior in everyday words.
+2. Impact. Who or what it hits, how often it shows up, and how bad the failure is when it hits.
+3. Expected versus actual. State what should happen. State what happens now. State the gap between them.
+
+### Diagnosis
+
+1. Reproduce the defect yourself on the matching surface. Drive CLIs and TUIs with `exec`. Drive a web UI only with the browser mechanism Devin actually exposes. Quote the decisive failing output. If you cannot reproduce it, stop and report how far you got. Do not invent a cause, a diagram, or a fix for a defect you did not reproduce. Keep Bug in plain terms limited to what the incomplete repro already shows.
 
 2. Find the root cause per `/pstack:principle-fix-root-causes`. Form hypotheses and binary-search them with runtime evidence. Use `/pstack:how` on the subsystem. Use `/pstack:why` for the regression history. Name the first wrong decision at `file:line`.
 
 3. Draw two fenced blocks with the info string `mermaid`. Draw the current failing path and mark the faulty step. Draw the same path after the proposed fix. Use `sequenceDiagram` when calls cross components. Use `flowchart` for logic in one place. Emit the raw blocks, because the host may not render Mermaid. When the bug is a bad state transition, offer `/pstack:statechart` instead of those blocks.
 
-4. Explain the bug per `/pstack:teach`. Do not repeat the how and why passes from step 2. Say what breaks, why it breaks, and why it was not caught. If the bad state is legitimate, handle it. If the bad state should never exist, fix what produced it. Name the other places with the same pattern.
+4. Explain the bug per `/pstack:teach`. Do not repeat the how and why passes from step 2. Do not restate Bug in plain terms. Say why it breaks and why it was not caught. If the bad state is legitimate, handle it. If the bad state should never exist, fix what produced it. Name the other places with the same pattern.
 
 5. Propose the smallest change the evidence justifies. Name the files it touches and the regression test from `/pstack:tdd`. When the change crosses modules, invoke `/pstack:blast-radius` and report what it finds. Name any hypothesis you have not ruled out.
 
@@ -29,4 +39,4 @@ Stop. Do not edit production code. Do not commit. Do not start the fix. Wait for
 
 Follow steps 3 through 6 of the Bug fix playbook. When `/pstack:tdd` says the test path is cheap, write the failing regression test first. Run it and show that it fails for the right reason. Apply the fix through the playbook's implementation step. Rerun the original repro and the nearby tests, type checks, and lint. Commit the failing test before the fix. Stop at merge-ready.
 
-**Reply before the gate:** the repro, the root cause, both diagrams or the statechart offer, the explanation, and the proposed fix. Run `/pstack:unslop` on that reply.
+**Reply before the gate:** Bug in plain terms first. Then the repro, the root cause, both diagrams or the statechart offer, the explanation, and the proposed fix. Run `/pstack:unslop` on that reply.
