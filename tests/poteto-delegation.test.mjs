@@ -150,7 +150,7 @@ describe("poteto delegation contract", () => {
   });
 
   it("keeps implementation defaults on legacy-equivalent model pins", () => {
-    const roles = new Map(buildRoleConfigs(new Set(["opus", "swe", "sonnet"])).map((row) => [row.role, row]));
+    const roles = new Map(buildRoleConfigs(new Set(["gpt-6-1-sol-medium", "swe", "glm-5-3-flash-high"])).map((row) => [row.role, row]));
     for (const [role, alias] of [["feature, refactoring", "opus"], ["bug-fix", "opus"], ["perf-issue", "opus"], ["hillclimb", "opus"]]) {
       const implementationPath = join(repoRoot, "agents", `poteto-agent-${alias}`, "AGENT.md");
       const panelPath = join(repoRoot, "agents", `panel-${alias}`, "AGENT.md");

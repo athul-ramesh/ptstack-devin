@@ -1,5 +1,9 @@
 # Release notes
 
+## 0.11.1
+
+- `/pstack:setup-pstack` reads `devin models list --format json` and accepts a profile when `agents/<name>/AGENT.md` exists and its `model:` pin is an alias, slug, family uid, or variant `model_uid`. A profile suffix is only a role label. Text output is the fallback when JSON is missing or not a catalog. An unregistered profile names the missing `AGENT.md`. An unavailable pin names that pin. Profile pins are unchanged.
+
 ## 0.11.0
 
 - Port upstream 0.15.43 (`e559e62`). Principle leaves, unslop, and technical-writing are shorter. Opening a PR, Babysit, and the multi-phase plan are shorter, and `check-plan.mjs` is gone. Reflect is one file with no reviewers. Architect is a short brief plus `/pstack:arena` for a large or contested design. The Orchestrate playbook is deleted. A standing program routes to `/pstack:figure-it-out` and keeps one owner per PR, a verifier on a different model pin, and a first unit before fan-out.

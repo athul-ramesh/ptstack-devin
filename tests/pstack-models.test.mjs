@@ -8,6 +8,7 @@ import { describe, it } from "node:test";
 
 import {
   buildRoleConfigs,
+  chooseModelsListOutput,
   implementationProfile,
   parseDevinModelsList,
   writeFromModelsList,
@@ -16,12 +17,16 @@ import {
 const LIST_FOUR = `
 Claude Opus 5 (claude-opus-5)
   aliases: opus
+  model_uid: gpt-6-1-sol-medium
 SWE-1.7 Lightning (swe-1.7-lightning)
   aliases: swe
+  model_uid: swe
 Claude Sonnet 5 (claude-sonnet-5)
   aliases: claude, sonnet
+  model_uid: glm-5-3-flash-high
 GPT-5.3-Codex (gpt-5.3-codex)
   aliases: codex
+  model_uid: gpt-6-1-sol-medium
 `;
 
 const LIST_SWE = `
@@ -38,11 +43,26 @@ describe("pstack models sheet", () => {
     assert.match(skill, /frontmatter `model:` pin is authoritative/);
     assert.match(skill, /maps implementation roles to registered `poteto-agent` profiles/);
     assert.match(skill, /replaces the file atomically/);
+    assert.match(skill, /devin models list --format json/);
+    assert.match(skill, /model_uid/);
+    assert.match(skill, /agents\/<name>\/AGENT\.md/);
   });
 
-  it("parses only alias lines from devin models list", () => {
+  it("parses text aliases, parenthetical ids, and model_uid lines", () => {
     const ids = parseDevinModelsList(LIST_FOUR);
-    assert.deepEqual([...ids].sort(), ["claude", "codex", "opus", "sonnet", "swe"]);
+    assert.deepEqual([...ids].sort(), [
+      "claude",
+      "claude-opus-5",
+      "claude-sonnet-5",
+      "codex",
+      "glm-5-3-flash-high",
+      "gpt-5.3-codex",
+      "gpt-6-1-sol-medium",
+      "opus",
+      "sonnet",
+      "swe",
+      "swe-1.7-lightning",
+    ]);
   });
 
   it("maps panel roles to registered profiles and keeps list length", () => {
@@ -271,6 +291,30 @@ describe("pstack models sheet", () => {
     writeFileSync(out, "judgment and prose: pstack:panel-terra\n");
     const result = writeFromModelsList(ownerJson(), { out });
     assert.match(result.content, /judgment and prose: pstack:panel-terra/);
+  });
+
+  it("uses the text listing when json is missing or not a catalog", () => {
+    const json = ownerJson();
+    assert.equal(
+      chooseModelsListOutput({ status: 1, stdout: "", stderr: "unknown flag" }, { status: 0, stdout: LIST_FOUR }),
+      LIST_FOUR,
+    );
+    assert.equal(
+      chooseModelsListOutput({ status: 0, stdout: "not-json\n" }, { status: 0, stdout: LIST_FOUR }),
+      LIST_FOUR,
+    );
+    assert.equal(
+      chooseModelsListOutput({ status: 0, stdout: "{\"error\":true}" }, { status: 0, stdout: LIST_FOUR }),
+      LIST_FOUR,
+    );
+    assert.equal(
+      chooseModelsListOutput({ status: 0, stdout: json }, { status: 1, stdout: "", stderr: "text failed" }),
+      json,
+    );
+    const out = join(mkdtempSync(join(tmpdir(), "pstack-models-")), "sheet.md");
+    const written = writeFromModelsList(LIST_FOUR, { out });
+    assert.match(written.content, /bug-fix: pstack:poteto-agent-opus/);
+    assert.match(written.content, /swarm workers: pstack:panel-sonnet/);
   });
 
   it("does not treat a text alias as the profile model pin", () => {

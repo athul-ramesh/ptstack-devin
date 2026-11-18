@@ -10,7 +10,7 @@ devin plugins install --local -y .
 
 Public skills are `/pstack:<name>`. Principle leaves are model-triggered only. SessionStart injects a route to `/pstack:poteto-mode` on local Devin CLI.
 
-`/pstack:setup-pstack` preserves configured roles and notes in `$HOME/.config/devin/pstack-models.md`, populating missing roles from `aliases:` lines in `devin models list`. Poteto keeps dispatch at root and resolves code-writing passes through the deterministic same-pin counterpart `pstack:panel-<alias>` → `pstack:poteto-agent-<alias>`. Background workers require already-approved permissions and return results through completion notifications; every dispatch records the returned identity, configured profile pin, and assigned workspace, is collected with `read_subagent` by agent id, and is inspected by the root before the parent verdict. Concurrent writers get a root-provisioned, verified worktree or directory, never two writers in one checkout.
+`/pstack:setup-pstack` preserves configured roles and notes in `$HOME/.config/devin/pstack-models.md`, populating missing roles from profile `model:` pins present in `devin models list`. Poteto keeps dispatch at root and resolves code-writing passes through the deterministic same-pin counterpart `pstack:panel-<alias>` → `pstack:poteto-agent-<alias>`. Background workers require already-approved permissions and return results through completion notifications; every dispatch records the returned identity, configured profile pin, and assigned workspace, is collected with `read_subagent` by agent id, and is inspected by the root before the parent verdict. Concurrent writers get a root-provisioned, verified worktree or directory, never two writers in one checkout.
 
 `shipping`, `autopilot-full`, and `autopilot-stack` are cut from this port. An explicit request for one gets that capability verdict and the bounded in-session alternative, not a silent fallback to figure-it-out. Merge stays with the operator. This plugin has no agent-callable scheduled wakeup. `/loop <prompt>` is an interactive command that runs a prompt then auto-reviews the diff in a loop, not a time-based scheduler.
 
@@ -21,6 +21,10 @@ Shipped behavior is in [`docs/release-notes.md`](docs/release-notes.md).
 The 0.2.0 release was verified against Devin CLI 3000.11.3 (9c803229faa4), local CLI on macOS. Historical native observations are in [port verification](docs/port-verification.md). Native activation of 0.5.0 remains untested. See the latest port audit for evidence limits.
 
 Avoid installing two copies with the same plugin name. Devin may source-qualify inventory names while loading skills from an older copy; verify the path returned by the skill tool.
+
+## Using 0.11.1
+
+`/pstack:setup-pstack` checks each profile's `model:` pin against `devin models list --format json`. The profile suffix is a role label. Text output is the fallback when JSON is missing or not a catalog. `agents/panel-terra` and `agents/poteto-agent-terra` stay registered with pin `gpt-6-1-terra-medium`.
 
 ## Using 0.11.0
 
