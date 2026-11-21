@@ -1,0 +1,15 @@
+HARNESS GAPS — Free only. Stay in dummyrepo. No PRs, push, merge, cloud, installs. panel-swe / poteto-agent-swe only. N≤2.
+
+A) Dual-writer worktree isolation
+1. Create two git worktrees under the repo (not /tmp), e.g.:
+   git worktree add .pstack/wt-a -b qa/wt-a
+   git worktree add .pstack/wt-b -b qa/wt-b
+2. Spawn TWO concurrent (or back-to-back if concurrent blocked) poteto-agent-swe writers:
+   - wt-a: append one unique line to README.md in THAT worktree only, then stop.
+   - wt-b: append a different unique line to README.md in THAT worktree only, then stop.
+3. PASS if each worktree's README has only its own line change, main checkout README unchanged, and no shared-checkout collision. FAIL if both wrote the same checkout.
+4. Do not push. Leave worktrees for evidence.
+
+B) /pstack:interrogate — 2 reviewers only, both panel-swe (ignore sheet opus). Target: the greet() function in hello.js. Adversaries must try to break claims with a run (e.g. node hello.test.js), not vibes. Cap at 2 reviewers. No High models.
+
+Stop with table A–B PASS/FAIL, worktree paths, agent ids, and whether main README stayed clean.

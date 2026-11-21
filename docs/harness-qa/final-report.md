@@ -81,7 +81,8 @@ Soft ceiling not exceeded. Pro meter stayed at 100%.
 2. ~~`how` → Devin panel profiles (P1).~~ **Done** (`panel-swe` / sheet `how:`).
 3. ~~Replace todolist with checklist (P2).~~ **Done** in swarm/arena/figure-it-out.
 4. ~~Document user-trigger load path (P2).~~ **Done** in `poteto-help`.
-5. Optional later: Med pin bakeoff; interrogate N=2 Free; dual-writer worktree smoke; re-smoke arena under `.pstack/` paths.
+5. ~~Re-smoke arena/swarm under `.pstack/`; dual-writer worktrees; interrogate N=2 Free.~~ **Done** — see `resmoke-and-gaps-results.md`.
+6. Optional later: Med pin bakeoff; document BG `exec` deny in skills that assume shell in background workers; figure-it-out plan-only live.
 
 ## Evidence index
 
