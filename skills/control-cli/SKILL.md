@@ -7,7 +7,7 @@ triggers:
 
 # Control CLI
 
-Use a repeatable local harness to exercise an interactive CLI instead of poking at it manually. First reuse the repo's own test/demo harness if it exists; otherwise assemble a temporary harness from standard local tools and `exec`. A `VerificationReceipt` from [Verification recipes](../poteto-mode/references/verification.md) records the proof. For a durable project harness, use `/pstack:create-verification-skill`.
+Use a repeatable local harness to exercise an interactive CLI instead of poking at it manually. Drive the product under test through a real terminal layer. Do not treat a one-shot `exec` of the binary as proof of prompts, focus, resize, or TUI layout. First reuse the repo's own test/demo harness if it exists. Otherwise pick a terminal layer below and `exec` its commands. A `VerificationReceipt` from [Verification recipes](../poteto-mode/references/verification.md) records the proof. For a durable project harness, use `/pstack:create-verification-skill`.
 
 ## What It Is Used For
 
@@ -26,15 +26,42 @@ Use a repeatable local harness to exercise an interactive CLI instead of poking 
 5. Send one action at a time: text, Enter, arrows, Escape, Ctrl-C, resize.
 6. Wait for a concrete screen pattern or prompt before the next action.
 7. Save the transcript and any profile artifacts.
-8. Kill the session cleanly.
+8. Tear down only blocks or sessions this run created.
 
 ## Harness Options
 
-- Repo-native harness: prefer checked-in scripts because they know the app's startup, env, and prompts.
-- `tmux`: managed sessions, `capture-pane`, `send-keys`, attach/detach.
-- PTY probe: use a short Python, Node, or Expect script when tmux is unavailable.
-- Runtime inspector: use Node or Bun inspector for CPU profiles, heap snapshots, and live evaluation.
-- Terminal recorder: use repo-local demo tools or asciinema-compatible tools when the user asks for a demo.
+Pick the first that works in this session.
+
+1. Repo-native harness: checked-in scripts that know startup, env, and prompts.
+2. **Rex** (Superlogical): when `command -v rex` succeeds and `rex whoami --json` reaches a server. Prefer this over tmux on machines that run Rex.
+3. `tmux`: managed sessions, `capture-pane`, `send-keys`, attach/detach.
+4. PTY probe: short Python, Node, or Expect script when Rex and tmux are unavailable.
+5. Runtime inspector: Node or Bun inspector for CPU profiles, heap snapshots, and live evaluation.
+6. Terminal recorder: repo-local demo tools or asciinema-compatible tools when the user asks for a demo.
+
+Non-interactive one-shots may still use `exec` on the real binary. Interactive prompts and TUIs need Rex, tmux, or a PTY.
+
+## Minimal Rex Harness
+
+Label every harness block so cleanup cannot hit the user's workspace. Save the block id from `--json`. Prefer a dedicated session or a new tab for the product under test. Do not type into the agent's own block unless the user asked to drive that pane.
+
+```bash
+created=$(rex run --label cli-harness --focus=false -c "$PWD" --json -- <command-under-test>) || exit
+block=$(printf '%s' "$created" | jq -er '.block_ids[0]') || exit
+rex capture -b "$block" --trim
+rex send -b "$block" $'help\n'
+rex capture -b "$block" --trim > /tmp/cli-harness-after.txt
+rex send-key -b "$block" ctrl+c
+rex block close "$block"
+```
+
+For a command that should exit with a status:
+
+```bash
+rex run --label cli-harness --focus=false --wait -c "$PWD" --json -- <command-under-test>
+```
+
+If `REX_SESSION` is unset, pass `-s` from `rex whoami --json` or `rex ls --json`. If `rex` is missing or the server is unreachable, fall through to tmux or PTY and say so in the receipt.
 
 ## Minimal tmux Harness
 
@@ -106,6 +133,6 @@ If the CLI needs richer terminal control, use `pty.fork()` or an existing PTY li
 
 - Prefer deterministic waits over sleeps. If you must sleep, explain why.
 - Do not send credentials or destructive commands into a controlled session.
-- Keep the harness in `/tmp` unless the repo already has a testing/demo harness.
+- Keep harness artifacts in `/tmp` unless the repo already has a testing/demo harness.
 - Do not hard-code paths from another repository. Adapt commands to the current repo's scripts and runtime.
-- Clean up tmux sessions, temp dirs, inspector processes, and demo artifacts unless the user asks to keep them.
+- Clean up only Rex blocks, tmux sessions, temp dirs, inspector processes, and demo artifacts this run created. Never `rex kill` a whole user session to finish a harness.

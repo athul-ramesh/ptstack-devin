@@ -166,6 +166,12 @@ test('0.12.0 port ships control adapters and babysit watch-pr wiring', () => {
     assert.match(text, /create-verification-skill/);
     assert.doesNotMatch(text, /verify-this/);
   }
+  const controlCli = read('skills/control-cli/SKILL.md');
+  assert.match(controlCli, /Minimal Rex Harness/);
+  assert.match(controlCli, /Prefer this over tmux/);
+  assert.match(controlCli, /rex run --label cli-harness/);
+  assert.match(controlCli, /Never `rex kill` a whole user session/);
+  assert.match(read('skills/poteto-mode/references/verification.md'), /Prefer Rex when `rex` reaches a server/);
   const babysitPlaybook = read('skills/poteto-mode/playbooks/babysit.md');
   assert.match(babysitPlaybook, /watch-pr\/watch-pr/);
   assert.match(babysitPlaybook, /--status-only/);

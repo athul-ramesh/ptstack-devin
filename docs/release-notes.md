@@ -2,7 +2,7 @@
 
 ## 0.12.0
 
-- Add `/pstack:control-ui` and `/pstack:control-cli` as first-class plugin skills. Verification recipes, poteto-mode, poteto-help, and create-verification-skill route to them when no project verify skill exists.
+- Add `/pstack:control-ui` and `/pstack:control-cli` as first-class plugin skills. Verification recipes, poteto-mode, poteto-help, and create-verification-skill route to them when no project verify skill exists. `/pstack:control-cli` prefers Superlogical Rex when available, then tmux, then a PTY.
 - Bundle upstream `watch-pr` under `skills/poteto-mode/scripts/` with Bun tests. Babysit prefers `--status-only` in check mode and bounded poll in drive mode, with `gh pr checks --watch` as fallback. No Origin CLI. No scheduled wake.
 - Delivery capability babysit rows name the watcher. Autopilot cut rows point at `/pstack:figure-it-out` instead of Orchestrate.
 
