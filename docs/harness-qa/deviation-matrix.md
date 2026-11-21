@@ -204,16 +204,16 @@ Order follows [devin-harness-qa-plan.md](../devin-harness-qa-plan.md). Overlay a
 | 5 | Foreground `run_subagent` `panel-swe` | **PASS** (Tier 2) |
 | 6 | Background worker + collection | **PASS** (Tier 2) |
 | 7 | `worker.md` first-line | **PASS** (Tier 2 follow-up) |
-| 8 | Worktree dual-writer isolation | **SKIP** (budget) |
-| 9 | poteto-mode → feature playbook | **SKIP** (orchestrations covered via swarm/arena instead) |
-| 10 | swarm N=2 | **PASS**; note `/tmp` sandbox block (Tier 3) |
-| 11 | arena N=2 | **PASS**; `/tmp` sandbox + parent judge (Tier 3) |
-| 12 | interrogate 2 reviewers | **SKIP** (not run) |
+| 8 | Worktree dual-writer isolation | **PASS** under `.pstack/wt-*` ([resmoke-and-gaps-results.md](resmoke-and-gaps-results.md)) |
+| 9 | poteto-mode → feature playbook | **SKIP** (orchestrations covered via swarm/arena instead; Med bakeoff skipped) |
+| 10 | swarm N=2 | **PASS**; `.pstack/` isolation after fix (Tier 3 + re-smoke) |
+| 11 | arena N=2 | **PASS**; `.pstack/` isolation after fix (Tier 3 + re-smoke) |
+| 12 | interrogate 2 reviewers | **PASS** N=2 Free FG ([resmoke-and-gaps-results.md](resmoke-and-gaps-results.md)) |
 | 13 | architect brief | **PASS** (Tier 3) |
-| 14 | figure-it-out plan-only | **SKIP** (not run) |
+| 14 | figure-it-out plan-only | **PASS** ([remaining-free-gaps-results.md](remaining-free-gaps-results.md)) |
 | 15 | Opening a PR / babysit | **PASS** private draft PR + Bun `watch-pr` (Tier 4); no merge |
 
-**Extra live findings not in original top 15:** `/pstack:how` still nominates `subagent_explore` (overridden to `panel-swe`); background writes outside workspace denied.
+**Extra live findings:** background writes outside the workspace are denied; background `exec` is auto-denied (use FG for shell probes). control-cli / control-ui / statechart remain **SKIP (env-gap)** on the dummy fixture ([remaining-free-gaps-results.md](remaining-free-gaps-results.md)).
 
 ---
 

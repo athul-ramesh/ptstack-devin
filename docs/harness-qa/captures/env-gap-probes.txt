@@ -1,0 +1,4 @@
+tlc=MISSING
+java=/usr/bin/java
+dummy_ui=MISSING
+rex=/Users/athulramesh/Library/Application Support/com.superlogical.rex/RexServer/Versions/Current/Rex Server.app/Contents/MacOS/rex

@@ -1,0 +1,27 @@
+=== git status ===
+?? .pstack/arena-resmoke/candidate-1/candidate.txt
+?? .pstack/arena-resmoke/candidate-2/candidate.txt
+?? .pstack/fio-plan-only/objective.txt
+?? .pstack/fio-plan-only/plan.md
+?? .pstack/fio-plan-only/status.md
+?? .pstack/fio-plan-only/units.tsv
+?? .pstack/swarm-resmoke/worker-1/out.txt
+?? .pstack/swarm-resmoke/worker-2/out.txt
+?? .pstack/wt-a/
+?? .pstack/wt-b/
+?? .pstack/wt-r1/
+?? .pstack/wt-r2/
+=== diff hello ===
+=== fio store ===
+objective: greetAlias(name) exists in repo, returns same string as greet(name) for probes, one test exits 0, hello.js and hello.test.js unchanged vs fa71c00
+pending: 3
+in-progress: 0
+verified: 0
+not-verified: 0
+inconclusive: 0
+abandoned: 0
+---
+id	owner	state	deps	evidence	head
+u1-baseline	pstack:panel-swe	pending		.pstack/fio-plan-only/u1/baseline.txt	
+u2-alias-module	pstack:poteto-agent-swe	pending	u1-baseline	.pstack/fio-plan-only/u2/test-output.txt	
+u3-parent-verify	pstack:panel-swe	pending	u2-alias-module	.pstack/fio-plan-only/u3/verdict.txt	

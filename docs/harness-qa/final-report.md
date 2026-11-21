@@ -17,7 +17,9 @@
 | 3 Orch | swarm, arena, architect, how (N≤2, Free) | PASS + harness caveats |
 | 4 Delivery | get-pr-comments, make-pr-easy-to-review, babysit watch-pr, shipping cut | PASS; PR still draft |
 
-**Not fully exercised live:** interrogate, figure-it-out end-to-end program, reflect, statechart/TLC, control-ui/cli, formal-verification skills, dual-writer worktrees, Med “as-shipped opus pin” bakeoff, High Opus/Fable parity. Static dispositions for those are in `deviation-matrix.md`.
+**Closed later the same day:** dual-writer worktrees, interrogate N=2, arena/swarm `.pstack/` re-smoke, figure-it-out plan-only. See `resmoke-and-gaps-results.md` and `remaining-free-gaps-results.md`.
+
+**Still not exercised live:** figure-it-out full Phase C execute, reflect, statechart/TLC (env-gap), control-ui/cli (env-gap on fixture), formal-verification skills, Med as-shipped opus bakeoff, High Opus/Fable parity. Static dispositions stay in `deviation-matrix.md`.
 
 ## What works well on Devin
 
@@ -82,7 +84,7 @@ Soft ceiling not exceeded. Pro meter stayed at 100%.
 3. ~~Replace todolist with checklist (P2).~~ **Done** in swarm/arena/figure-it-out.
 4. ~~Document user-trigger load path (P2).~~ **Done** in `poteto-help`.
 5. ~~Re-smoke arena/swarm under `.pstack/`; dual-writer worktrees; interrogate N=2 Free.~~ **Done** — see `resmoke-and-gaps-results.md`.
-6. Optional later: Med pin bakeoff; document BG `exec` deny in skills that assume shell in background workers; figure-it-out plan-only live.
+6. ~~figure-it-out plan-only live; BG `exec` deny in `delegation.md`.~~ **Done.** Optional later: Med pin bakeoff; control-cli/ui against a real CLI or app fixture; statechart once TLC is installed.
 
 ## Evidence index
 
