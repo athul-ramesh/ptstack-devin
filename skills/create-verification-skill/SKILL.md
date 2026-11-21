@@ -7,7 +7,7 @@ description: "Generate a project-local verification skill that drives your app t
 
 Every serious project needs a scripted way to drive the real app and prove behavior. Launch it. Exercise a feature the way a user would. Capture evidence. This skill writes that as a project-local skill under `.devin/skills/verify-<app>/`. You write the output for the next agent, not for a human. It will be read cold, mid-task, by an agent that has never seen the app.
 
-Read [Verification recipes](../poteto-mode/references/verification.md) before writing Launch or Drive. There is no Devin `run` or `verify` skill. A test file is not proof.
+Read [Verification recipes](../poteto-mode/references/verification.md) before writing Launch or Drive. Reuse patterns from `/pstack:control-ui` and `/pstack:control-cli` when they fit the surface. There is no Devin `run` or `verify` skill. A test file is not proof.
 
 ## 1. Interview the repo, not the user
 

@@ -16,15 +16,15 @@ There is no Devin `run` or `verify` skill. Do not invent one.
 
 ## Detect the surface
 
-Before promising evidence, name the tool this session actually exposes for the surface the change touches. A `cli` or `tui` change needs an `exec` path to the real binary. A `web` change needs a browser mechanism the session exposes. Inspect the available tools rather than assuming one. If none is visible, set `surface` to `unsupported` and record the missing tool as the unresolved gap. Then fill the receipt below. Compile success, a green type check, and a passing unit test are not evidence of the changed user surface.
+Before promising evidence, name the tool this session actually exposes for the surface the change touches. A `cli` or `tui` change needs a path to the real binary plus a terminal layer for interactive proof; `/pstack:control-cli` is the shipped harness recipe when no project-local verify skill exists. Prefer Rex when `rex` reaches a server, then tmux, then a PTY. A `web` change needs a browser mechanism the session exposes; `/pstack:control-ui` is the shipped harness recipe when no project-local verify skill exists. A project skill from `/pstack:create-verification-skill` takes precedence when one covers the surface. Inspect the available tools rather than assuming one. If none is visible, set `surface` to `unsupported` and record the missing tool as the unresolved gap. Then fill the receipt below. Compile success, a green type check, and a passing unit test are not evidence of the changed user surface.
 
 ## Surfaces
 
-**CLI.** `exec` the real binary or documented command. Capture stdout, stderr, and exit code. `passPredicate` names the exact output or exit that means the user-visible behavior happened.
+**CLI.** For a non-interactive one-shot, `exec` the real binary or documented command. For prompts or interactive flows, follow `/pstack:control-cli` (Rex, then tmux, then PTY). Capture stdout, stderr, screen text, and exit code. `passPredicate` names the exact output or exit that means the user-visible behavior happened.
 
-**TUI.** `exec` the real binary in a PTY or tmux session the skill starts. Drive by sending keys. Capture a transcript or screen dump. Do not attach to a user's already-open terminal.
+**TUI.** Follow `/pstack:control-cli`. Prefer Rex (`rex run` / `rex send` / `rex capture`), then tmux, then a PTY. Drive by sending keys. Capture a transcript or screen dump. Do not attach to a user's already-open terminal.
 
-**Web.** Drive only with a browser mechanism this Devin session actually exposes. If none is visible, `surface` is `unsupported`. Do not pretend `exec curl` is a UI proof unless the product itself is an HTTP API.
+**Web.** Drive with `/pstack:control-ui`, a project verification skill, or another browser mechanism this Devin session actually exposes. If none is visible, `surface` is `unsupported`. Do not pretend `exec curl` is a UI proof unless the product itself is an HTTP API.
 
 **Unsupported.** Name the surface, the control path that is missing, and what a later session would need. Do not fill a fake pass. Do not fall back to unit tests as a substitute.
 

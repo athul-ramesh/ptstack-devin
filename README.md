@@ -22,6 +22,10 @@ The 0.2.0 release was verified against Devin CLI 3000.11.3 (9c803229faa4), local
 
 Avoid installing two copies with the same plugin name. Devin may source-qualify inventory names while loading skills from an older copy; verify the path returned by the skill tool.
 
+## Using 0.12.0
+
+This release ports control adapters and same-session PR watching. [`/pstack:control-ui`](skills/control-ui/SKILL.md) and [`/pstack:control-cli`](skills/control-cli/SKILL.md) drive web and terminal surfaces with local harness recipes. Babysit uses the bundled `skills/poteto-mode/scripts/watch-pr` watcher when Bun is available, with `gh pr checks --watch` as fallback. Watches never outlive the session. Merge stays with the operator.
+
 ## Using 0.11.1
 
 `/pstack:setup-pstack` checks each profile's `model:` pin against `devin models list --format json`. The profile suffix is a role label. Text output is the fallback when JSON is missing or not a catalog. `agents/panel-terra` and `agents/poteto-agent-terra` stay registered with pin `gpt-6-1-terra-medium`.

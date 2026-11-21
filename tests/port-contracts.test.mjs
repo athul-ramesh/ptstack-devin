@@ -61,7 +61,7 @@ test('interleaved run documentation assigns boundaries and supersedes history', 
 });
 
 test('portable skills retain user activation and numeric principle model activation', () => {
-  for (const name of ['statechart', 'correct', 'benchmark-checklist', 'ketchup', 'in-your-own-words', 'sharpen', 'create-formal-verification-skill', 'maintain-formal-verification-skill']) {
+  for (const name of ['statechart', 'correct', 'benchmark-checklist', 'ketchup', 'in-your-own-words', 'sharpen', 'create-formal-verification-skill', 'maintain-formal-verification-skill', 'control-ui', 'control-cli']) {
     const text = read(`skills/${name}/SKILL.md`);
     assert.match(text, new RegExp(`^name: ${name}$`, 'm'));
     assert.match(text, /triggers:\n  - user/);
@@ -155,7 +155,34 @@ test('0.15.42 port keeps a short why, one how pass, and traced playbooks', () =>
 test('plugin manifest is local-only and current release', () => {
   const manifest = JSON.parse(read('.devin-plugin/plugin.json'));
   assert.deepEqual(manifest.platforms, ['local']);
-  assert.equal(manifest.version, '0.11.1');
+  assert.equal(manifest.version, '0.12.0');
+});
+
+test('0.12.0 port ships control adapters and babysit watch-pr wiring', () => {
+  for (const name of ['control-ui', 'control-cli']) {
+    const text = read(`skills/${name}/SKILL.md`);
+    assert.match(text, new RegExp(`^name: ${name}$`, 'm'));
+    assert.match(text, /triggers:\n  - user/);
+    assert.match(text, /create-verification-skill/);
+    assert.doesNotMatch(text, /verify-this/);
+  }
+  const controlCli = read('skills/control-cli/SKILL.md');
+  assert.match(controlCli, /Minimal Rex Harness/);
+  assert.match(controlCli, /Prefer this over tmux/);
+  assert.match(controlCli, /rex run --label cli-harness/);
+  assert.match(controlCli, /Never `rex kill` a whole user session/);
+  assert.match(read('skills/poteto-mode/references/verification.md'), /Prefer Rex when `rex` reaches a server/);
+  const babysitPlaybook = read('skills/poteto-mode/playbooks/babysit.md');
+  assert.match(babysitPlaybook, /watch-pr\/watch-pr/);
+  assert.match(babysitPlaybook, /--status-only/);
+  assert.doesNotMatch(babysitPlaybook, /no bundled watcher/);
+  const babysitSkill = read('skills/babysit/SKILL.md');
+  assert.match(babysitSkill, /watch-pr\/watch-pr/);
+  const delivery = read('skills/poteto-mode/references/delivery-capability.md');
+  assert.match(delivery, /watch-pr/);
+  assert.doesNotMatch(delivery, /Orchestrate plus Babysit/);
+  assert.doesNotMatch(delivery, /Orchestrate with root/);
+  assert.doesNotMatch(delivery, /Orchestrate, then Opening/);
 });
 
 test('e73df47 port keeps Devin paths, honest tool limits, and local-only reflect edits', () => {

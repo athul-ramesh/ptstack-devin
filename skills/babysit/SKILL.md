@@ -21,6 +21,16 @@ Read [`../poteto-mode/references/delivery-capability.md`](../poteto-mode/referen
 
 1. Fetch PR state.
 
+   Resolve PluginRoot from the Source line of `devin plugins info pstack`. The watcher is `$PluginRoot/skills/poteto-mode/scripts/watch-pr/watch-pr`. It needs Bun on PATH.
+
+   For a one-shot status pass, `exec` the watcher with `--status-only`:
+
+   ```
+   exec "$PluginRoot/skills/poteto-mode/scripts/watch-pr/watch-pr" --pr <number> --status-only
+   ```
+
+   When Bun or the watcher is unavailable, fall back to:
+
    ```
    exec gh pr view <number> --json number,title,state,mergeable,reviewDecision,statusCheckRollup,mergeStateStatus,comments,reviews
    ```
@@ -33,7 +43,7 @@ Read [`../poteto-mode/references/delivery-capability.md`](../poteto-mode/referen
    - Review comments. Act only on feedback you agree with. A mechanical answer gets an edit and a quoted commit message. A judgment call stays open with a reply that says what you would have done.
    - Review-bot comments. Classify fix, dismiss, or ask per [`references/bugbot-triage.md`](references/bugbot-triage.md). Ask by default on security, data, and high-severity findings.
 
-3. Recheck in this session. Active CI uses `exec` `gh pr checks --watch`. That command blocks until checks finish. Awaiting a reviewer means report and stop. Write what remains. Do not sleep.
+3. Recheck in this session. Active CI uses the watcher with a bounded `--timeout`, or `exec gh pr checks --watch` when the watcher is unavailable. That command blocks until checks finish. Awaiting a reviewer means report and stop. Write what remains. Do not sleep.
 
 4. Stop when
    - checks are green, comments you agreed to fix are resolved, and `gh pr view` reports mergeable. Call it ready. Do not merge.

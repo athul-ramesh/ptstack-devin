@@ -32,6 +32,7 @@ Invoke the named companion skill before the work proceeds. Do not force fan-out 
 - Starting any agent with `run_subagent`: the first line of its `task` is `Read <path>/worker.md before anything else.`, with `<path>` the absolute path of this skill's folder. See [worker.md](worker.md). Whether the child follows that line is untested.
 - Any prose surface, your reply included: invoke `/pstack:unslop` before you send it. Write the reply per Write the reply.
 - Docs, RFCs, readmes, PR descriptions, or commit messages: invoke `/pstack:technical-writing`, every layer except Diátaxis where it does not fit, then `/pstack:unslop`.
+- Shipping UI, IDE, or CLI evidence: invoke `/pstack:control-ui` or `/pstack:control-cli` before promising visual or terminal proof.
 
 Devin has no Cursor sticky-mode metadata or reminder. poteto-mode is not a native sticky mode. The always-on plugin rule and the SessionStart hook make it the default entry point for nontrivial engineering work, and `/pstack:poteto-mode` loads it explicitly when the default is missed.
 
