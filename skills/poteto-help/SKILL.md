@@ -83,6 +83,8 @@ The default answer is `/pstack:poteto-mode`, which runs most of the others when 
 | Turn their own working habits into a personal mode skill | [`/pstack:automate-me`](../automate-me/SKILL.md) |
 | Turn what a finished task taught into skill edits | [`/pstack:reflect`](../reflect/SKILL.md) |
 | Stop agents from repeating the same mistakes in this repo | [`/pstack:correct`](../correct/SKILL.md) |
+| Drive a web, IDE, or Electron UI locally with browser or CDP harnesses | [`/pstack:control-ui`](../control-ui/SKILL.md) |
+| Drive a CLI or TUI locally with tmux, PTY, or profiling harnesses | [`/pstack:control-cli`](../control-cli/SKILL.md) |
 | Clean AI-generated code style | [`/pstack:deslop`](../deslop/SKILL.md) |
 | Get CI failures green | [`/pstack:fix-ci`](../fix-ci/SKILL.md) |
 | Resolve demonstrated merge conflicts | [`/pstack:fix-merge-conflicts`](../fix-merge-conflicts/SKILL.md) |
@@ -107,8 +109,8 @@ Close calls:
 
 Port boundaries:
 
-- This port includes `/pstack:deslop` and the other Devin companion skills listed above. Do not send users to Cursor's team-kit plugin.
-- `control-cli`, `control-ui`, `/create-skill`, and `/make-bot-ui` are not shipped here. Use the skill-authoring playbook for skill work. Detect an available UI or CLI adapter before promising visual proof.
+- This port includes `/pstack:deslop`, `/pstack:control-ui`, `/pstack:control-cli`, and the other Devin companion skills listed above. Do not send users to Cursor's team-kit plugin for those adapters.
+- `/create-skill` and `/make-bot-ui` are not shipped here. Use the skill-authoring playbook for skill work. When no project verify skill exists, route UI proof to `/pstack:control-ui` and CLI or TUI proof to `/pstack:control-cli`.
 - Devin's `/loop <prompt>` is an interactive command that auto-reviews a diff. It is not an agent-callable timer or unattended scheduler.
 - There is no Orchestrate playbook. A standing program routes to `/pstack:figure-it-out`. If the slash menu shows `/orchestrate`, another plugin provides it.
 - `/pstack:statechart` checks TLA+ models and returns Mermaid text and SVG files. Native CLI inline rendering is untested. `/ketchup-video` remains unshipped. Formal verification skills bundle no verifier; the agent confirms the tool runs on this machine and asks before installing one.
