@@ -15,7 +15,7 @@ Swap in the real paths, skills, and done checks. Informal wording works.
 ## Build
 
 - Bug: `/pstack:poteto-mode <symptom>. repro first, then fix and verify.`
-- Bug in an app: `/pstack:poteto-mode repro this with /verify-<app>. if it repros on main, fix it and show the actual flow through an available adapter, or report the missing control tool.`
+- Bug in an app: `/pstack:poteto-mode repro this with /verify-<app>. if it repros on main, fix it and show the actual flow through /pstack:control-ui or /pstack:control-cli, or report the missing control tool.`
 - Bug with a cheap test: `/pstack:poteto-mode repro <bug> first. if there's a cheap test path, /pstack:tdd it. then fix and rerun.`
 - Feature: `/pstack:poteto-mode add <behavior>. <current output> stays byte-identical. verify both.`
 - Refactor: `/pstack:poteto-mode move <code> into one module, zero behavior change. record the current output first and prove it's unchanged after.`
@@ -23,7 +23,7 @@ Swap in the real paths, skills, and done checks. Informal wording works.
 
 ## Design and plan
 
-- `/pstack:poteto-mode prototype a few options for <feature>. show runnable probes and, with an available UI adapter, captures for me to compare.`
+- `/pstack:poteto-mode prototype a few options for <feature>. show runnable probes and, with /pstack:control-ui when the surface is web, captures for me to compare.`
 - `/pstack:poteto-mode we need <feature>. /pstack:architect it first, and answer open questions with prototypes. let me review before proceeding.`
 - `/pstack:poteto-mode write a tutorial for how i would use <new package> first. then /pstack:teach me why it beats the current one.`
 - `ask /pstack:arena for a second opinion on this thread and our approach.`
