@@ -1,0 +1,157 @@
+
+⠀⣴⣾⣶⡄⠀⠀⠀⠀
+⠀⠛⠿⠟⠻⣶⣾⣶⡄  Devin CLI
+⠀⣤⣶⣦⣴⠿⢿⠿⠃  v3000.14.30821
+⠀⠻⢿⠿⠃⠀⠀⠀⠀
+
+ Pro · 100% remaining (resets in 15h 45m)
+
+❭ HARNESS QA TIER 4 — delivery surfaces on the private draft PR only. Workspace
+  is dummyrepo. Permission smart/bypass.
+
+  Safety: NEVER merge. NEVER force-push. NEVER delete the repo or remote. NEVER
+  make the repo public. Do not install packages. Stay on this private PR.
+
+  Discover the open draft PR with `gh pr view` / `gh pr list`.
+
+  Then:
+
+  1) /pstack:get-pr-comments — fetch/summarize. Expect empty or none; PASS if
+  command path works.
+  2) /pstack:make-pr-easy-to-review — improve description only if needed; do not
+  rewrite history unless trivial and safe. Prefer description polish. No force.
+  3) /pstack:babysit — start a short watch. Confirm it does not claim merge
+  authority. If watch-pr / gh pr checks --watch starts, let it run briefly then
+  stop/cancel so it does not outlive this instruction. Record whether Bun watch-
+  pr or gh fallback was used.
+  4) Ask what happens on an explicit shipping request — expect cut verdict
+  again.
+
+  Use Free SWE workers only if any subagents spawn (panel-swe / poteto-agent-
+  swe).
+
+  Stop with a table 1–4 PASS/FAIL/SKIP and the PR URL. Confirm no merge happened
+  (`gh pr view` still OPEN/DRAFT).
+
+ I'll start by loading the routing skill and discovering the draft PR.
+
+ ✓ Invoked skill poteto-mode
+ ✓ gh pr list --state open --json number,title,isDraft,url,headRefName && git s…
+ ✓ Read ~/projects/AISkills/ptstack-devin/skills/poteto-mode/SKILL.md · 142 lin…
+ ✓ gh pr view 1 --json title,body,isDraft,state,url,headRefName,baseRefName,com…
+
+ ⏺ Updated todo list (5 items)
+ │ ⏺ 1. Run /pstack:get-pr-comments on PR #1 and summarize
+ │ ○ 2. Run /pstack:make-pr-easy-to-review; polish description only if needed,
+ │   no force-push
+ │ ○ 3. Run /pstack:babysit; confirm no merge authority, start short watch then
+ │   stop; record watch-pr vs gh fallback
+ │ ○ 4. Report shipping-request verdict from delivery-capability reference
+ └ ○ 5. Emit PASS/FAIL table + confirm PR still OPEN/DRAFT
+
+ ✓ Invoked skill get-pr-comments
+ ✓ Read ~/projects/AISkills/ptstack-devin/skills/poteto-mode/references/evidenc…
+ ✓ gh pr view --json number,url,title,reviewDecision
+ ✓ REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner); echo "repo=$REP…
+
+ Step 1 — get-pr-comments: no feedback on the PR.
+
+   • Review comments: 0, issue comments: 0, reviews: 0 ( gh api  on  athul-rames
+     h/dummyrepo  PR #1).
+   • Action list: none. Open questions: none.
+   • EvidenceSource: kind  pr , locator PR #1.
+
+ Step 2 next.
+
+ ⏺ Updated todo list (5 items)
+ │ ✓ 1. Run /pstack:get-pr-comments on PR #1 and summarize
+ │ ⏺ 2. Run /pstack:make-pr-easy-to-review; polish description only if needed,
+ │   no force-push
+ │ ○ 3. Run /pstack:babysit; confirm no merge authority, start short watch then
+ │   stop; record watch-pr vs gh fallback
+ │ ○ 4. Report shipping-request verdict from delivery-capability reference
+ └ ○ 5. Emit PASS/FAIL table + confirm PR still OPEN/DRAFT
+
+ ✓ Invoked skill make-pr-easy-to-review
+ ✓ Read ~/projects/AISkills/ptstack-devin/skills/poteto-mode/references/deliver…
+ ✓ git fetch origin main qa/tier4-pr-smoke 2>/dev/null; git diff origin/main...…
+ ✓ gh pr edit 1 --body "$(cat <<'EOF' (+14 lines)
+
+ ⏺ Updated todo list (5 items)
+ │ ✓ 1. Run /pstack:get-pr-comments on PR #1 and summarize
+ │ ✓ 2. Run /pstack:make-pr-easy-to-review; polish description only if needed,
+ │   no force-push
+ │ ⏺ 3. Run /pstack:babysit; confirm no merge authority, start short watch then
+ │   stop; record watch-pr vs gh fallback
+ │ ○ 4. Report shipping-request verdict from delivery-capability reference
+ └ ○ 5. Emit PASS/FAIL table + confirm PR still OPEN/DRAFT
+
+ ✓ Invoked skill babysit
+ ✓ devin plugins info pstack 2>&1 | head -20; echo "---"; which bun; ls -la /Us…
+
+ Bun and the  watch-pr  watcher are both present. Running the one-shot status
+ pass first.
+
+ ✓ WATCHER=/Users/athulramesh/.local/share/devin/cli/plugins_cache/cache/Users_…
+ ✓ Read shell afea28
+ ✓ Killed shell afea28
+ ✓ gh pr view 1 --json number,state,isDraft,mergeable,mergeStateStatus,reviewDe…
+
+ Triage is clean. Now the unslop gate before the final report, plus a last PR-
+ state check.
+
+ ✓ Invoked skill unslop
+ ✓ gh pr view 1 --json state,isDraft,mergedAt -q '"state=" + .state + " draft="…
+
+ Goal restated: exercise the four pstack PR surfaces on draft PR #1 without
+ merging or rewriting history, then report pass/fail.
+
+ ┌───┬────────────────────────┬─────────┬──────────────────────────────────────┐
+ │ # │ Surface                │ Verdict │ Evidence                             │
+ ├───┼────────────────────────┼─────────┼──────────────────────────────────────┤
+ │ 1 │ get-pr-comments        │ PASS    │  gh api  returned empty review       │
+ │   │                        │         │ comments, issue comments, and        │
+ │   │                        │         │ reviews. No feedback to act on.      │
+ ├───┼────────────────────────┼─────────┼──────────────────────────────────────┤
+ │ 2 │ make-pr-easy-to-review │ PASS    │ Body polished via  gh pr edit . No   │
+ │   │                        │         │ commits, no history rewrite, no      │
+ │   │                        │         │ force-push.                          │
+ ├───┼────────────────────────┼─────────┼──────────────────────────────────────┤
+ │ 3 │ babysit                │ PASS    │ Bun  watch-pr  ran the watch, not    │
+ │   │                        │         │ the gh fallback. See notes.          │
+ ├───┼────────────────────────┼─────────┼──────────────────────────────────────┤
+ │ 4 │ Shipping request       │ PASS    │ Cut verdict, per  delivery-capabilit │
+ │   │                        │         │ y.md .                               │
+ └───┴────────────────────────┴─────────┴──────────────────────────────────────┘
+
+ Details.
+
+   1. Zero comments and zero reviews on PR #1. EvidenceSource kind  pr , locator
+      PR #1.
+   2. The old body named no changed file. New body names the README line, marks
+      the docs-only diff, and checks the two completed test-plan items. Diff
+      untouched.
+   3.  watch-pr --pr 1 --status-only  emitted a JSON  RETRY  event. It reported
+      checks-unavailable  because the branch has no CI. I let it run about 15
+      seconds, then killed it. Nothing outlives this session. A  gh pr view
+      pass confirmed  MERGEABLE  and  CLEAN  with zero checks and zero comments.
+      The skill's hard rules forbid merge and auto-merge. It never claimed merge
+      authority.
+   4. An explicit  shipping  request gets a  cut  verdict. It needs a watch that
+      outlives the session and merge authority this port will not take.  autopil
+      ot-full  and  autopilot-stack  are cut for the same reason. The supported
+      alternative is in-session Babysit, then Opening a PR. The operator keeps
+      the landing.
+
+ No merge happened.  gh pr view  reports  state=OPEN ,  draft=true ,  mergedAt=n
+ ull .
+
+ PR: https://github.com/athul-ramesh/dummyrepo/pull/1
+
+ No subagents were dispatched, so the free SWE worker rule did not apply.
+
+ ⏺ ~/projects/AISkills/dummyrepo
+───────────────────────────────────── QA delivery workflows on a private draf… ─
+❭ Ask Devin to build features, fix bugs, or work on your code
+────────────────────────────────────────────────────────────────────────────────
+SWE-2 High · smart                              Context: 37k / 262k tokens (13%)

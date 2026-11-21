@@ -1,0 +1,195 @@
+
+⠀⣴⣾⣶⡄⠀⠀⠀⠀
+⠀⠛⠿⠟⠻⣶⣾⣶⡄  Devin CLI
+⠀⣤⣶⣦⣴⠿⢿⠿⠃  v3000.14.30821
+⠀⠻⢿⠿⠃⠀⠀⠀⠀
+
+ Pro · 100% remaining (resets in 15h 49m)
+
+❭ HARNESS QA TIER 3 — orchestration smokes, Free only. Stay in dummyrepo. No PRs, push, merge, cloud, or package installs. Keep permission smart/bypass.
+
+  Hard cost rule: every run_subagent profile MUST be pstack:panel-swe or pstack:poteto-agent-swe. Ignore the models sheet opus/sonnet rows for this QA. Cap workers at N=2. No High models.
+
+  Run these as separate short exercises. After each, record PASS/FAIL/SKIP with one evidence line. Do not expand scope.
+
+  1) /pstack:swarm — ask for a 2-worker read-only swarm that each returns one line: the first line of README.md vs hello.js. Drain and one report. Profiles: panel-swe only.
+
+  2) /pstack:arena — N=2 candidates on a tiny task: "Add a one-line comment at top of hello.js explaining greet". Use panel-swe runners only. Pick a base; do NOT spend a High judge. If judge wants opus, SKIP judge and say so.
+  Prefer parent judgment on Free.
+
+  3) /pstack:architect — brief-only for "tiny logging helper in hello.js". Stop after types/signatures sketch. If it wants arena, note the route claim but do not start arena again.
+
+  4) Cut check already done in Tier 1 — SKIP.
+
+  5) /pstack:how on hello.js — allow one read-only explore worker on panel-swe only; skip if it insists on a non-swe profile.
+
+  Stop with a table for 1–5. List every agent id and profile used. If anything tries to spawn poteto-agent-opus or panel-opus, refuse and record FAIL-COST.
+
+ I'll start by loading the entry-point skill and checking the repo contents.
+
+ ✓ Invoked skill poteto-mode
+ ✓ ls -la /Users/athulramesh/projects/AISkills/dummyrepo && head -3 /Users/athulramesh/projects/AISkills/dummyrepo/README.md 2>/dev/null; head -10 /Users/athulramesh/projects/AISkills/dummyrepo/hello.js 2>/dev/null
+ ✓ Read ~/projects/AISkills/ptstack-devin/skills/poteto-mode/SKILL.md · 142 lines
+
+ Understood. The goal: smoke-test five pstack orchestration routes in dummyrepo under a hard cost cap — only  pstack:panel-swe  /  pstack:poteto-agent-swe  profiles, max 2 workers per exercise, no High models, parent judgment
+ instead of a judge. I'll record PASS/FAIL/SKIP per exercise with one evidence line.
+
+ Exercise 1: /pstack:swarm — loading the skill.
+
+ ✓ Invoked skill swarm
+
+ Swarm skill loaded. Its default is  panel-sonnet  but the QA rule caps us at  panel-swe  — user instructions win. Let me check the models config and panel-run reference, then fan out.
+
+ ✓ cat "$HOME/.config/devin/pstack-models.md" 2>/dev/null | head -30; ls /Users/athulramesh/.local/share/devin/cli/plugins_cache/cache/Users_athulramesh_projects_AISkills_ptstack-devin-0ecfbb42/local/skills/poteto-mode/referen…
+ ✓ Read ~/projects/AISkills/ptstack-devin/skills/poteto-mode/references/panel-run.md · 90 lines
+
+ PanelRun recorded: role  swarm workers , profiles  [pstack:panel-swe]  (QA override of configured  panel-sonnet ), 2 perspectives, parallel mode, read-only. Fanning out both workers now.
+
+ ✓ Ran pstack:panel-swe subagent swarm-w1-readme · Background subagent started.
+ ✓ Ran pstack:panel-swe subagent swarm-w2-hello · Background subagent started.
+ ✓ Subagent "swarm-w2-hello" completed · 5s · 2 tool calls
+ ✓ Subagent "swarm-w1-readme" completed · 5s · 2 tool calls
+ ✓ Checked on subagent 9eee68a3 · Subagent completed.
+
+ Both workers returned verbatim first lines matching ground truth. Aggregate:
+
+ ┌──────────────┬──────────┬───────────┬───────────────────────────────┐
+ │ Slice        │ Agent    │ Profile   │ Result                        │
+ ├──────────────┼──────────┼───────────┼───────────────────────────────┤
+ │ README.md L1 │ 9eee68a3 │ panel-swe │  PASS # dummyrepo             │
+ ├──────────────┼──────────┼───────────┼───────────────────────────────┤
+ │ hello.js L1  │ 3c983171 │ panel-swe │  PASS function greet(name) {  │
+ └──────────────┴──────────┴───────────┴───────────────────────────────┘
+
+ Ex 1 — swarm: PASS (2/2 workers returned verbatim first lines matching the files I read directly).
+
+ Exercise 2: /pstack:arena — loading the skill.
+
+ ✓ Invoked skill arena
+
+ Arena loaded. QA overrides: runners =  pstack:panel-swe  ×2 (not the configured opus/swe/sonnet pool). Per the cost rule I refuse a  panel-opus  judge, and  panel-swe  would share the parent's model — so Phase C cross-judge is
+ skipped; parent judgment stands in, which the skill allows when no different-pin entry can run.
+
+ Phase A: Frame
+
+   • Artifact: one-line comment at top of  hello.js  explaining  greet .
+   • Rubric (hidden from candidates): (1) exactly one comment line at the very top, before all code; (2) accurately describes greet's behavior (returns  "hello, " + name ); (3) valid  //  syntax; (4) concise, adds a why/what
+     not derivable trivially; (5) rest of file byte-identical.
+   • Isolation: each candidate writes a full candidate file to  /tmp/arena-greet/candidate-<n>/hello.js  — not the shared checkout.
+
+ ✓ mkdir -p /tmp/arena-greet/candidate-1 /tmp/arena-greet/candidate-2 && cp /Users/athulramesh/projects/AISkills/dummyrepo/hello.js /tmp/arena-greet/orig-hello.js && ls /tmp/arena-greet
+ ✓ Ran pstack:panel-swe subagent arena-c1-comment · Background subagent started.
+ ✓ Ran pstack:panel-swe subagent arena-c2-comment · Background subagent started.
+ ✓ Subagent "arena-c2-comment" completed · 52s · 13 tool calls
+ ✓ Subagent "arena-c1-comment" completed · 53s · 15 tool calls
+ ✓ Checked on subagent b8e195b3 · Subagent completed.
+
+ Both candidates converged on the identical line. Verifying candidate-1's file on disk, then I'll pick the base.
+
+ ✓ cd /Users/athulramesh/projects/AISkills/dummyrepo && cat arena-greet/candidate-1/hello.js && echo "---DIFF---" && diff hello.js arena-greet/candidate-1/hello.js; echo "---STRAYS---" && ls -la .wtest .arena-write-test 2>/dev…
+
+ Converged — both produced the identical line, verified byte-identical diff on disk. Phase C judge skipped per cost rule (opus refused; swe would share the parent's model). Parent verdict: base = the consensus line; no graft
+ needed. Applying it to  hello.js  and cleaning up the stray probe files and candidate dirs.
+
+ ✓ Edited ./hello.js +1
+ ✓ cd /Users/athulramesh/projects/AISkills/dummyrepo && rm -f .wtest .arena-write-test && rm -rf arena-greet && node hello.test.js 2>&1; echo "EXIT=$?"; git status --short
+
+ Ex 2 — arena: PASS. Both panel-swe runners converged on the identical comment line; applied to  hello.js ,  node hello.test.js  →  ok . Judge skipped per cost rule (opus refused, swe = parent model); parent verdict. Stray
+ probe files cleaned.
+
+ Exercise 3: /pstack:architect — loading the skill.
+
+ ✓ Invoked skill architect
+
+ The skill wants: trace touched systems, sketch two shapes, pick one. This is a tiny uncontested design — the arena route claim exists in the skill ("for a large or contested design, run  /pstack:arena ") but is not triggered;
+ noting it, not starting arena. Design sketch is root-owned judgment, no worker dispatched.
+
+ Sketch — tiny logging helper in  hello.js  (file touched:  hello.js  only; it's a CJS module exporting  greet , consumed by  hello.test.js ).
+
+ Shape A — flat helper:
+
+
+   function log(...args) {            // log(...args) -> void; wraps console.log with a fixed prefix
+     console.log("[hello]", ...args);
+   }
+   module.exports = { greet, log };
+
+
+ Shape B — logger factory:
+
+
+   function createLogger(prefix) {    // createLogger(prefix: string) -> (...args) -> void
+     return (...args) => console.log(`[${prefix}]`, ...args);
+   }
+
+
+ Pick: A. One state owner ( console ), one way to log, smallest caller surface. B adds a closure and a factory for a file with at most one log site — machinery that earns nothing here. Stopping after the sketch per the exercise
+ scope; no implementation.
+
+ Ex 3 — architect: PASS (two signatures sketched, one picked; arena route noted but correctly not triggered for a tiny design).
+
+ Ex 4 — cut check: SKIP (done in Tier 1, per instructions).
+
+ Exercise 5: /pstack:how on hello.js — loading the skill.
+
+ ✓ Invoked skill how
+
+ The skill nominates built-in  subagent_explore  (non-swe), but the QA hard rule takes precedence and explicitly allows one read-only worker on  panel-swe  — the profile is a skill default, not a hard requirement, and read-
+ only-ness is enforced via the brief. Substituting  panel-swe , recording the deviation.
+
+ ✓ Ran pstack:panel-swe subagent how-hellojs · Background subagent started.
+ ✓ Subagent "how-hellojs" completed · 8s · 5 tool calls
+ ✓ Checked on subagent f485cebe · Subagent completed.
+
+ All exercises complete. Final report:
+
+ QA Tier 3 — orchestration smokes
+
+ ┌───┬───────────────────┬────────┬───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+ │ # │ Route             │ Result │ Evidence                                                                                                                                                                                      │
+ ├───┼───────────────────┼────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+ │ 1 │ /pstack:swarm     │ PASS   │ 2 parallel  panel-swe  workers returned verbatim first lines: README.md →  # dummyrepo , hello.js →  function greet(name) {  — both match ground truth read directly                          │
+ ├───┼───────────────────┼────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+ │ 2 │ /pstack:arena     │ PASS   │ 2  panel-swe  runners converged on the identical comment line; applied to hello.js,  node hello.test.js  →  ok . Cross-judge skipped per cost rule (opus refused; swe shares parent model) —  │
+ │   │                   │        │ parent verdict stood in                                                                                                                                                                       │
+ ├───┼───────────────────┼────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+ │ 3 │ /pstack:architect │ PASS   │ Root sketch: two shapes ( log(...args)  flat helper vs  createLogger(prefix)  factory), picked flat helper; arena route claim noted but correctly not triggered for a tiny design; stopped    │
+ │   │                   │        │ after signatures, no implementation                                                                                                                                                           │
+ ├───┼───────────────────┼────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+ │ 4 │ cut check         │ SKIP   │ Already done in Tier 1                                                                                                                                                                        │
+ ├───┼───────────────────┼────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+ │ 5 │ /pstack:how       │ PASS   │ One read-only  panel-swe  worker returned a correct explainer of hello.js (CJS module, test-as-script flow, coercion traps). Skill nominates  subagent_explore ; overrode to  panel-swe  per  │
+ │   │                   │        │ cost rule and recorded it                                                                                                                                                                     │
+ └───┴───────────────────┴────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+ Agents used
+
+ ┌──────────┬──────────────────┬──────────┬─────────────────┐
+ │ Agent ID │ Profile          │ Exercise │ Role            │
+ ├──────────┼──────────────────┼──────────┼─────────────────┤
+ │ 9eee68a3 │ pstack:panel-swe │ swarm    │ readme reader   │
+ ├──────────┼──────────────────┼──────────┼─────────────────┤
+ │ 3c983171 │ pstack:panel-swe │ swarm    │ hello.js reader │
+ ├──────────┼──────────────────┼──────────┼─────────────────┤
+ │ b8e195b3 │ pstack:panel-swe │ arena    │ candidate 1     │
+ ├──────────┼──────────────────┼──────────┼─────────────────┤
+ │ 790a0af9 │ pstack:panel-swe │ arena    │ candidate 2     │
+ ├──────────┼──────────────────┼──────────┼─────────────────┤
+ │ f485cebe │ pstack:panel-swe │ how      │ explore worker  │
+ └──────────┴──────────────────┴──────────┴─────────────────┘
+
+ 5 workers total, all  panel-swe . No  panel-opus / poteto-agent-opus  dispatch attempted — zero FAIL-COST events. Worker count never exceeded 2.
+
+ Caveats worth logging for the harness
+
+   • Background workers auto-deny writes outside  dummyrepo :  /tmp/arena-greet/  writes were sandbox-blocked for both arena candidates. C1 fell back to writing inside  dummyrepo/arena-greet/  (verified, then cleaned up); C2
+     returned content inline. Isolation held — the source file was never touched. For future tiers, provision output dirs inside the workspace, not  /tmp .
+   • Both arena workers left probe files ( .wtest ,  .arena-write-test ); removed by root.
+   • Arena convergence on a byte-identical line means Phase E graft was a no-op by design — the skill's consensus path fired correctly.
+   • hello.js now carries the arena-winning comment and the test still passes; left uncommitted per scope.
+
+ ⏺ ~/projects/AISkills/dummyrepo
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── Run Free-Only Orchestration QA Smokes i… ─
+❭ Ask Devin to build features, fix bugs, or work on your code
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+SWE-2 High · smart · 5 subagents ↓                                                                                                                                                                           ctrl+o to expand edits

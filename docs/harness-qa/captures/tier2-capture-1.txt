@@ -1,0 +1,119 @@
+
+⠀⣴⣾⣶⡄⠀⠀⠀⠀
+⠀⠛⠿⠟⠻⣶⣾⣶⡄  Devin CLI
+⠀⣤⣶⣦⣴⠿⢿⠿⠃  v3000.14.30821
+⠀⠻⢿⠿⠃⠀⠀⠀⠀
+
+ Pro · 100% remaining (resets in 15h 52m)
+
+❭ HARNESS QA TIER 2 — Free SWE workers only. Stay in dummyrepo. Do not open PRs,
+  push, merge, install packages, or use cloud. Prefer bypass/smart permissions
+  already on.
+
+  First: confirm ~/.config/devin/pstack-models.md is visible this session (new
+  session after setup). Quote the feature/bug-fix lines.
+
+  Then run these harness checks. For EVERY run_subagent use profile
+  `pstack:panel-swe` or `pstack:poteto-agent-swe` only (Free). Never opus/sol/
+  fable.
+
+  A) Foreground: run_subagent profile=pstack:panel-swe, is_background=false,
+  task first line MUST be exactly:
+  Read /Users/athulramesh/projects/AISkills/ptstack-devin/skills/poteto-mode/
+  worker.md before anything else.
+  Then: Read /Users/athulramesh/projects/AISkills/dummyrepo/hello.js and reply
+  with exactly SMOKE_FOREGROUND_OK plus the greet function signature. Collect
+  with read_subagent by id.
+
+  B) Fresh sequential (no resume): two more panel-swe passes asking for
+  SMOKE_PASS_1 and SMOKE_PASS_2 respectively, each reading a different file
+  (hello.js vs README.md). Confirm distinct agent ids.
+
+  C) Background: one panel-swe is_background=true read-only task that replies
+  SMOKE_BACKGROUND_OK after reading hello.test.js. Wait for completion
+  notification; collect by id.
+
+  D) worker.md obedience: from the A child result, say PASS if the child report
+  shows it read worker.md (or quotes a worker rule), FAIL if it ignored the
+  pointer, UNCERTAIN if no evidence either way.
+
+  E) Do NOT spawn two writers. Skip worktree dual-writer this tier if it would
+  take more than one more worker; note SKIP.
+
+  Reply with a markdown table A–E PASS/FAIL/SKIP/UNCERTAIN + agent ids +
+  configured pin from agents/panel-swe (swe). Then stop.
+
+ I'll start by loading poteto-mode and reading the config file in parallel.
+
+ ✓ Invoked skill poteto-mode
+ ✓ Read ~/.config/devin/pstack-models.md · 20 lines
+ ✓ ls /Users/athulramesh/projects/AISkills/dummyrepo && ls /Users/athulramesh/p…
+
+ Config file confirmed visible. Now let me check the panel-swe pin and the
+ poteto-mode skill instructions.
+
+ ✓ Read ~/projects/AISkills/ptstack-devin/agents/panel-swe/AGENT.md · 9 lines
+ ✓ Read ~/projects/AISkills/ptstack-devin/skills/poteto-mode/SKILL.md · 142 lin…
+ ✓ ls /Users/athulramesh/projects/AISkills/ptstack-devin/skills/poteto-mode/ &&…
+ ✓ Subagent: Smoke A foreground · Read  (+1 line)
+ ✓ Ran pstack:panel-swe subagent Smoke A foreground · SMOKE_FOREGROUND_OK `func…
+ ✓ Subagent: Smoke B pass 1 · Read ~/projects/AISkills/ptstack-devin/skills/pot…
+ ✓ Ran pstack:panel-swe subagent Smoke B pass 1 · SMOKE_PASS_1 (+1 line)
+ ✓ Subagent: Smoke B pass 2 · Read ~/projects/AISkills/ptstack-devin/skills/pot…
+ ✓ Ran pstack:panel-swe subagent Smoke B pass 2 · SMOKE_PASS_2 # dummyrepo
+ ✓ Ran pstack:panel-swe subagent Smoke C background · Background subagent start…
+ ✓ Subagent "Smoke C background" completed · 5s · 2 tool calls
+ ✓ Checked on subagent 183557b7 · Subagent completed.
+
+ Goal was a Tier 2 harness QA of free-SWE subagent dispatch in dummyrepo. Config
+ and all four runs completed.
+
+ Config check:  ~/.config/devin/pstack-models.md  is visible this session.
+ Quoted lines:
+
+
+   feature, refactoring: pstack:poteto-agent-opus
+   bug-fix: pstack:poteto-agent-opus
+
+
+ ┌──────────────────────┬───────────┬─────────────────┬────────────────────────┐
+ │ Check                │ Result    │ Agent id(s)     │ Evidence               │
+ ├──────────────────────┼───────────┼─────────────────┼────────────────────────┤
+ │ A Foreground         │ PASS      │  3f2e5ed0       │  SMOKE_FOREGROUND_OK   │
+ │                      │           │                 │ +  function greet(nam  │
+ │                      │           │                 │ e)                     │
+ ├──────────────────────┼───────────┼─────────────────┼────────────────────────┤
+ │ B Sequential fresh   │ PASS      │  9ac92f69 ,  f4 │  SMOKE_PASS_1          │
+ │                      │           │ 835da2          │ (hello.js),  SMOKE_PAS │
+ │                      │           │                 │ S_2  (README.md,  # du │
+ │                      │           │                 │ mmyrepo ); distinct    │
+ │                      │           │                 │ ids                    │
+ ├──────────────────────┼───────────┼─────────────────┼────────────────────────┤
+ │ C Background         │ PASS      │  183557b7       │  SMOKE_BACKGROUND_OK   │
+ │                      │           │                 │ +  hello, world ;      │
+ │                      │           │                 │ collected via  read_su │
+ │                      │           │                 │ bagent                 │
+ ├──────────────────────┼───────────┼─────────────────┼────────────────────────┤
+ │ D worker.md          │ UNCERTAIN │  3f2e5ed0       │ Child returned the     │
+ │ obedience            │           │                 │ exact required reply,  │
+ │                      │           │                 │ but the required       │
+ │                      │           │                 │ format gave no room to │
+ │                      │           │                 │ show worker.md was     │
+ │                      │           │                 │ read; no tool trace    │
+ │                      │           │                 │ visible, no evidence   │
+ │                      │           │                 │ either way             │
+ ├──────────────────────┼───────────┼─────────────────┼────────────────────────┤
+ │ E Dual-writer        │ SKIP      │ —               │ Skipped per            │
+ │                      │           │                 │ instruction; would     │
+ │                      │           │                 │ take more than one     │
+ │                      │           │                 │ more worker            │
+ └──────────────────────┴───────────┴─────────────────┴────────────────────────┘
+
+  agents/panel-swe  pin:  model: swe . All dispatches used  pstack:panel-swe
+ only.
+
+ ⏺ ~/projects/AISkills/dummyrepo
+───────────────────────────────────── Run Tier 2 SWE harness checks in dummyr… ─
+❭ Ask Devin to build features, fix bugs, or work on your code
+────────────────────────────────────────────────────────────────────────────────
+SWE-2 High · smart · 4 subagents ↓              Context: 29k / 262k tokens (11%)

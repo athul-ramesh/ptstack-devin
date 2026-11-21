@@ -11,11 +11,11 @@ Don't reinvent a playbook you already have. A focused single-unit task that matc
 
 A standing program keeps one owner per PR. A verifier whose `model:` pin differs from the owner's reviews that head. Start with one unit through owner and verifier before you fan out. Dispatch stays root to worker. There is no sub-coordinator.
 
-Read [`../poteto-mode/references/program-state.md`](../poteto-mode/references/program-state.md). Persist `ProgramState` before the first unit. Resume from that store. Do not keep the plan only in the todolist.
+Read [`../poteto-mode/references/program-state.md`](../poteto-mode/references/program-state.md). Persist `ProgramState` before the first unit. Resume from that store. Do not keep the plan only in the checklist.
 
 ## Start
 
-Open a todolist whose first item is to read the Principles section of `skills/poteto-mode/SKILL.md`. Then add the phases below as todos.
+Copy the phases below into a compact checklist and track outcomes there. Devin's documented tools do not include Cursor's todolist tool. The first checklist item is to read the Principles section of `skills/poteto-mode/SKILL.md`.
 
 ## Phase A: Frame
 
@@ -49,7 +49,7 @@ Register each unit before running it.
 exec skills/poteto-mode/scripts/program-state.sh set <storePath> <id> <owner> pending <deps> <evidence> <head>
 ```
 
-Then execute the design. Add its steps to the todolist as concrete items between the Phase C and Phase D entries. Run each under the Phase C loop discipline, and weave the Phase D log through them, a row as each step lands, rather than saving the whole trail for the end.
+Then execute the design. Add its steps to the checklist as concrete items between the Phase C and Phase D entries. Run each under the Phase C loop discipline, and weave the Phase D log through them, a row as each step lands, rather than saving the whole trail for the end.
 
 ## Phase C: Run the loop
 

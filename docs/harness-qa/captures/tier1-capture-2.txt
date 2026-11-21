@@ -1,0 +1,39 @@
+
+⠀⣴⣾⣶⡄⠀⠀⠀⠀
+⠀⠛⠿⠟⠻⣶⣾⣶⡄  Devin CLI
+⠀⣤⣶⣦⣴⠿⢿⠿⠃  v3000.14.30821
+⠀⠻⢿⠿⠃⠀⠀⠀⠀
+
+ Pro · 100% remaining (resets in 15h 59m)
+
+❭ HARNESS QA TIER 1 — load/route/setup only. Stay in this repo (dummyrepo). Do not fan out workers. Do not edit product code except what /pstack:setup-pstack writes under ~/.config/devin/. Do not open PRs, push, merge, install
+  packages, or use cloud.
+
+  Budget: this session is Free SWE-2 High. If any skill wants subagents, SKIP spawning them and report what profile it would have used.
+
+  Do these steps in order and report a compact checklist with PASS/FAIL/SKIP and one evidence line each:
+
+  1) SessionStart / poteto-mode routing: Did session start inject a route toward /pstack:poteto-mode? Quote the relevant injected text or say absent.
+  2) Plugin identity: Run `devin plugins info pstack` via exec. Confirm version 0.12.0 and source path contains ptstack-devin (not an old copy).
+  3) /pstack:poteto-help — ask: "Which skill should I use to configure pstack models on Devin?" Expect a single suggested prompt/link; do not start a task.
+  4) /pstack:setup-pstack — run it fully so it writes ~/.config/devin/pstack-models.md from an absent sheet. Then read that file and confirm `# defaults: 3` and that every listed profile's model: pin exists in `devin models
+  list --format json`.
+  5) Slash-load only (inject skill, restate its one-line contract, stop; no work): /pstack:how /pstack:why /pstack:ketchup /pstack:bro /pstack:sharpen /pstack:in-your-own-words /pstack:benchmark-checklist /pstack:correct
+  6) Cut capabilities: Ask what happens if the user requests shipping or autopilot-full. Expect an explicit cut/capability verdict, not silent figure-it-out.
+  7) Stop. Do not continue into features, swarm, arena, or PR work.
+
+  Final reply format: markdown table of the 7 steps, then the absolute path of pstack-models.md, then any deviations from the skill docs.
+
+ I'll run this QA checklist in order. Starting with the routing step and plugin identity check in parallel.
+
+ ✓ Invoked skill pstack:poteto-mode
+ ✓ devin plugins info pstack
+
+ ⏺ Running command
+ └ $ ls -la ~/.config/devin/ 2>/dev/null; echo "---"; ls -la ~/.config/devin/pstack-models.md 2>/dev/null || echo "pstack-models.md absent"
+
+❭ Allow       ← ◼◼◼◼ → Once     Exec(ls)
+  Bypass mode
+  Deny
+
+↑↓ select · ←→ 1-4 scope · e edit · ↵ confirm · esc cancel

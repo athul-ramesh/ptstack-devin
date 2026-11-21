@@ -1,0 +1,4 @@
+id	owner	state	deps	evidence	head
+u1-baseline	pstack:panel-swe	pending		.pstack/fio-plan-only/u1/baseline.txt	
+u2-alias-module	pstack:poteto-agent-swe	pending	u1-baseline	.pstack/fio-plan-only/u2/test-output.txt	
+u3-parent-verify	pstack:panel-swe	pending	u2-alias-module	.pstack/fio-plan-only/u3/verdict.txt	

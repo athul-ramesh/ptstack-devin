@@ -1,0 +1,23 @@
+HARNESS GAP — figure-it-out plan-only. Free only. Stay in dummyrepo. smart/bypass OK.
+No PRs, push, merge, cloud, installs. No High/opus/sol. Do not spawn run_subagent.
+
+Load /pstack:figure-it-out for this objective only:
+
+  Objective: "Add a tiny greetAlias(name) that returns the same string as greet(name),
+  with one matching test, without rewriting hello.js."
+
+Plan-only rules (hard):
+1. Run Phase A (Frame) and Phase B (Design the workflow) only.
+2. Persist ProgramState under .pstack/fio-plan-only/ via program-state.sh init + set for
+   the designed units. Do not execute units. Do not edit hello.js or hello.test.js.
+3. No unbounded fan-out. Cap designed parallel units at N≤2 if any. Prefer sequential.
+4. Use checklist language (not Cursor todolist). Confirm worker profiles would be
+   panel-swe / poteto-agent-swe if execution were allowed later.
+5. Stop after writing the designed phase list + storePath. Reply with:
+   - falsifiable done predicate
+   - unit table (id, deps, owner profile, evidence expected)
+   - storePath and `program-state.sh status` output
+   - confirmation that zero code files changed and zero subagents ran
+
+PASS if ProgramState exists, units are registered pending, no code edits, no subagents.
+FAIL if it starts implementing, fans out, or skips the store.

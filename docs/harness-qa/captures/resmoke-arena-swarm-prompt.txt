@@ -1,0 +1,17 @@
+HARNESS RE-SMOKE — Free only. Stay in dummyrepo. smart/bypass OK. No PRs, push, merge, cloud, or package installs.
+
+Hard rule: every run_subagent uses pstack:panel-swe or pstack:poteto-agent-swe only. N≤2. No opus/sol/fable.
+
+Goal: prove the post-fix isolation paths work.
+
+1) /pstack:swarm — two read-only workers. BEFORE dispatch, create dirs:
+   mkdir -p .pstack/swarm-resmoke/worker-1 .pstack/swarm-resmoke/worker-2
+   Each worker writes ONLY its one-line result file under its dir (worker-1/out.txt = first line of README.md; worker-2/out.txt = first line of hello.js). Then drain and report. PASS if both files exist under .pstack/swarm-resmoke/ and match ground truth. FAIL if any worker tries /tmp or writes outside workspace.
+
+2) /pstack:arena — N=2. BEFORE dispatch:
+   mkdir -p .pstack/arena-resmoke/candidate-1 .pstack/arena-resmoke/candidate-2
+   Tiny task: each candidate writes candidate.txt in its dir containing exactly one line: a short comment that could sit above greet() in hello.js. Do NOT modify hello.js in the shared checkout until after pick. Parent picks a base; skip High/opus judge (parent judgment OK). PASS if both candidates wrote under .pstack/arena-resmoke/ and no /tmp writes were required.
+
+3) Cleanup: leave .pstack/ in place for evidence; do not commit.
+
+Stop with a table for 1–2, agent ids, and `find .pstack -type f` listing.
