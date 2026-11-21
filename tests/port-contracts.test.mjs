@@ -143,7 +143,8 @@ test('0.15.42 port keeps a short why, one how pass, and traced playbooks', () =>
   assert.match(why, /Quote what the authors wrote/);
   assert.match(why, /exec` for `git` and `gh`/);
   assert.doesNotMatch(why, /references\/|Datadog|Linear|synthesizer/);
-  assert.match(how, /subagent_explore/);
+  assert.match(how, /pstack:panel-swe/);
+  assert.match(how, /read_subagent/);
   assert.doesNotMatch(how, /how explorer|how explainer|references\//);
   assert.match(read('skills/poteto-mode/SKILL.md'), /Do not route that trace through `\/pstack:how`/);
   assert.match(read('skills/poteto-mode/playbooks/feature.md'), /Trace the affected subsystem/);

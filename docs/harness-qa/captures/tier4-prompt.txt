@@ -1,0 +1,16 @@
+HARNESS QA TIER 4 — delivery surfaces on the private draft PR only. Workspace is dummyrepo. Permission smart/bypass.
+
+Safety: NEVER merge. NEVER force-push. NEVER delete the repo or remote. NEVER make the repo public. Do not install packages. Stay on this private PR.
+
+Discover the open draft PR with `gh pr view` / `gh pr list`.
+
+Then:
+
+1) /pstack:get-pr-comments — fetch/summarize. Expect empty or none; PASS if command path works.
+2) /pstack:make-pr-easy-to-review — improve description only if needed; do not rewrite history unless trivial and safe. Prefer description polish. No force.
+3) /pstack:babysit — start a short watch. Confirm it does not claim merge authority. If watch-pr / gh pr checks --watch starts, let it run briefly then stop/cancel so it does not outlive this instruction. Record whether Bun watch-pr or gh fallback was used.
+4) Ask what happens on an explicit shipping request — expect cut verdict again.
+
+Use Free SWE workers only if any subagents spawn (panel-swe / poteto-agent-swe).
+
+Stop with a table 1–4 PASS/FAIL/SKIP and the PR URL. Confirm no merge happened (`gh pr view` still OPEN/DRAFT).

@@ -1,0 +1,73 @@
+
+⠀⣴⣾⣶⡄⠀⠀⠀⠀
+⠀⠛⠿⠟⠻⣶⣾⣶⡄  Devin CLI
+⠀⣤⣶⣦⣴⠿⢿⠿⠃  v3000.14.30821
+⠀⠻⢿⠿⠃⠀⠀⠀⠀
+
+ Pro · 100% remaining (resets in 15h 59m)
+
+❭ HARNESS QA TIER 1 — load/route/setup only. Stay in this repo (dummyrepo). Do not fan out workers. Do not edit product code except what /pstack:setup-pstack writes under ~/.config/devin/. Do not open PRs, push, merge, install
+  packages, or use cloud.
+
+  Budget: this session is Free SWE-2 High. If any skill wants subagents, SKIP spawning them and report what profile it would have used.
+
+  Do these steps in order and report a compact checklist with PASS/FAIL/SKIP and one evidence line each:
+
+  1) SessionStart / poteto-mode routing: Did session start inject a route toward /pstack:poteto-mode? Quote the relevant injected text or say absent.
+  2) Plugin identity: Run `devin plugins info pstack` via exec. Confirm version 0.12.0 and source path contains ptstack-devin (not an old copy).
+  3) /pstack:poteto-help — ask: "Which skill should I use to configure pstack models on Devin?" Expect a single suggested prompt/link; do not start a task.
+  4) /pstack:setup-pstack — run it fully so it writes ~/.config/devin/pstack-models.md from an absent sheet. Then read that file and confirm `# defaults: 3` and that every listed profile's model: pin exists in `devin models
+  list --format json`.
+  5) Slash-load only (inject skill, restate its one-line contract, stop; no work): /pstack:how /pstack:why /pstack:ketchup /pstack:bro /pstack:sharpen /pstack:in-your-own-words /pstack:benchmark-checklist /pstack:correct
+  6) Cut capabilities: Ask what happens if the user requests shipping or autopilot-full. Expect an explicit cut/capability verdict, not silent figure-it-out.
+  7) Stop. Do not continue into features, swarm, arena, or PR work.
+
+  Final reply format: markdown table of the 7 steps, then the absolute path of pstack-models.md, then any deviations from the skill docs.
+
+ I'll run this QA checklist in order. Starting with the routing step and plugin identity check in parallel.
+
+ ✓ Invoked skill pstack:poteto-mode
+ ✓ devin plugins info pstack
+ ✓ ls -la ~/.config/devin/ 2>/dev/null; echo "---"; ls -la ~/.config/devin/pstack-models.md 2>/dev/null || echo "pstack-models.md absent"
+ ✓ Read ~/projects/AISkills/ptstack-devin/skills/poteto-mode/SKILL.md · 142 lines
+
+ poteto-mode loaded. Restating the goal: this is a load/route/setup harness QA only — no workers, no code edits beyond  ~/.config/devin/pstack-models.md , ending with a PASS/FAIL/SKIP table.
+
+ Step 1 PASS already: session start injected  PSTACK_ROUTE=/pstack:poteto-mode  plus the routing mandate. Step 2 PASS: version 0.12.0, source  /Users/athulramesh/projects/AISkills/ptstack-devin .
+
+ Step 3: invoking poteto-help.
+
+ ✓ Invoked skill pstack:poteto-help
+ ✓ ls /Users/athulramesh/projects/AISkills/ptstack-devin/skills/ 2>/dev/null | head -80; echo "---"; ls /Users/athulramesh/projects/AISkills/ptstack-devin/skills/poteto-help/ 2>/dev/null
+ ✓ Listed ~/projects/AISkills/ptstack-devin/skills
+ ✓ Read ~/projects/AISkills/ptstack-devin/skills/poteto-help/SKILL.md · 161 lines
+ ✓ Invoked skill pstack:setup-pstack
+
+ Running setup-pstack steps. First the model catalog and script check.
+
+ ✓ devin models list --format json > /tmp/pstack-models.json && head -c 600 /tmp/pstack-models.json; echo; echo "---"; wc -c /tmp/pstack-models.json
+ ✓ Listed ~/projects/AISkills/ptstack-devin/skills/setup-pstack/write-models.mjs, ~/projects/AISkills/ptstack-devin/agents
+ ✓ cat /tmp/pstack-models.json | node "/Users/athulramesh/projects/AISkills/ptstack-devin/skills/setup-pstack/write-models.mjs" --home "$HOME"
+ ✓ Read ~/.config/devin/pstack-models.md · 20 lines
+ ✓ for p in poteto-agent-opus panel-opus panel-sonnet panel-swe poteto-agent-sonnet poteto-agent-swe panel-terra poteto-agent-terra poteto-agent-codex panel-codex poteto-agent comment-sicko; do f="/Users/athulramesh/projects/A…
+ ✓ python3 - <<'EOF' (+12 lines)
+
+ Step 4 complete — file written,  # defaults: 3  present, all listed profile pins verified in the catalog. (Note for the user: start a new session so the sheet and profile registration load.)
+
+ Step 5: slash-load only. how, why, bro are registered; the other four aren't in the skill registry per the earlier error, but I'll try each anyway.
+
+ ✓ Invoked skill pstack:how
+ ✓ Invoked skill pstack:why
+ ✓ Invoked skill pstack:bro
+ ✓ Invoked skill pstack:ketchup
+ ✓ Invoked skill pstack:sharpen
+ ✓ Invoked skill pstack:in-your-own-words
+ ✓ Invoked skill pstack:benchmark-checklist
+ ✓ Invoked skill pstack:correct
+ ✓ Read ~/projects/AISkills/ptstack-devin/skills/poteto-mode/references/delivery-capability.md · 39 lines
+
+⢠⡀ Thinking · 2m 58s (esc twice to interrupt)
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── QA pstack routing, plugin setup, skill … ─
+❭ Guide Devin while it works
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+SWE-2 High · bypass                                                                                                                                                                                Context: 45k / 262k tokens (17%)

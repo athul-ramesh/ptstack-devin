@@ -1,0 +1,17 @@
+HARNESS QA TIER 3 — orchestration smokes, Free only. Stay in dummyrepo. No PRs, push, merge, cloud, or package installs. Keep permission smart/bypass.
+
+Hard cost rule: every run_subagent profile MUST be pstack:panel-swe or pstack:poteto-agent-swe. Ignore the models sheet opus/sonnet rows for this QA. Cap workers at N=2. No High models.
+
+Run these as separate short exercises. After each, record PASS/FAIL/SKIP with one evidence line. Do not expand scope.
+
+1) /pstack:swarm — ask for a 2-worker read-only swarm that each returns one line: the first line of README.md vs hello.js. Drain and one report. Profiles: panel-swe only.
+
+2) /pstack:arena — N=2 candidates on a tiny task: "Add a one-line comment at top of hello.js explaining greet". Use panel-swe runners only. Pick a base; do NOT spend a High judge. If judge wants opus, SKIP judge and say so. Prefer parent judgment on Free.
+
+3) /pstack:architect — brief-only for "tiny logging helper in hello.js". Stop after types/signatures sketch. If it wants arena, note the route claim but do not start arena again.
+
+4) Cut check already done in Tier 1 — SKIP.
+
+5) /pstack:how on hello.js — allow one read-only explore worker on panel-swe only; skip if it insists on a non-swe profile.
+
+Stop with a table for 1–5. List every agent id and profile used. If anything tries to spawn poteto-agent-opus or panel-opus, refuse and record FAIL-COST.
