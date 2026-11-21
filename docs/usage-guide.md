@@ -50,7 +50,9 @@ Some bugs live on paths nobody drives: two retries that overlap, a lock that exp
 
 ## Deliver in this session
 
-Request commits, pushes, or a PR explicitly. Opening a PR does not start babysitting. [`/pstack:babysit`](../skills/babysit/SKILL.md) handles checks and feedback in the current session. Merge remains with the operator.
+Request commits, pushes, or a PR explicitly. Opening a PR does not start babysitting. [`/pstack:babysit`](../skills/babysit/SKILL.md) handles checks and feedback in the current session through the bundled `watch-pr` watcher (Bun plus `gh` fallback). Merge remains with the operator.
+
+[`/pstack:control-ui`](../skills/control-ui/SKILL.md) and [`/pstack:control-cli`](../skills/control-cli/SKILL.md) are the default harness recipes when the project has no verify skill yet.
 
 Concurrent writers need root-provisioned, verified worktrees or directories. Branches in one checkout do not isolate writes. Worktrees share machine resources, so account for ports and build output too.
 

@@ -158,7 +158,7 @@ test('plugin manifest is local-only and current release', () => {
   assert.equal(manifest.version, '0.12.0');
 });
 
-test('0.12.0 port ships control-ui and control-cli adapters', () => {
+test('0.12.0 port ships control adapters and babysit watch-pr wiring', () => {
   for (const name of ['control-ui', 'control-cli']) {
     const text = read(`skills/${name}/SKILL.md`);
     assert.match(text, new RegExp(`^name: ${name}$`, 'm'));
@@ -166,6 +166,17 @@ test('0.12.0 port ships control-ui and control-cli adapters', () => {
     assert.match(text, /create-verification-skill/);
     assert.doesNotMatch(text, /verify-this/);
   }
+  const babysitPlaybook = read('skills/poteto-mode/playbooks/babysit.md');
+  assert.match(babysitPlaybook, /watch-pr\/watch-pr/);
+  assert.match(babysitPlaybook, /--status-only/);
+  assert.doesNotMatch(babysitPlaybook, /no bundled watcher/);
+  const babysitSkill = read('skills/babysit/SKILL.md');
+  assert.match(babysitSkill, /watch-pr\/watch-pr/);
+  const delivery = read('skills/poteto-mode/references/delivery-capability.md');
+  assert.match(delivery, /watch-pr/);
+  assert.doesNotMatch(delivery, /Orchestrate plus Babysit/);
+  assert.doesNotMatch(delivery, /Orchestrate with root/);
+  assert.doesNotMatch(delivery, /Orchestrate, then Opening/);
 });
 
 test('e73df47 port keeps Devin paths, honest tool limits, and local-only reflect edits', () => {

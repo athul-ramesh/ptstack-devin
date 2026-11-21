@@ -1,5 +1,11 @@
 # Release notes
 
+## 0.12.0
+
+- Add `/pstack:control-ui` and `/pstack:control-cli` as first-class plugin skills. Verification recipes, poteto-mode, poteto-help, and create-verification-skill route to them when no project verify skill exists.
+- Bundle upstream `watch-pr` under `skills/poteto-mode/scripts/` with Bun tests. Babysit prefers `--status-only` in check mode and bounded poll in drive mode, with `gh pr checks --watch` as fallback. No Origin CLI. No scheduled wake.
+- Delivery capability babysit rows name the watcher. Autopilot cut rows point at `/pstack:figure-it-out` instead of Orchestrate.
+
 ## 0.11.1
 
 - `/pstack:setup-pstack` reads `devin models list --format json` and accepts a profile when `agents/<name>/AGENT.md` exists and its `model:` pin is an alias, slug, family uid, or variant `model_uid`. A profile suffix is only a role label. Text output is the fallback when JSON is missing or not a catalog. An unregistered profile names the missing `AGENT.md`. An unavailable pin names that pin. Profile pins are unchanged.
