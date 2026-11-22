@@ -11,10 +11,18 @@ If the scope is ambiguous, state your interpretation and explore. The user can r
 
 ## Explain
 
-Start one read-only `run_subagent`. Devin's `run_subagent` has no readonly flag. Use the built-in profile `subagent_explore`, which the CLI documents as read-only codebase exploration. Pass the user's question and this brief:
+Start one read-only `run_subagent`. Devin's `run_subagent` has no readonly flag, so forbid writes in the brief. Pick the profile from `how` in `$HOME/.config/devin/pstack-models.md`, else the Models default. Pass the user's question and this brief:
 
-> Explain this area to a senior engineer who has not worked in it. Read the code and describe the architecture they need before they change it. Stay read-only. Name the main flow, where the pieces live, and the traps.
+> Explain this area to a senior engineer who has not worked in it. Read the code and describe the architecture they need before they change it. Stay read-only. Do not edit, commit, or change external state. Name the main flow, where the pieces live, and the traps.
+
+Collect the result with `read_subagent`.
 
 ## Present
 
-Present the subagent's output. Light edits for conversation context are fine. Do not rewrite it.
+Present the collected output. Light edits for conversation context are fine. Do not rewrite it.
+
+## Models
+
+`$HOME/.config/devin/pstack-models.md` overrides this default.
+
+- how: `pstack:panel-swe`
