@@ -46,11 +46,12 @@ Non-interactive one-shots may still use `exec` on the real binary. Interactive p
 Label every harness block so cleanup cannot hit the user's workspace. Save the block id from `--json`. Prefer a dedicated session or a new tab for the product under test. Do not type into the agent's own block unless the user asked to drive that pane.
 
 ```bash
+mkdir -p .pstack/cli-harness
 created=$(rex run --label cli-harness --focus=false -c "$PWD" --json -- <command-under-test>) || exit
 block=$(printf '%s' "$created" | jq -er '.block_ids[0]') || exit
 rex capture -b "$block" --trim
 rex send -b "$block" $'help\n'
-rex capture -b "$block" --trim > /tmp/cli-harness-after.txt
+rex capture -b "$block" --trim > .pstack/cli-harness/after.txt
 rex send-key -b "$block" ctrl+c
 rex block close "$block"
 ```
@@ -133,6 +134,6 @@ If the CLI needs richer terminal control, use `pty.fork()` or an existing PTY li
 
 - Prefer deterministic waits over sleeps. If you must sleep, explain why.
 - Do not send credentials or destructive commands into a controlled session.
-- Keep harness artifacts in `/tmp` unless the repo already has a testing/demo harness.
+- Keep harness artifacts under the project checkout, such as `.pstack/cli-harness/`, unless the repo already has a testing/demo harness. Devin denies writes outside the workspace, so do not use `/tmp`.
 - Do not hard-code paths from another repository. Adapt commands to the current repo's scripts and runtime.
 - Clean up only Rex blocks, tmux sessions, temp dirs, inspector processes, and demo artifacts this run created. Never `rex kill` a whole user session to finish a harness.

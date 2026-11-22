@@ -7,7 +7,7 @@ triggers:
 
 # Control UI
 
-Use local browser automation to verify UI behavior with evidence. First reuse the repo's own Playwright, browser, or Electron harness if it exists; otherwise assemble a temporary local harness around the app's dev server or Chromium debug port. Save artifacts under `/tmp` or another disposable path with `exec`. A `VerificationReceipt` from [Verification recipes](../poteto-mode/references/verification.md) records the proof. For a durable project harness, use `/pstack:create-verification-skill`.
+Use local browser automation to verify UI behavior with evidence. First reuse the repo's own Playwright, browser, or Electron harness if it exists; otherwise assemble a temporary local harness around the app's dev server or Chromium debug port. Save artifacts under the project checkout, such as `.pstack/ui-harness/`, with `exec`. Devin denies writes outside the workspace, so do not use `/tmp`. A `VerificationReceipt` from [Verification recipes](../poteto-mode/references/verification.md) records the proof. For a durable project harness, use `/pstack:create-verification-skill`.
 
 ## What It Is Used For
 
@@ -37,11 +37,11 @@ const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
 await page.goto("http://127.0.0.1:<port>");
 await page.getByRole("button", { name: /submit/i }).click();
-await page.screenshot({ path: "/tmp/ui-harness-after.png", fullPage: true });
+await page.screenshot({ path: ".pstack/ui-harness/after.png", fullPage: true });
 await browser.close();
 ```
 
-Do not add Playwright as a project dependency just for this probe unless the user asks. Prefer existing dev dependencies or external browser tools already available in the environment.
+Create `.pstack/ui-harness/` before writing. Do not add Playwright as a project dependency just for this probe unless the user asks. Prefer existing dev dependencies or external browser tools already available in the environment.
 
 ## Generic CDP Harness
 
@@ -68,7 +68,7 @@ if (!page) {
   throw new Error("No matching app page found");
 }
 
-await page.screenshot({ path: "/tmp/ui-harness-cdp.png", fullPage: true });
+await page.screenshot({ path: ".pstack/ui-harness/cdp.png", fullPage: true });
 await browser.close();
 ```
 
@@ -105,7 +105,7 @@ When multiple app windows/tabs share a debug port:
 
 - Do not rely on stale element references after navigation or structural changes.
 - Avoid coordinate clicks unless a fresh screenshot was captured immediately before the click.
-- Keep test data local and disposable.
+- Keep test data and harness artifacts under the project checkout, such as `.pstack/ui-harness/`. Devin denies writes outside the workspace, so do not use `/tmp`.
 - Do not store screenshots or heap snapshots from privacy-sensitive workspaces unless the user explicitly agrees.
 - Do not hard-code selectors, ports, or script paths from another repository. Discover the current repo's local app markers.
 - Clean up dev servers, debug sessions, and temp profiles when done.
