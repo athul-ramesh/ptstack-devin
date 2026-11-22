@@ -1,5 +1,9 @@
 # Release notes
 
+## 0.12.1
+
+- Port upstream pstack 0.15.46 statechart Windows and CRLF fixes ([#1292](https://github.com/cursor/plugins/pull/1292), `0b46ec39`): `splitLines` for TLC output and dot dumps, JVM `-Dstdout.encoding=UTF-8` and `-Dstderr.encoding=UTF-8`, `windowsHide` on child processes, and a Node-based process janitor with cross-platform `killGroup`. Shipped profile pins are unchanged. Neon panel seat churn from #1283 and #1284 is not ported. See the [port audit](pstack-0.15.46-port-audit.md).
+
 ## 0.12.0
 
 - Add `/pstack:control-ui` and `/pstack:control-cli` as first-class plugin skills. Verification recipes, poteto-mode, poteto-help, and create-verification-skill route to them when no project verify skill exists. `/pstack:control-cli` prefers Superlogical Rex when available, then tmux, then a PTY.
