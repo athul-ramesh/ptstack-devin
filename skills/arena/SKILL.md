@@ -7,7 +7,7 @@ description: "Spawn N parallel candidates at the same task, pick a base, graft t
 
 Resolve profiles from [`../poteto-mode/references/panel-run.md`](../poteto-mode/references/panel-run.md). Record a `PanelRun` before the first `run_subagent` call. Sequential when distinct profiles are fewer than N. Say so. Do not claim parallel execution in that mode.
 
-Open a todolist with one entry per phase: Frame, Fan out, Cross-judge, Pick, Graft, Verify.
+Copy the phases below into a compact checklist and track outcomes there. Devin's documented tools do not include Cursor's todolist tool.
 
 ## Phase A: Frame
 
@@ -16,7 +16,7 @@ The prompt is the contract.
 1. State the artifact.
 2. Derive the rubric. 3-6 concrete, gradeable criteria. Candidates do not see the rubric.
 3. Pick runners from `arena runners` in `$HOME/.config/devin/pstack-models.md`, else the Models defaults. If a named profile is not registered, drop that seat, keep at least two runners, and say so. Same profile N times when the work is generation-bound.
-4. Assign output paths. Each candidate writes to its own root-provisioned location. A verified git worktree when possible, otherwise a separate `/tmp/arena-<slug>/candidate-<n>/` directory. A branch in the shared checkout is not isolation. Shared write paths fail `skills/principle-separate-before-serializing-shared-state/SKILL.md`. Record each workspace per [`../poteto-mode/references/delegation.md`](../poteto-mode/references/delegation.md) before dispatch.
+4. Assign output paths. Each candidate writes to its own root-provisioned location inside the project or a root-created worktree. Prefer `git worktree add` when the repo is git. Otherwise use a writable directory under the project root, such as `<cwd>/.pstack/arena-<slug>/candidate-<n>/`. Devin's background sandbox denies writes outside the workspace, so do not use `/tmp` or other paths outside the checkout. A branch in the shared checkout is not isolation. Shared write paths fail `skills/principle-separate-before-serializing-shared-state/SKILL.md`. Record each workspace per [`../poteto-mode/references/delegation.md`](../poteto-mode/references/delegation.md) before dispatch.
 
 ## Phase B: Fan out
 

@@ -9,7 +9,7 @@ Resolve profiles from [`../poteto-mode/references/panel-run.md`](../poteto-mode/
 
 ## Start
 
-Open a todolist with one entry per phase.
+Copy the phases below into a compact checklist and track outcomes there. Devin's documented tools do not include Cursor's todolist tool.
 
 1. Frame
 2. Fan out
@@ -21,7 +21,7 @@ Open a todolist with one entry per phase.
 1. State the done predicate and the artifact or report.
 2. Choose the shape. Partition, race, or mix. For a race or mix, declare `first pass`, `rank all`, or `best-of` before spawning.
 3. Pick the worker profile from `swarm workers` in `$HOME/.config/devin/pstack-models.md`, else the Models default. For a model race, name each arm's profile up front.
-4. Give each writer its own root-provisioned output. A verified git worktree, or a separate directory such as `/tmp/swarm-<slug>/worker-<n>/`. A branch in the shared checkout is not isolation.
+4. Give each writer its own root-provisioned output inside the project or a root-created worktree. Prefer a verified git worktree. Otherwise use a writable directory under the project root, such as `<cwd>/.pstack/swarm-<slug>/worker-<n>/`. Devin's background sandbox denies writes outside the workspace, so do not use `/tmp` or other paths outside the checkout. A branch in the shared checkout is not isolation.
 
 ## Phase B: Fan out
 
