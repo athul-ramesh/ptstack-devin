@@ -29,7 +29,7 @@ Invoke the named companion skill before the work proceeds. Do not force fan-out 
 - A change crossing a function boundary, including within one module: invoke `/pstack:architect` for the shape. A large or contested design runs `/pstack:arena`.
 - Motivation, rationale, tradeoffs, regressions, postmortems, data-backed thresholds, or a change that redefines ownership or layering: invoke `/pstack:why`. Do not require it for every task.
 - Parallel fan-out over independent partitions: `/pstack:swarm`. Competing design or code attempts: `/pstack:arena`. A contested design before shipping: `/pstack:interrogate`.
-- Starting any agent with `run_subagent`: the first line of its `task` is `Read <path>/worker.md before anything else.`, with `<path>` the absolute path of this skill's folder. See [worker.md](worker.md). Whether the child follows that line is untested.
+- Starting any agent with `run_subagent`: the first line of its `task` is `Read <path>/worker.md before anything else.`, with `<path>` the absolute path of this skill's folder. See [worker.md](worker.md). Child follow-through is locally observed on Devin CLI (Tier 2: WORKER_MD_OK, agent 8e71b7f6). Devin docs still do not document a kickoff file as a platform feature.
 - Any prose surface, your reply included: invoke `/pstack:unslop` before you send it. Write the reply per Write the reply.
 - Docs, RFCs, readmes, PR descriptions, or commit messages: invoke `/pstack:technical-writing`, every layer except Diátaxis where it does not fit, then `/pstack:unslop`.
 - Shipping UI, IDE, or CLI evidence: invoke `/pstack:control-ui` or `/pstack:control-cli` before promising visual or terminal proof.
@@ -91,7 +91,7 @@ Inside poteto-mode, use the Babysit playbook rather than the standalone `/pstack
 
 Unless the user requires inline work or forbids subagents, every nontrivial code implementation is delegated, including tests and follow-up corrections. This includes code written during prototypes, visual parity, PR fixes, and autonomous or figure-it-out units. Writing prose, answering questions, and reviewing artifacts stay with the root unless delegation adds value.
 
-The first line of every `run_subagent` `task` is `Read <path>/worker.md before anything else.`, where `<path>` is the absolute path of this skill's folder. Devin documents subagents as separate conversations that can read and that cannot call `ask_user_question` ([Subagents](https://docs.devin.ai/cli/subagents)). It does not document Project workers or a kickoff file. Whether the child follows that first line is untested.
+The first line of every `run_subagent` `task` is `Read <path>/worker.md before anything else.`, where `<path>` is the absolute path of this skill's folder. Devin documents subagents as separate conversations that can read and that cannot call `ask_user_question` ([Subagents](https://docs.devin.ai/cli/subagents)). It does not document Project workers or a kickoff file as a platform feature. Child follow-through is locally observed on Devin CLI (Tier 2: WORKER_MD_OK, agent 8e71b7f6).
 
 The root owns inspection, reproduction, diagnosis, design, decomposition, review, and independent verification. Every nontrivial implementation uses its dedicated implementation profile, including one sequential worker. Read-only exploration is optional when its time or quality benefit outweighs its context cost. Do not dispatch a narrow lookup or trivial edit.
 

@@ -16,7 +16,7 @@ State the goal, a check that can pass or fail, the proof you want, known evidenc
 
 The playbook supplies the steps. A list of skills can override that order, so name a skill only when you want to change a default. Short follow-ups work when the conversation already holds the task. Say "new task" when changing subjects.
 
-Workers and review panels spend extra tokens. Choose suitable registered profiles through setup. Preserve required perspective counts; repeated profiles still run separate fresh-context passes. A trivial edit needs no playbook or worker. This port does not offer `auto` or `inherit-parent` routing. The first line of a `run_subagent` task points at [worker.md](../skills/poteto-mode/worker.md). Whether the child follows that pointer is untested.
+Workers and review panels spend extra tokens. Choose suitable registered profiles through setup. Preserve required perspective counts; repeated profiles still run separate fresh-context passes. A trivial edit needs no playbook or worker. This port does not offer `auto` or `inherit-parent` routing. The first line of a `run_subagent` task points at [worker.md](../skills/poteto-mode/worker.md). Child follow-through is locally observed on Devin CLI (Tier 2: WORKER_MD_OK, agent 8e71b7f6). Devin docs still do not document a kickoff file as a platform feature.
 
 ## Understand before editing
 
