@@ -165,13 +165,18 @@ test('0.12.0 port ships control adapters and babysit watch-pr wiring', () => {
     assert.match(text, new RegExp(`^name: ${name}$`, 'm'));
     assert.match(text, /triggers:\n  - user/);
     assert.match(text, /create-verification-skill/);
+    assert.match(text, /\.pstack\//);
+    assert.match(text, /Devin denies writes outside the workspace/);
     assert.doesNotMatch(text, /verify-this/);
+    assert.doesNotMatch(text, /\/tmp\//);
   }
   const controlCli = read('skills/control-cli/SKILL.md');
   assert.match(controlCli, /Minimal Rex Harness/);
   assert.match(controlCli, /Prefer this over tmux/);
   assert.match(controlCli, /rex run --label cli-harness/);
   assert.match(controlCli, /Never `rex kill` a whole user session/);
+  assert.match(controlCli, /\.pstack\/cli-harness/);
+  assert.match(read('skills/control-ui/SKILL.md'), /\.pstack\/ui-harness/);
   assert.match(read('skills/poteto-mode/references/verification.md'), /Prefer Rex when `rex` reaches a server/);
   const babysitPlaybook = read('skills/poteto-mode/playbooks/babysit.md');
   assert.match(babysitPlaybook, /watch-pr\/watch-pr/);
