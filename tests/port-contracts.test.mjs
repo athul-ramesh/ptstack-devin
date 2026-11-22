@@ -156,7 +156,7 @@ test('0.15.42 port keeps a short why, one how pass, and traced playbooks', () =>
 test('plugin manifest is local-only and current release', () => {
   const manifest = JSON.parse(read('.devin-plugin/plugin.json'));
   assert.deepEqual(manifest.platforms, ['local']);
-  assert.equal(manifest.version, '0.12.0');
+  assert.equal(manifest.version, '0.12.1');
 });
 
 test('0.12.0 port ships control adapters and babysit watch-pr wiring', () => {
