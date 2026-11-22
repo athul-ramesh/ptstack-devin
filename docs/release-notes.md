@@ -13,7 +13,7 @@
 ## 0.11.0
 
 - Port upstream 0.15.43 (`e559e62`). Principle leaves, unslop, and technical-writing are shorter. Opening a PR, Babysit, and the multi-phase plan are shorter, and `check-plan.mjs` is gone. Reflect is one file with no reviewers. Architect is a short brief plus `/pstack:arena` for a large or contested design. The Orchestrate playbook is deleted. A standing program routes to `/pstack:figure-it-out` and keeps one owner per PR, a verifier on a different model pin, and a first unit before fan-out.
-- `skills/poteto-mode/worker.md` holds the rules for a started agent. The first line of a `run_subagent` task points at it. Devin documents subagents and withholds `ask_user_question` from them. It does not document Project workers or a kickoff file. Following that pointer is untested.
+- `skills/poteto-mode/worker.md` holds the rules for a started agent. The first line of a `run_subagent` task points at it. Devin documents subagents and withholds `ask_user_question` from them. It does not document Project workers or a kickoff file as a platform feature. Following that pointer is locally observed on Devin CLI (Tier 2: WORKER_MD_OK, agent 8e71b7f6).
 - Setup writes `# defaults: 3` and drops `architect runners`, `reflect tooling`, and `reflect judgment, divergent, synthesizer`. A `# defaults: 2` sheet keeps its other choices. Profile pins are unchanged. Cursor slugs for Opus 5.5, Fable 5.2, and Gemini 4 Carbon, and the three effort budgets, are not written. Native activation remains untested. See the [port audit](pstack-0.15.43-port-audit.md).
 
 ## 0.10.0

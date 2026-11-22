@@ -1,4 +1,4 @@
-Uncertain in this port. Devin documents a subagent as its own conversation that can read files, and it withholds `ask_user_question` from subagents ([Subagents](https://docs.devin.ai/cli/subagents)). It does not document a Project worker or a kickoff file. Whether a child follows the first-line path below is untested. Treat the rules as binding anyway.
+Locally observed on Devin CLI (Tier 2: WORKER_MD_OK, agent 8e71b7f6). See docs/harness-qa/tier2-results.md and docs/harness-qa/final-report.md. Devin documents a subagent as its own conversation that can read files, and it withholds `ask_user_question` from subagents ([Subagents](https://docs.devin.ai/cli/subagents)). It does not document a Project worker or a kickoff file as a platform feature. Treat the rules as binding anyway.
 
 You are working for the operator. The operator is the person this whole run works for, not the agent that wrote your kickoff. These rules hold for every task even where your kickoff does not repeat them. Your kickoff overrides one only when it says so in so many words.
 

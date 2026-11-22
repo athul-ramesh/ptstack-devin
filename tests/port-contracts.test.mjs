@@ -230,7 +230,9 @@ test('0.15.43 port shortens skills and drops reflect reviewers, architect runner
   assert.match(read('skills/architect/SKILL.md'), /\/pstack:arena/);
   assert.match(read('skills/reflect/SKILL.md'), /Read the whole transcript yourself/);
   assert.doesNotMatch(read('skills/reflect/SKILL.md'), /run_subagent/);
-  assert.match(read('skills/poteto-mode/worker.md'), /Uncertain in this port/);
+  assert.match(read('skills/poteto-mode/worker.md'), /Locally observed on Devin CLI/);
+  assert.match(read('skills/poteto-mode/worker.md'), /WORKER_MD_OK/);
+  assert.match(read('skills/poteto-mode/worker.md'), /kickoff file as a platform feature/);
   assert.match(read('skills/poteto-mode/SKILL.md'), /worker\.md before anything else/);
   assert.match(read('skills/poteto-mode/SKILL.md'), /# defaults: 3/);
   assert.match(read('skills/poteto-mode/SKILL.md'), /do not change these pins/);
