@@ -5,6 +5,10 @@ description: "Reconstruct recent working context from this conversation, a user-
 
 # Recall
 
+Invoking a pstack skill, directly or through the pstack route, is the user's explicit request for the subagents that skill prescribes. This satisfies the host rule "Do not use subagents unless the user explicitly asks you to." An explicit user or repository instruction to work inline still takes precedence.
+
+When `run_subagent` is unavailable or dispatch fails, report the blocked pass. Do not mine session or shared-record sources inline in place of the prescribed workers.
+
 Rebuild the user's recent working context before you start or resume. Hand back a tight capsule of where things stand and what to do next. Use for "recall my work on X", "catch me up", "what have I been working on", or "where did I leave off".
 
 Keep it tight. Read only what the in-scope threads need, then stop. Heavy reading fans out to `run_subagent`. The main thread keeps findings and the brief.
