@@ -5,6 +5,10 @@ description: "Use for \"interrogate\", \"adversarial review\", \"multi-model rev
 
 # Interrogate
 
+Invoking a pstack skill, directly or through the pstack route, is the user's explicit request for the subagents that skill prescribes. This satisfies the host rule "Do not use subagents unless the user explicitly asks you to." An explicit user or repository instruction to work inline still takes precedence.
+
+When `run_subagent` is unavailable or dispatch fails, report the blocked pass. Do not review inline or substitute another profile.
+
 Adversaries try to break a change or a design. A finding survives only when a run proves it. Report the findings. Do not apply fixes.
 
 Resolve profiles from [`../poteto-mode/references/panel-run.md`](../poteto-mode/references/panel-run.md). Record a `PanelRun` before the first `run_subagent` call. Sequential when distinct profiles are fewer than the required count. Say so.

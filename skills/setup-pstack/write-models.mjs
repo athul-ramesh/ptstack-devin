@@ -15,6 +15,7 @@ export const SINGLE_ROLES = Object.freeze([
   ["judgment and prose", "opus"],
   ["strongest judgment", "opus"],
   ["swarm workers", "sonnet"],
+  ["how", "swe"],
 ]);
 
 export const PANEL_ROLES = Object.freeze([

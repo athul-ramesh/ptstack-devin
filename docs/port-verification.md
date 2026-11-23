@@ -29,6 +29,8 @@ Configured pin is `gpt-6-1-sol-medium`; no per-worker runtime model identity was
 
 ## Evidence gaps
 
+A native run that invokes `/pstack:how`, `/pstack:arena`, `/pstack:swarm`, or `/pstack:interrogate` must make at least one `run_subagent` call unless the user said to work inline. Static tests cannot prove that; it is the transcript-level acceptance criterion.
+
 A non-interactive accept-edits run encountered a permission-denied root tool before dispatch and returned no worker identity. Same-worker foreground permission repair could not be exercised there. Approved-permission background behavior, writer completion, and foreground recovery remain untested. New runtime routing and user slash activation were confirmed after temporary collision removal. Duplicate installations can still affect future routing. Benchmark/fresh-worker/swarm and interleaved-run tests check instruction contracts, not native agent compliance; no benchmark behavioral eval or live review-history mining is claimed. No CI run or UI adapter was needed for these source/script changes.
 
 ## Final PR review

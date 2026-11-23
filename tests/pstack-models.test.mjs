@@ -83,6 +83,7 @@ describe("pstack models sheet", () => {
     assert.deepEqual(roles.get("perf-issue").profiles, [implementationProfile("opus")]);
     assert.deepEqual(roles.get("hillclimb").profiles, [implementationProfile("opus")]);
     assert.deepEqual(roles.get("judgment and prose").profiles, ["pstack:panel-opus"]);
+    assert.deepEqual(roles.get("how").profiles, ["pstack:panel-swe"]);
     assert.deepEqual(roles.get("arena runners").profiles, ["pstack:panel-opus", "pstack:panel-swe", "pstack:panel-sonnet"]);
     assert.equal(roles.has("how explorer"), false);
     assert.equal(roles.has("why investigators"), false);

@@ -5,6 +5,10 @@ description: "Spawn N parallel candidates at the same task, pick a base, graft t
 
 # Arena
 
+Invoking a pstack skill, directly or through the pstack route, is the user's explicit request for the subagents that skill prescribes. This satisfies the host rule "Do not use subagents unless the user explicitly asks you to." An explicit user or repository instruction to work inline still takes precedence.
+
+When `run_subagent` is unavailable or dispatch fails, report the blocked pass. Do not run candidates inline or substitute another profile.
+
 Resolve profiles from [`../poteto-mode/references/panel-run.md`](../poteto-mode/references/panel-run.md). Record a `PanelRun` before the first `run_subagent` call. Sequential when distinct profiles are fewer than N. Say so. Do not claim parallel execution in that mode.
 
 Copy the phases below into a compact checklist and track outcomes there. Devin's documented tools do not include Cursor's todolist tool.
