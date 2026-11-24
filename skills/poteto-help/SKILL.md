@@ -54,6 +54,7 @@ The default answer is `/pstack:poteto-mode`, which runs most of the others when 
 | Do any non-trivial task with rigor | [`/pstack:poteto-mode`](../poteto-mode/SKILL.md) |
 | Check that the agent understood the goals and the problem | [`/pstack:in-your-own-words`](../in-your-own-words/SKILL.md) |
 | Get a prompt rewritten deeper, not bigger, before sending it: what a top professional would add, their raw material and methods, and an outside check. It returns the prompt and doesn't do the task | [`/pstack:sharpen`](../sharpen/SKILL.md) |
+| Learn the expert words for what they're building, including words borrowed from neighboring fields, with every cited source checked, and get their description rewritten with them | [`/pstack:reframe`](../reframe/SKILL.md) |
 | Know how code works now, or where new code should live | [`/pstack:how`](../how/SKILL.md) |
 | Know why code is shaped this way, or where a number came from | [`/pstack:why`](../why/SKILL.md) |
 | Understand a change or subsystem, explained plainly | [`/pstack:teach`](../teach/SKILL.md) |
@@ -99,6 +100,7 @@ If a skill directory next to this one is missing from the table, read its frontm
 
 Close calls:
 
+- `/pstack:reframe` names the problems a vague description could be, teaches the expert words for the most likely one, and rewrites the description. `/pstack:sharpen` deepens a prompt that already aims at a known task.
 - `/pstack:how` explains what the code does, in one read-only pass. `/pstack:why` cites the commits and the PR discussion. `/pstack:teach` runs one or both and explains the result plainly.
 - `/pstack:understand-bug` reproduces a defect, draws the current path and the path after the proposed fix, and waits for approval before Bug fix. The Bug fix playbook starts the fix once the defect is reproduced.
 - `/pstack:arena` gives every worker the same brief and merges the best parts. `/pstack:swarm` splits work into slices or a race and returns one report.

@@ -22,6 +22,12 @@ The 0.2.0 release was verified against Devin CLI 3000.11.3 (9c803229faa4), local
 
 Avoid installing two copies with the same plugin name. Devin may source-qualify inventory names while loading skills from an older copy; verify the path returned by the skill tool.
 
+## Using 0.13.0
+
+Invoke [`/pstack:reframe`](skills/reframe/SKILL.md) when you can't name what you're building, so you can't ask an agent for it clearly. It starts from your files and your own words. If those words could describe more than one problem, it lists the two or three it could be, with the term that names each and the sign that tells them apart, then teaches the words for the most likely one and says why. It then gives 8 to 12 expert terms, ranked by how much each would change what you build. Each term is tied to the part of your description it names and to a real project whose link it checked with `webfetch`. It borrows terms from 2 or 3 neighboring fields that solved the same problem under other names, says where each analogy breaks, and rewrites your description with the new words. It does not do the task. It runs only when you type `/pstack:reframe`. Send the rewrite yourself, or run `/pstack:sharpen` on it.
+
+This release ports upstream pstack 0.15.47 and 0.15.48 (`2dd5c0c`, `9e278fe`). See the [0.15.48 port audit](docs/pstack-0.15.48-port-audit.md).
+
 ## Using 0.12.0
 
 This release ports control adapters and same-session PR watching. [`/pstack:control-ui`](skills/control-ui/SKILL.md) and [`/pstack:control-cli`](skills/control-cli/SKILL.md) drive web and terminal surfaces with local harness recipes. Babysit uses the bundled `skills/poteto-mode/scripts/watch-pr` watcher when Bun is available, with `gh pr checks --watch` as fallback. Watches never outlive the session. Merge stays with the operator.

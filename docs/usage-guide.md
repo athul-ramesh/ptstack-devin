@@ -78,6 +78,14 @@ Use `/pstack:in-your-own-words` to hear the goals and problem the agent understo
 
 Use `/pstack:sharpen <the prompt you're about to send>` when you are unsure a prompt is aimed right. It hands back the prompt rewritten deeper, not bigger, with an outside check. The rewrite asks the agent to prototype a choice an experiment can settle and recommend from what it observed. Product and preference choices stay with you. It does not do the task. Send the rewrite yourself.
 
+Use `/pstack:reframe` on your own description and files when you can't name what you're after:
+
+```text
+/pstack:reframe the settings page saves some fields right away and others only on submit, and people lose edits.
+```
+
+If the description could name more than one problem, the agent lists the two or three it could be, with the term that names each and the sign that tells them apart, then teaches the words for the most likely one and says why. It gives 8 to 12 expert terms, ranked by how much each would change what you build. Each term comes with the part of your description it names, a real project that uses it, with the link checked, and what it lets you ask an agent for. It also borrows terms from 2 or 3 neighboring fields that solved the same problem under other names, and says where each analogy breaks. Then it rewrites your description with the new words. It does not do the task. Send the rewrite, or run `/pstack:sharpen` on it.
+
 Use `/pstack:ketchup` to catch up since your previous message. The story stays under 100 words. Every call waiting on you gets its own bullet with its link, what it changes, the evidence, the risk, and a pick, including older unresolved decisions, so a large batch makes a long reply instead of a cut list. Existing captures and available diagrams show status and before/after options. When the Devin host cannot render them, compact text includes the same facts and unknowns. The skill does not start an app, install a renderer, or post anything to produce a visual.
 
 Verification skills must launch a usable app from an empty data directory. Include migrations and seed data. Missing journey preconditions are failed checks, not a reason to weaken the journey. Proof from a stand-in must identify target setup steps it has not exercised.

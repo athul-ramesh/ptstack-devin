@@ -61,7 +61,7 @@ test('interleaved run documentation assigns boundaries and supersedes history', 
 });
 
 test('portable skills retain user activation and numeric principle model activation', () => {
-  for (const name of ['statechart', 'correct', 'benchmark-checklist', 'ketchup', 'in-your-own-words', 'sharpen', 'create-formal-verification-skill', 'maintain-formal-verification-skill', 'control-ui', 'control-cli']) {
+  for (const name of ['statechart', 'correct', 'benchmark-checklist', 'ketchup', 'in-your-own-words', 'sharpen', 'reframe', 'create-formal-verification-skill', 'maintain-formal-verification-skill', 'control-ui', 'control-cli']) {
     const text = read(`skills/${name}/SKILL.md`);
     assert.match(text, new RegExp(`^name: ${name}$`, 'm'));
     assert.match(text, /triggers:\n  - user/);
@@ -156,7 +156,27 @@ test('0.15.42 port keeps a short why, one how pass, and traced playbooks', () =>
 test('plugin manifest is local-only and current release', () => {
   const manifest = JSON.parse(read('.devin-plugin/plugin.json'));
   assert.deepEqual(manifest.platforms, ['local']);
-  assert.equal(manifest.version, '0.12.1');
+  assert.equal(manifest.version, '0.13.0');
+});
+
+test('0.13.0 port ships user-only reframe', () => {
+  const reframe = read('skills/reframe/SKILL.md');
+  assert.match(reframe, /^name: reframe$/m);
+  assert.match(reframe, /triggers:\n  - user/);
+  assert.match(reframe, /permissions:\n  deny:\n    - edit/);
+  assert.match(reframe, /\/pstack:reframe/);
+  assert.match(reframe, /8 to 12 terms/);
+  assert.match(reframe, /two or three problems it could be/);
+  assert.match(reframe, /sign that would tell it apart/);
+  assert.match(reframe, /webfetch/);
+  assert.match(reframe, /Do not start the task/);
+  assert.doesNotMatch(reframe, /disable-model-invocation/);
+  assert.doesNotMatch(reframe, /\.cursor/);
+  assert.match(read('skills/poteto-help/SKILL.md'), /\/pstack:reframe/);
+  assert.match(read('skills/poteto-help/references/recipes.md'), /\/pstack:reframe/);
+  assert.match(read('README.md'), /\/pstack:reframe/);
+  assert.match(read('docs/usage-guide.md'), /\/pstack:reframe/);
+  assert.match(read('docs/release-notes.md'), /44 public skills/);
 });
 
 test('0.12.0 port ships control adapters and babysit watch-pr wiring', () => {
