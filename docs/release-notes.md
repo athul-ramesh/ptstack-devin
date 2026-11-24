@@ -1,5 +1,9 @@
 # Release notes
 
+## 0.13.0
+
+- Add explicit-user `/pstack:reframe`. It teaches the expert words for what the user is building. When a description could name more than one problem, it lists the two or three it could be, each with the term that names it and the sign that tells it apart, then teaches the words for the most likely one and says why. Citations are checked with `webfetch`. It returns the words and the rewrite and does not do the task. `permissions.deny` blocks `edit`. Native activation remains untested. See the [port audit](pstack-0.15.48-port-audit.md).
+
 ## 0.12.1
 
 - Port upstream pstack 0.15.46 statechart Windows and CRLF fixes ([#1292](https://github.com/cursor/plugins/pull/1292), `0b46ec39`): `splitLines` for TLC output and dot dumps, JVM `-Dstdout.encoding=UTF-8` and `-Dstderr.encoding=UTF-8`, `windowsHide` on child processes, and a Node-based process janitor with cross-platform `killGroup`. Shipped profile pins are unchanged. Neon panel seat churn from #1283 and #1284 is not ported. See the [port audit](pstack-0.15.46-port-audit.md).
@@ -59,7 +63,7 @@ Plugin 0.2.0 was verified on local Devin CLI 3000.11.3 (9c803229faa4). Earlier 3
 
 ## Shipped
 
-39 public skills under `/pstack:<name>`. 24 `principle-*` leaves, model-triggered. 19 poteto-mode playbooks. Profiles `pstack:poteto-agent`, `pstack:poteto-agent-{swe,opus,sonnet,codex,terra}`, `pstack:comment-sicko`, and `pstack:panel-{swe,opus,sonnet,codex,terra}`.
+44 public skills under `/pstack:<name>`. 24 `principle-*` leaves, model-triggered. 19 poteto-mode playbooks. Profiles `pstack:poteto-agent`, `pstack:poteto-agent-{swe,opus,sonnet,codex,terra}`, `pstack:comment-sicko`, and `pstack:panel-{swe,opus,sonnet,codex,terra}`.
 
 SessionStart injects `PSTACK_ROUTE=/pstack:poteto-mode`.
 
